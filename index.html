@@ -117,7 +117,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   letter-spacing: 0.02em;
   color: var(--text);
 }
-.masthead-brand .brand-gold { color: var(--gold); }
+.masthead-brand .brand-gold {
+  color: var(--ember);
+}
 .masthead-hub-title {
   font-family: var(--serif);
   font-size: 1.05rem;
@@ -562,7 +564,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .manifesto-item:nth-child(1) .manifesto-num { color: var(--ember); }
 .manifesto-item:nth-child(2) .manifesto-num { color: var(--teal); }
-.manifesto-item:nth-child(3) .manifesto-num { color: var(--gold); }
+.manifesto-item:nth-child(3) .manifesto-num { color: var(--ember); }
 .manifesto-item .manifesto-title {
   font-family: var(--serif);
   font-size: 1.05rem;
@@ -599,9 +601,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .pillar-card:hover::before { opacity: 1; }
 .pillar-card .pillar-icon {
-  font-size: 1.5rem;
-  margin-bottom: 16px;
   display: block;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: var(--text-faint);
+  margin-bottom: var(--sp2);
 }
 .pillar-card .pillar-name {
   font-family: var(--serif);
@@ -729,7 +734,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-family: var(--serif);
   font-size: 1.6rem;
   margin-bottom: 12px;
-  color: var(--gold);
+  color: var(--ember);
 }
 .tenet-block .tenet-body {
   font-size: 0.9rem;
@@ -1346,7 +1351,7 @@ body.night #view-thesis > .section:first-of-type::before {
 
 </style>
 <style>
-/* AI Readiness Questionnaire — reskinned to The Hub palette */
+/* AI Readiness Questionnaire — editorial spec-sheet reskin */
 #aiq-root{
   --bg-primary:var(--base);
   --bg-secondary:var(--surface);
@@ -1357,7 +1362,7 @@ body.night #view-thesis > .section:first-of-type::before {
   --text-primary:var(--text);
   --text-secondary:var(--text-dim);
   --text-muted:var(--text-faint);
-  --accent-gold:var(--gold);
+  --accent-gold:var(--gold);--accent-ember:var(--ember);
   --accent-ember:var(--ember);
   --accent-teal:var(--teal);
   --accent-teal-dim:rgba(34,211,238,0.12);
@@ -1366,9 +1371,9 @@ body.night #view-thesis > .section:first-of-type::before {
   --danger:#c2410c;
   --warning:var(--gold);
   --success:var(--green);
-  --radius:10px;
-  --radius-sm:6px;
-  --shadow:0 4px 24px rgba(0,0,0,0.4);
+  --radius:0px;
+  --radius-sm:2px;
+  --shadow:none;
   --transition:0.2s ease;
   background:var(--base);
   color:var(--text);
@@ -1377,83 +1382,72 @@ body.night #view-thesis > .section:first-of-type::before {
   font-family:var(--sans);
   -webkit-font-smoothing:antialiased;
 }
-#aiq-root::before{
-  content:'';
-  position:fixed;
-  top:0;left:0;right:0;
-  height:400px;
-  background:radial-gradient(ellipse at 50% 0%,rgba(232,134,45,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(212,175,55,0.04) 0%,transparent 50%);
-  pointer-events:none;
-  z-index:0;
-}
-
 #aiq-root, #aiq-root *{margin:0;padding:0;box-sizing:border-box}
 #aiq-root{font-family:var(--sans);background:var(--base);color:var(--text);line-height:1.75;min-height:100vh;-webkit-font-smoothing:antialiased}
-#aiq-root::before{content:'';position:fixed;top:0;left:0;right:0;height:400px;background:radial-gradient(ellipse at 50% 0%,rgba(232,134,45,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(212,175,55,0.04) 0%,transparent 50%);pointer-events:none;z-index:0}
 #aiq-root .container{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:var(--sp3) var(--sp3) var(--sp6);min-height:100vh;display:flex;flex-direction:column}
 #aiq-root .header{display:flex;align-items:center;justify-content:space-between;padding:var(--sp2) 0 var(--sp3);border-bottom:1px solid var(--hairline);margin-bottom:var(--sp4)}
 #aiq-root .logo{font-family:var(--serif);font-size:1.3rem;font-weight:600;letter-spacing:0.02em;color:var(--text)}
-#aiq-root .logo span{color:var(--accent-gold)}
-#aiq-root .progress-container{display:flex;align-items:center;gap:var(--sp1);font-family:var(--mono);font-size:0.72rem;letter-spacing:0.06em;color:var(--text-dim)}
+#aiq-root .logo span{color:var(--accent-ember)}
+#aiq-root .progress-container{display:flex;align-items:center;gap:var(--sp1);font-family:var(--mono);font-size:0.65rem;letter-spacing:0.06em;color:var(--text-dim)}
 #aiq-root .progress-bar{width:120px;height:2px;background:var(--hairline);overflow:hidden}
 #aiq-root .progress-fill{height:100%;background:var(--gold);transition:width 0.4s ease}
 #aiq-root .step{display:none;flex:1;animation:aiq_fadeIn 0.3s ease}
 #aiq-root .step.active{display:block}
 @keyframes aiq_fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 #aiq-root .step h1{font-family:var(--serif);font-size:2rem;font-weight:500;line-height:1.1;margin-bottom:var(--sp1);color:var(--text)}
-#aiq-root .step h2{font-family:var(--serif);font-size:1.5rem;font-weight:500;margin-bottom:4px;color:var(--text)}
-#aiq-root .step .subtitle{font-size:0.95rem;color:var(--text-dim);margin-bottom:var(--sp4)}
-#aiq-root .dimension-intro{font-size:0.85rem;color:var(--text-dim);margin-bottom:var(--sp3);padding:var(--sp2) var(--sp3);background:var(--surface-lift);border-left:2px solid var(--accent-ember);border-radius:0 var(--radius-sm) var(--radius-sm) 0;line-height:1.7}
+#aiq-root .step h2{font-family:var(--serif);font-size:1.3rem;font-weight:500;margin-bottom:4px;color:var(--text)}
+#aiq-root .step .subtitle{font-size:0.9rem;color:var(--text-dim);margin-bottom:var(--sp4)}
+#aiq-root .dimension-intro{font-size:0.9rem;color:var(--text-dim);margin-bottom:var(--sp3);padding:var(--sp2) var(--sp3);background:var(--surface-lift);border-left:2px solid var(--accent-ember);border-radius:0 var(--radius-sm) var(--radius-sm) 0;line-height:1.7}
 #aiq-root .form-group{margin-bottom:var(--sp4)}
 #aiq-root .form-group label.field-label{display:block;font-family:var(--mono);font-size:0.65rem;font-weight:600;color:var(--text-dim);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.1em}
-#aiq-root .form-group input[type="text"], #aiq-root .form-group input[type="email"], #aiq-root .form-group input[type="tel"], #aiq-root .form-group input[type="number"], #aiq-root .form-group select, #aiq-root .form-group textarea{width:100%;padding:var(--sp1) var(--sp2);background:var(--bg-input);border:1px solid var(--hairline);border-radius:var(--radius-sm);color:var(--text);font-size:0.95rem;font-family:var(--sans);transition:border-color var(--transition),box-shadow var(--transition)}
+#aiq-root .form-group input[type="text"], #aiq-root .form-group input[type="email"], #aiq-root .form-group input[type="tel"], #aiq-root .form-group input[type="number"], #aiq-root .form-group select, #aiq-root .form-group textarea{width:100%;padding:var(--sp1) var(--sp2);background:var(--bg-input);border:1px solid var(--hairline);border-radius:var(--radius-sm);color:var(--text);font-size:0.9rem;font-family:var(--sans);transition:border-color var(--transition),box-shadow var(--transition)}
 #aiq-root .form-group input:focus, #aiq-root .form-group select:focus, #aiq-root .form-group textarea:focus{outline:none;border-color:var(--accent-gold);box-shadow:0 0 0 2px rgba(212,175,55,0.18)}
 #aiq-root .form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239C8F7A' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right var(--sp2) center;padding-right:40px}
 #aiq-root .form-group textarea{resize:vertical;min-height:100px}
 #aiq-root .options{display:flex;flex-direction:column;gap:var(--sp1)}
 #aiq-root .option-card{position:relative;display:flex;align-items:flex-start;gap:var(--sp2);padding:var(--sp2) var(--sp3);background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);user-select:none}
-#aiq-root .option-card:hover{background:var(--surface-lift);border-color:var(--accent-gold);transform:translateY(-1px)}
-#aiq-root .option-card.selected{border-color:var(--accent-gold);background:rgba(212,175,55,0.06);box-shadow:0 0 0 1px var(--accent-gold)}
+#aiq-root .option-card:hover{background:var(--surface-lift);border-color:var(--accent-gold)}
+#aiq-root .option-card.selected{border-color:var(--accent-gold);background:rgba(212,175,55,0.06);box-shadow:none;border-left:2px solid var(--accent-gold)}
 #aiq-root .option-card input{position:absolute;opacity:0;pointer-events:none}
 #aiq-root .option-card .check{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:2px solid var(--text-faint);display:flex;align-items:center;justify-content:center;transition:all var(--transition);margin-top:1px}
-#aiq-root .option-card.multi .check{border-radius:6px}
+#aiq-root .option-card.multi .check{border-radius:2px}
 #aiq-root .option-card.selected .check{border-color:var(--accent-gold);background:var(--accent-gold)}
 #aiq-root .option-card.selected .check::after{content:'';width:10px;height:10px;background:var(--surface);border-radius:50%}
 #aiq-root .option-card.multi.selected .check::after{width:6px;height:10px;background:transparent;border:2px solid var(--surface);border-top:none;border-left:none;border-radius:0;transform:rotate(45deg) translate(-1px,-1px)}
-#aiq-root .option-card .opt-text{font-size:0.95rem;line-height:1.5;color:var(--text)}
+#aiq-root .option-card .opt-text{font-size:0.9rem;line-height:1.5;color:var(--text)}
 #aiq-root .question{margin-bottom:var(--sp4);padding-bottom:var(--sp3);border-bottom:1px solid var(--hairline)}
 #aiq-root .question:last-child{border-bottom:none;margin-bottom:0}
 #aiq-root .question-text{font-family:var(--serif);font-size:1.05rem;font-weight:500;margin-bottom:var(--sp2);color:var(--text);line-height:1.4}
-#aiq-root .question-text .q-num{font-family:var(--mono);color:var(--accent-gold);font-size:0.7rem;margin-right:4px}
-#aiq-root .error-msg{display:none;color:var(--danger);font-size:0.85rem;margin-top:var(--sp2);padding:var(--sp1) var(--sp2);background:rgba(194,65,12,0.08);border-radius:var(--radius-sm);border-left:2px solid var(--danger)}
+#aiq-root .question-text .q-num{font-family:var(--mono);color:var(--accent-ember);font-size:0.65rem;margin-right:4px}
+#aiq-root .error-msg{display:none;color:var(--danger);font-size:0.9rem;margin-top:var(--sp2);padding:var(--sp1) var(--sp2);background:rgba(194,65,12,0.08);border-radius:var(--radius-sm);border-left:2px solid var(--danger)}
 #aiq-root .error-msg.visible{display:block;animation:aiq_shake 0.4s ease}
 @keyframes aiq_shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 #aiq-root .buttons{display:flex;gap:var(--sp1);margin-top:var(--sp5);padding-top:var(--sp3);border-top:1px solid var(--hairline)}
-#aiq-root .btn{padding:var(--sp1) var(--sp3);border-radius:var(--radius-sm);font-size:0.85rem;font-weight:600;font-family:var(--mono);letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all var(--transition);border:1px solid transparent;display:inline-flex;align-items:center;gap:var(--sp1)}
-#aiq-root .btn-primary{background:linear-gradient(135deg,var(--accent-gold),var(--accent-ember));color:var(--base);border-color:var(--accent-gold)}
-#aiq-root .btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(212,175,55,0.25)}
+#aiq-root .btn{padding:var(--sp1) var(--sp3);border-radius:var(--radius-sm);font-size:0.9rem;font-weight:600;font-family:var(--mono);letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all var(--transition);border:1px solid transparent;display:inline-flex;align-items:center;gap:var(--sp1)}
+#aiq-root .btn-primary{background:var(--accent-gold);color:var(--base);border-color:var(--accent-gold)}
+#aiq-root .btn-primary:hover{background:var(--accent-ember);border-color:var(--accent-ember)}
 #aiq-root .btn-primary:active{transform:translateY(0)}
 #aiq-root .btn-secondary{background:transparent;color:var(--text-dim);border-color:var(--hairline)}
 #aiq-root .btn-secondary:hover{background:var(--surface-lift);color:var(--text);border-color:var(--text-faint)}
 #aiq-root .btn:disabled{opacity:0.5;cursor:not-allowed;transform:none!important}
-#aiq-root .landing-icon{width:54px;height:54px;background:linear-gradient(135deg,var(--accent-gold),var(--accent-ember));border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.1rem;font-weight:600;color:var(--base);margin-bottom:var(--sp3)}
 #aiq-root .landing-features{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp2);margin:var(--sp4) 0}
 #aiq-root .feature{padding:var(--sp2);background:var(--surface);border-radius:var(--radius-sm);border:1px solid var(--hairline)}
-#aiq-root .feature .feature-icon{font-size:1.2rem;margin-bottom:4px}
-#aiq-root .feature .feature-title{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--text);margin-bottom:4px}
-#aiq-root .feature .feature-desc{font-size:0.78rem;color:var(--text-dim)}
-#aiq-root .privacy-note{display:flex;align-items:flex-start;gap:var(--sp1);padding:var(--sp2);background:var(--surface-lift);border-radius:var(--radius-sm);border:1px solid var(--hairline);margin-top:var(--sp3);font-size:0.85rem;color:var(--text-dim)}
-#aiq-root .privacy-note .icon{font-size:1.1rem;flex-shrink:0}
-#aiq-root .results-header{text-align:center;margin-bottom:var(--sp5)}
-#aiq-root .score-circle{width:160px;height:160px;margin:0 auto var(--sp3);position:relative}
-#aiq-root .score-circle svg{width:100%;height:100%;transform:rotate(-90deg)}
-#aiq-root .score-circle .score-value{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:2.6rem;font-weight:600;color:var(--text)}
-#aiq-root .tier-badge{display:inline-block;padding:var(--sp1) var(--sp3);border-radius:20px;font-family:var(--mono);font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:var(--sp2);border:1px solid var(--accent-gold);color:var(--accent-gold);background:rgba(212,175,55,0.06)}
+#aiq-root .feature .feature-icon{display:none}
+#aiq-root .feature .feature-title{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--text);margin-bottom:4px}
+#aiq-root .feature .feature-desc{font-size:0.9rem;color:var(--text-dim)}
+#aiq-root .privacy-note{display:flex;align-items:flex-start;gap:var(--sp1);padding:var(--sp2);background:var(--surface-lift);border-radius:var(--radius-sm);border:1px solid var(--hairline);margin-top:var(--sp3);font-size:0.9rem;color:var(--text-dim)}
+#aiq-root .privacy-note .icon{display:none}
+#aiq-root .results-header{margin-bottom:var(--sp5)}
+#aiq-root .score-circle{width:100%;margin:0 0 var(--sp3);position:relative;display:flex;align-items:baseline;gap:var(--sp3);padding-bottom:var(--sp3);border-bottom:1px solid var(--hairline)}
+#aiq-root .score-circle .score-value{font-family:var(--serif);font-size:2.6rem;font-weight:500;color:var(--text);line-height:1}
+#aiq-root .score-circle .score-scale{flex:1;height:1px;background:var(--hairline);position:relative}
+#aiq-root .score-circle .score-tick{position:absolute;top:-3px;width:1px;height:7px;background:var(--accent-gold)}
+#aiq-root .tier-badge{display:inline-block;padding:2px 6px;border-radius:0;font-family:var(--mono);font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:var(--sp2);border:1px solid var(--accent-gold);color:var(--accent-ember);background:transparent}
 #aiq-root .dim-bars{margin:var(--sp4) 0}
 #aiq-root .dim-bar-row{margin-bottom:var(--sp2)}
-#aiq-root .dim-bar-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;font-family:var(--mono);font-size:0.7rem;letter-spacing:0.04em}
+#aiq-root .dim-bar-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;font-family:var(--mono);font-size:0.65rem;letter-spacing:0.04em}
 #aiq-root .dim-bar-name{color:var(--text-dim);font-weight:500;text-transform:uppercase;letter-spacing:0.06em}
-#aiq-root .dim-bar-value{font-family:var(--mono);font-weight:600;font-size:0.85rem;color:var(--text)}
+#aiq-root .dim-bar-value{font-family:var(--mono);font-weight:600;font-size:0.9rem;color:var(--text)}
 #aiq-root .dim-bar-track{height:2px;background:var(--hairline);overflow:hidden}
 #aiq-root .dim-bar-fill{height:100%;transition:width 1s ease;width:0}
 #aiq-root .dim-bar-fill.red{background:var(--danger)}
@@ -1461,38 +1455,39 @@ body.night #view-thesis > .section:first-of-type::before {
 #aiq-root .dim-bar-fill.teal{background:var(--accent-teal)}
 #aiq-root .dim-bar-fill.gold{background:var(--accent-gold)}
 #aiq-root .results-section{margin:var(--sp4) 0}
-#aiq-root .results-section h3{font-family:var(--serif);font-size:1.2rem;font-weight:500;margin-bottom:var(--sp2)}
+#aiq-root .results-section h3{font-family:var(--serif);font-size:1.3rem;font-weight:500;margin-bottom:var(--sp2)}
 #aiq-root .opportunities, #aiq-root .risks{display:flex;flex-direction:column;gap:var(--sp1)}
-#aiq-root .opp-item, #aiq-root .risk-item{padding:var(--sp2) var(--sp3);border-radius:var(--radius-sm);font-size:0.85rem;line-height:1.7}
+#aiq-root .opp-item, #aiq-root .risk-item{padding:var(--sp2) var(--sp3);border-radius:var(--radius-sm);font-size:0.9rem;line-height:1.7}
 #aiq-root .opp-item{background:rgba(34,211,238,0.04);border-left:2px solid var(--accent-teal)}
 #aiq-root .risk-item{background:rgba(212,175,55,0.06);border-left:2px solid var(--warning)}
 #aiq-root .action-items{display:flex;flex-direction:column;gap:4px}
-#aiq-root .action-item{padding:var(--sp1) var(--sp2);background:var(--surface);border-radius:var(--radius-sm);font-size:0.85rem;border:1px solid var(--hairline);display:flex;align-items:flex-start;gap:var(--sp1)}
+#aiq-root .action-item{padding:var(--sp1) var(--sp2);background:var(--surface);border-radius:var(--radius-sm);font-size:0.9rem;border:1px solid var(--hairline);display:flex;align-items:flex-start;gap:var(--sp1)}
 #aiq-root .action-item .bullet{color:var(--accent-ember);font-weight:700;flex-shrink:0;font-family:var(--mono)}
-#aiq-root .dq-message{padding:var(--sp2) var(--sp3);border-radius:var(--radius-sm);font-size:0.85rem;line-height:1.7;background:rgba(212,175,55,0.06);border-left:2px solid var(--warning);margin-bottom:var(--sp1)}
+#aiq-root .dq-message{padding:var(--sp2) var(--sp3);border-radius:var(--radius-sm);font-size:0.9rem;line-height:1.7;background:rgba(212,175,55,0.06);border-left:2px solid var(--warning);margin-bottom:var(--sp1)}
 #aiq-root .next-step{padding:var(--sp3);background:var(--surface-lift);border-radius:var(--radius-sm);border:1px solid var(--hairline);font-size:0.9rem;line-height:1.75;margin-top:var(--sp3)}
-#aiq-root .next-step .label{font-family:var(--mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent-gold);font-weight:600;margin-bottom:4px}
+#aiq-root .next-step .label{font-family:var(--mono);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent-ember);font-weight:600;margin-bottom:4px}
 #aiq-root .export-buttons{display:flex;flex-wrap:wrap;gap:var(--sp1);margin-top:var(--sp4)}
 #aiq-root .internal-toggle{text-align:center;margin-top:var(--sp5);padding-top:var(--sp3);border-top:1px solid var(--hairline)}
-#aiq-root .internal-toggle button{background:none;border:none;color:var(--text-faint);font-family:var(--mono);font-size:0.7rem;cursor:pointer;letter-spacing:0.06em;padding:4px var(--sp1);border-radius:4px;transition:color var(--transition)}
+#aiq-root .internal-toggle button{background:none;border:none;color:var(--text-faint);font-family:var(--mono);font-size:0.65rem;cursor:pointer;letter-spacing:0.06em;padding:4px var(--sp1);border-radius:0;transition:color var(--transition)}
 #aiq-root .internal-toggle button:hover{color:var(--text-dim)}
 #aiq-root .internal-view{display:none;margin-top:var(--sp4);padding:var(--sp3);background:var(--surface);border-radius:var(--radius-sm);border:1px solid var(--warning)}
 #aiq-root .internal-view.visible{display:block}
-#aiq-root .internal-view h4{font-family:var(--mono);font-size:0.7rem;font-weight:600;color:var(--warning);margin-bottom:var(--sp2);text-transform:uppercase;letter-spacing:0.1em}
-#aiq-root .internal-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:0.7rem;margin-bottom:var(--sp3)}
+#aiq-root .internal-view h4{font-family:var(--mono);font-size:0.65rem;font-weight:600;color:var(--warning);margin-bottom:var(--sp2);text-transform:uppercase;letter-spacing:0.1em}
+#aiq-root .internal-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:0.65rem;margin-bottom:var(--sp3)}
 #aiq-root .internal-table th, #aiq-root .internal-table td{padding:6px var(--sp1);text-align:left;border-bottom:1px solid var(--hairline)}
-#aiq-root .internal-table th{color:var(--text-faint);font-weight:600;text-transform:uppercase;font-size:0.6rem;letter-spacing:0.1em}
+#aiq-root .internal-table th{color:var(--text-faint);font-weight:600;text-transform:uppercase;font-size:0.65rem;letter-spacing:0.1em}
 #aiq-root .internal-table td{color:var(--text-dim)}
-#aiq-root .dq-tag{display:inline-block;padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:0.6rem;font-weight:600;background:rgba(194,65,12,0.1);color:var(--danger);margin:2px 4px 2px 0}
-#aiq-root .no-dq{color:var(--text-faint);font-family:var(--mono);font-size:0.7rem}
-#aiq-root .geographic-result{padding:var(--sp1) var(--sp2);background:var(--surface-lift);border-radius:var(--radius-sm);font-size:0.85rem;margin-bottom:var(--sp2)}
+#aiq-root .dq-tag{display:inline-block;padding:2px 6px;border-radius:0;font-family:var(--mono);font-size:0.65rem;font-weight:600;background:rgba(194,65,12,0.1);color:var(--danger);margin:2px 4px 2px 0}
+#aiq-root .no-dq{color:var(--text-faint);font-family:var(--mono);font-size:0.65rem}
+#aiq-root .geographic-result{padding:var(--sp1) var(--sp2);background:var(--surface-lift);border-radius:var(--radius-sm);font-size:0.9rem;margin-bottom:var(--sp2)}
+#aiq-root .assessment-eyebrow{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-faint);margin-bottom:var(--sp2);padding-bottom:var(--sp2);border-bottom:1px solid var(--hairline)}
+#aiq-root .assessment-divider{width:100%;height:1px;background:var(--hairline);margin:var(--sp4) 0}
 @media print{#aiq-root{background:white;color:black}#aiq-root::before{display:none}#aiq-root .container{max-width:100%;padding:0}#aiq-root .header, #aiq-root .buttons, #aiq-root .export-buttons, #aiq-root .internal-toggle, #aiq-root .internal-view{display:none!important}#aiq-root .step{display:none}#aiq-root .step.active{display:block}#aiq-root .option-card{break-inside:avoid}#aiq-root .dim-bar-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
-@media (max-width:640px){#aiq-root .container{padding:var(--sp2) var(--sp2) var(--sp5)}#aiq-root .step h1{font-size:1.5rem}#aiq-root .step h2{font-size:1.25rem}#aiq-root .landing-features{grid-template-columns:1fr}#aiq-root .buttons{flex-direction:column}#aiq-root .btn{justify-content:center}#aiq-root .progress-bar{width:80px}#aiq-root .progress-container span{display:none}#aiq-root .option-card{padding:var(--sp1) var(--sp2)}#aiq-root .question-text{font-size:1rem}#aiq-root .export-buttons{flex-direction:column}#aiq-root .internal-table{font-size:0.6rem}#aiq-root .internal-table th, #aiq-root .internal-table td{padding:4px 6px}}
-#aiq-root *:focus-visible{outline:2px solid var(--accent-gold);outline-offset:2px;border-radius:4px}
+@media (max-width:640px){#aiq-root .container{padding:var(--sp2) var(--sp2) var(--sp5)}#aiq-root .step h1{font-size:1.3rem}#aiq-root .step h2{font-size:1.05rem}#aiq-root .landing-features{grid-template-columns:1fr}#aiq-root .buttons{flex-direction:column}#aiq-root .btn{justify-content:center}#aiq-root .progress-bar{width:80px}#aiq-root .progress-container span{display:none}#aiq-root .option-card{padding:var(--sp1) var(--sp2)}#aiq-root .question-text{font-size:1.05rem}#aiq-root .export-buttons{flex-direction:column}#aiq-root .internal-table{font-size:0.65rem}#aiq-root .internal-table th, #aiq-root .internal-table td{padding:4px 6px}}
+#aiq-root *:focus-visible{outline:2px solid var(--accent-gold);outline-offset:2px;border-radius:0}
 @media (prefers-reduced-motion:reduce){#aiq-root, #aiq-root *, #aiq-root *::before, #aiq-root *::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
-
 </style>
-</head>
+
 <body>
 
 <!-- ===== GLOBAL NETWORK BACKGROUND ===== -->
@@ -1900,7 +1895,7 @@ body.night #view-thesis > .section:first-of-type::before {
         <div class="col-4">
 
           <div class="pillar-card">
-            <span class="pillar-icon">⚡</span>
+            <span class="pillar-icon">01</span>
             <div class="pillar-name">TimeForce</div>
             <div class="pillar-audience">For anyone with time and willingness</div>
             <p class="pillar-desc">Exchange time and skills for sats. Short tasks, immediate settlement. Move, clean, verify, show up. Proof-of-work meets proof-of-attendance.</p>
@@ -1909,7 +1904,7 @@ body.night #view-thesis > .section:first-of-type::before {
         </div>
         <div class="col-4">
           <div class="pillar-card">
-            <span class="pillar-icon">💼</span>
+            <span class="pillar-icon">02</span>
             <div class="pillar-name">EasyJobs</div>
             <div class="pillar-audience">For skilled workers seeking Bitcoin-native careers</div>
             <p class="pillar-desc">Bitcoin-only career placements. Roles at companies that pay in sats. Operations to engineering. Salary runs on Lightning. No fiat detour.</p>
@@ -1918,7 +1913,7 @@ body.night #view-thesis > .section:first-of-type::before {
         </div>
         <div class="col-4">
           <div class="pillar-card">
-            <span class="pillar-icon">🛠️</span>
+            <span class="pillar-icon">03</span>
             <div class="pillar-name">EasyDevs</div>
             <div class="pillar-audience">For builders, designers, and technical freelancers</div>
             <p class="pillar-desc">Freelance bounties for wallet features, node dashboards, Lightning integrations. Paid in bitcoin on completion. No 20% platform cut.</p>
@@ -2093,8 +2088,8 @@ body.night #view-thesis > .section:first-of-type::before {
     <div class="section" style="padding-top: 40px;">
       <div class="grid">
         <div class="col-full">
-          <div class="eyebrow" style="color: var(--gold);">Doctrine</div>
-          <h1 class="display">FreedomTech.<br><span style="color: var(--gold);">The removal of<br>rent-takers.</span></h1>
+          <div class="eyebrow" style="color: var(--ember);">Doctrine</div>
+          <h1 class="display">FreedomTech.<br><span style="color: var(--ember);">The removal of<br>rent-takers.</span></h1>
         </div>
       </div>
     </div>
@@ -2103,7 +2098,7 @@ body.night #view-thesis > .section:first-of-type::before {
     <div class="section">
       <div class="grid">
         <div class="col-8">
-          <div class="section-label" style="color: var(--gold);">FreedomTech — full text</div>
+          <div class="section-label" style="color: var(--ember);">FreedomTech — full text</div>
           <h2 class="display-hed">FreedomTech is the removal of unnecessary intermediaries — from your workflow and from your money — using tools that are open, verifiable, and controlled by the people who use them.</h2>
           <p class="body-lg" style="margin-top: 24px;">That is the whole doctrine. Every system we build exists to make one or more intermediaries unnecessary. Not disrupted. Not "democratised." Unnecessary. The rent flows back to the person who earned it.</p>
         </div>
@@ -2137,7 +2132,7 @@ body.night #view-thesis > .section:first-of-type::before {
     <div class="section">
       <div class="grid">
         <div class="col-full">
-          <div class="section-label" style="color: var(--gold); margin-bottom: 21px;">TPOK — The Pursuit of Knowledge</div>
+          <div class="section-label" style="color: var(--ember); margin-bottom: 21px;">TPOK — The Pursuit of Knowledge</div>
           <div class="card card-accent-gold" style="max-width: 600px;">
             <div class="card-title">Edutainment events — learning frontier tech the fun way.</div>
             <div class="card-sub">Bitcoin · Lightning nodes · Nostr · and more</div>
@@ -2186,20 +2181,19 @@ body.night #view-thesis > .section:first-of-type::before {
 </div>
 
 <div class="step active" data-step="0" data-type="landing">
-<div class="landing-icon">AI</div>
+<div class="assessment-eyebrow">ASSESSMENT / 8 DIMENSIONS</div>
 <h1>Is Your Business Ready for an AI Assistant?</h1>
 <p class="subtitle">Is your business ready for an AI assistant? Find out in 5 minutes.</p>
 <div class="landing-features">
-<div class="feature"><div class="feature-icon">⏱</div><div class="feature-title">Under 5 minutes</div><div class="feature-desc">No preparation needed.</div></div>
-<div class="feature"><div class="feature-icon">🔒</div><div class="feature-title">100% Private</div><div class="feature-desc">Nothing is sent to any server.</div></div>
-<div class="feature"><div class="feature-icon">📊</div><div class="feature-title">Instant Results</div><div class="feature-desc">Results immediately.</div></div>
-<div class="feature"><div class="feature-icon">🤝</div><div class="feature-title">No Obligation</div><div class="feature-desc">Not a sales pitch.</div></div>
+<div class="feature"><div class="feature-title">01 — Under 5 minutes</div><div class="feature-desc">No preparation needed.</div></div>
+<div class="feature"><div class="feature-title">02 — 100% Private</div><div class="feature-desc">Nothing is sent to any server.</div></div>
+<div class="feature"><div class="feature-title">03 — Instant Results</div><div class="feature-desc">Results immediately.</div></div>
+<div class="feature"><div class="feature-title">04 — No Obligation</div><div class="feature-desc">Not a sales pitch.</div></div>
 </div>
-<div class="privacy-note"><span class="icon">🔐</span><span>Stored in this browser tab only. Progress saves locally. We never send your information anywhere.</span></div>
+<div class="assessment-divider"></div>
+<div class="privacy-note"><span>Stored in this browser tab only. Progress saves locally. We never send your information anywhere.</span></div>
 <div class="buttons"><button class="btn btn-primary" onclick="aiq_next()">Start</button></div>
 </div>
-
-<div class="step" data-step="1" data-type="contact">
 <h2>About You</h2>
 <p class="subtitle">A few details to tailor your results.</p>
 <div class="form-group"><label class="field-label">Company Name</label><input type="text" id="contact-company" placeholder="e.g., Smart Polar Distributors" required></div>
@@ -3086,15 +3080,13 @@ function aiq_renderResults(){
 
   let h='<div class="results-header">';
   h+='<div class="score-circle">';
-  h+='<svg viewBox="0 0 160 160"><circle cx="80" cy="80" r="70" fill="none" stroke="#2A241C" stroke-width="10"/><circle cx="80" cy="80" r="70" fill="none" stroke="'+aiq_getScoreColor(scoreInt)+'" stroke-width="10" stroke-dasharray="'+(scoreInt*4.4)+' 440" stroke-linecap="round"/></svg>';
   h+='<div class="score-value">'+scoreInt+'</div>';
+  h+='<div class="score-scale"><div class="score-tick" style="left:'+scoreInt+'%"></div></div>';
   h+='</div>';
   h+='<div class="tier-badge '+tierClass+'">'+tier.name+'</div>';
   h+='<h2>Your Results</h2>';
   h+='<p class="subtitle">'+tier.description+'</p>';
-  h+='</div>';
-
-  if(aiq_triggeredDQs.length>0){
+  h+='</div>';if(aiq_triggeredDQs.length>0){
     h+='<div class="results-section"><h3>What Needs to Change</h3>';
     aiq_triggeredDQs.forEach(dq=>{
       const dqInfo=aiq_DISQUALIFIERS[dq];
