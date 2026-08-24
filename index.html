@@ -1,0 +1,3339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OKIN Ent — The Hub</title>
+<style>
+/* ============================================
+   THE HUB v6 — "Network of Hubs"
+   OKIN Ent · single-file offline demo
+   v6: global network bg, retro loader,
+       hero shrink, CTAs centered, green accent,
+       TPOK + ecosystem strip.
+   All v5 architecture preserved.
+   ============================================ */
+
+/* --- Custom Properties --- */
+:root {
+  --base: #0E0C0A;
+  --surface: #16130F;
+  --surface-lift: #1A1611;
+  --hairline: #2A241C;
+  --hairline-soft: rgba(237,231,218,0.06);
+  --text: #EDE7DA;
+  --text-dim: #9C8F7A;
+  --text-faint: rgba(237,231,218,0.35);
+  --gold: #d4af37;
+  --ember: #e8862d;
+  --teal: #22d3ee;
+  --green: #3fb950;
+  --btc: #f7931a;
+  --data-bg: #1A1611;
+  --data-text: #EDE7DA;
+
+  /* Golden ratio scale */
+  --phi: 1.618;
+  --sp1: 8px;
+  --sp2: 13px;
+  --sp3: 21px;
+  --sp4: 34px;
+  --sp5: 55px;
+  --sp6: 89px;
+  --sp7: 144px;
+
+  --serif: "Iowan Old Style", "Apple Georgia", "Times New Roman", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, "Roboto Mono", monospace;
+
+  --grid-cols: 12;
+  --gutter: 16px;
+  --maxw: 1200px;
+  --rail-w: 40px;
+}
+
+/* --- Reset --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  background: var(--base);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+/* --- Utility --- */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); border: 0;
+}
+.rail-num {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  display: inline-block;
+  min-width: 28px;
+  margin-right: 12px;
+  vertical-align: top;
+  padding-top: 4px;
+  flex-shrink: 0;
+}
+
+/* --- Masthead --- */
+.masthead {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  height: 52px;
+  border-bottom: 1px solid var(--hairline);
+  background: rgba(14,12,10,0.92);
+  backdrop-filter: blur(8px);
+}
+.masthead-zone {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+.masthead-left { justify-content: flex-start; }
+.masthead-center { justify-content: center; }
+.masthead-right { justify-content: flex-end; gap: 16px; }
+.masthead-brand {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+.masthead-brand .brand-gold { color: var(--gold); }
+.masthead-hub-title {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.masthead-tag {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* --- Mempool Strip — DARK instrument panel --- */
+.mempool-strip {
+  position: fixed;
+  top: 52px; left: 0; right: 0;
+  z-index: 90;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 0 28px;
+  border-bottom: 1px solid var(--data-bg);
+  background: var(--data-bg);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.mempool-strip .strip-item {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--data-text);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.mempool-strip .strip-label {
+  text-transform: uppercase;
+  color: rgba(237,231,218,0.5);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+}
+.mempool-strip .strip-val { color: var(--data-text); }
+.mempool-strip .strip-val.btc { color: var(--btc); }
+.mempool-strip .strip-val.teal { color: var(--teal); }
+.mempool-strip .strip-sep {
+  width: 1px; height: 16px;
+  background: rgba(237,231,218,0.2);
+  flex-shrink: 0;
+}
+.mempool-strip .strip-fallback {
+  font-size: 0.65rem;
+  color: rgba(237,231,218,0.7);
+  letter-spacing: 0.08em;
+}
+.mempool-strip .strip-fallback-tag {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(237,231,218,0.7);
+  border: 1px solid rgba(237,231,218,0.3);
+  padding: 1px 5px;
+  margin-right: 4px;
+}
+
+/* --- Top Nav --- */
+.top-nav {
+  position: fixed;
+  top: 88px; left: 0; right: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 28px;
+  height: 44px;
+  border-bottom: 1px solid var(--hairline);
+  background: rgba(14,12,10,0.88);
+  backdrop-filter: blur(6px);
+}
+.nav-link {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 8px 16px;
+  transition: color 0.15s ease;
+  position: relative;
+}
+.nav-link:hover { color: var(--text); }
+.nav-link.active { color: var(--text); }
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 16px; right: 16px;
+  height: 1px;
+  background: var(--text);
+}
+.nav-link.door-business.active::after { background: var(--ember); }
+.nav-link.door-earn.active::after { background: var(--btc); }
+.nav-link.door-philosophy.active::after { background: var(--gold); }
+
+/* --- App Container --- */
+#app {
+  padding-top: 132px;
+  padding-bottom: 50px;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Views --- */
+.view {
+  display: none;
+  opacity: 0;
+}
+.view.active {
+  display: block;
+  opacity: 1;
+}
+
+/* --- Footer --- */
+.hub-footer {
+  border-top: 1px solid var(--hairline);
+  margin-top: var(--sp6);
+  padding: var(--sp5) 28px var(--sp5);
+  position: relative;
+}
+.footer-verification {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-bottom: var(--sp4);
+}
+.footer-verification strong { color: var(--text); font-weight: 500; }
+.footer-watermark {
+  font-family: var(--serif);
+  font-size: 3rem;
+  color: var(--text);
+  opacity: 0.04;
+  position: absolute;
+  bottom: var(--sp4);
+  right: 28px;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+}
+.footer-links {
+  display: flex;
+  gap: 20px;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.footer-links a:hover { color: var(--text); }
+.footer-legacy {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  margin-top: var(--sp3);
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
+  gap: var(--gutter);
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 28px;
+}
+.col-full { grid-column: 1 / -1; }
+.col-6 { grid-column: span 6; }
+.col-4 { grid-column: span 4; }
+.col-3 { grid-column: span 3; }
+.col-8 { grid-column: span 8; }
+.col-5 { grid-column: span 5; }
+.col-7 { grid-column: span 7; }
+
+/* Section spacing — golden ratio scale */
+.section {
+  padding: var(--sp6) 0;
+  border-bottom: 1px solid var(--hairline-soft);
+}
+.section-sm { padding: var(--sp5) 0; }
+.section-lg { padding: var(--sp7) 0; }
+
+/* --- Typography --- */
+.display {
+  font-family: var(--serif);
+  font-size: clamp(3.25rem, 8vw, 7.5rem);
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.display-sm {
+  font-family: var(--serif);
+  font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+  line-height: 1.08;
+  font-weight: 500;
+}
+.display-hed {
+  font-family: var(--serif);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.15;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+  display: block;
+}
+.body-lg {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--text-dim);
+  max-width: 60ch;
+}
+.body-md {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--text-dim);
+}
+.mono {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+}
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+}
+.section-label.bordered {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* Drop-cap */
+.drop-cap::first-letter {
+  font-family: var(--serif);
+  font-size: 3.6em;
+  float: left;
+  line-height: 0.8;
+  padding-right: 10px;
+  padding-top: 4px;
+  color: var(--ember);
+  font-weight: 600;
+}
+
+/* --- Cards --- */
+.card {
+  border: 1px solid var(--hairline);
+  padding: 28px;
+  background: var(--surface);
+  transition: border-color 0.15s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.25), transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.card:hover {
+  border-color: rgba(237,231,218,0.18);
+  transform: translateY(-4px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+.card:hover::before { opacity: 1; }
+.card-title {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.card-sub {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  letter-spacing: 0.02em;
+}
+.card-body {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+.card-accent-ember { border-left: 2px solid var(--ember); }
+.card-accent-btc { border-left: 2px solid var(--btc); }
+.card-accent-gold { border-left: 2px solid var(--gold); }
+.card-accent-teal { border-left: 2px solid var(--teal); }
+
+/* --- Hairline separator --- */
+.hairline-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 20px 0;
+}
+.hairline-row::before,
+.hairline-row::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--hairline);
+}
+
+/* --- Methodology blocks --- */
+.method-block {
+  border-left: 1px solid var(--hairline);
+  padding-left: 24px;
+  margin-bottom: 32px;
+  position: relative;
+}
+.method-block::before {
+  content: '';
+  position: absolute;
+  left: -3px; top: 6px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--ember);
+}
+.method-block .method-step {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+.method-block .method-sub {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 55ch;
+}
+
+/* --- Doors --- */
+.door-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 420px;
+}
+.door {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.2s ease;
+  position: relative;
+}
+.door:hover { transform: translateY(-2px); }
+.door-business {
+  background: var(--surface);
+  border-right: 1px solid var(--hairline);
+}
+.door-business:hover { background: rgba(232,134,45,0.04); }
+.door-earn { background: var(--surface); }
+.door-earn:hover { background: rgba(247,147,26,0.04); }
+.door .door-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.door-business .door-label { color: var(--ember); }
+.door-earn .door-label { color: var(--btc); }
+.door .door-title {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.door .door-desc {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.65;
+  max-width: 44ch;
+}
+.door .door-cta {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.door .door-cta::after { content: '→'; font-size: 0.9rem; }
+.door-business .door-cta { color: var(--ember); }
+.door-earn .door-cta { color: var(--btc); }
+
+/* --- Manifesto band --- */
+.manifesto-band {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+.manifesto-item {
+  padding: 36px 28px;
+  border-right: 1px solid var(--hairline);
+}
+.manifesto-item:last-child { border-right: none; }
+.manifesto-item .manifesto-num {
+  font-family: var(--serif);
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.manifesto-item:nth-child(1) .manifesto-num { color: var(--ember); }
+.manifesto-item:nth-child(2) .manifesto-num { color: var(--teal); }
+.manifesto-item:nth-child(3) .manifesto-num { color: var(--gold); }
+.manifesto-item .manifesto-title {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+}
+.manifesto-item .manifesto-text {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* --- Pillars --- */
+.pillar-card {
+  border: 1px solid var(--hairline);
+  padding: 32px;
+  background: var(--surface);
+  height: 100%;
+  transition: border-color 0.15s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+.pillar-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.pillar-card:hover {
+  border-color: rgba(237,231,218,0.18);
+  transform: translateY(-4px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+.pillar-card:hover::before { opacity: 1; }
+.pillar-card .pillar-icon {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  display: block;
+}
+.pillar-card .pillar-name {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  margin-bottom: 4px;
+}
+.pillar-card .pillar-audience {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--btc);
+  margin-bottom: 14px;
+}
+.pillar-card .pillar-desc {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+.pillar-card .pillar-mechanic {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  letter-spacing: 0.04em;
+}
+
+/* --- Flow steps --- */
+.flow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  position: relative;
+}
+.flow-step {
+  flex: 1;
+  padding: 24px 20px;
+  border: 1px solid var(--hairline);
+  border-right: none;
+  text-align: left;
+}
+.flow-step:last-child { border-right: 1px solid var(--hairline); }
+.flow-step .flow-num {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--btc);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.flow-step .flow-name {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+.flow-step .flow-desc {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* --- Solution row --- */
+.solution-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+}
+.solution-cell {
+  padding: 32px;
+  border: 1px solid var(--hairline);
+  border-right: none;
+}
+.solution-cell:last-child { border-right: 1px solid var(--hairline); }
+.solution-cell .sol-num {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+.solution-cell .sol-title {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+}
+.solution-cell .sol-body {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.65;
+}
+
+/* --- CTA --- */
+.cta-block {
+  text-align: center;
+  padding: 48px 0;
+}
+.cta-block .cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 16px 28px;
+  border: 1px solid var(--text);
+  color: var(--text);
+  transition: background 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+}
+.cta-block .cta-btn:hover { background: var(--text); color: var(--base); }
+.cta-block .cta-btn.ember { border-color: var(--ember); color: var(--ember); }
+.cta-block .cta-btn.ember:hover { background: var(--ember); color: var(--base); }
+.cta-block .cta-btn.btc { border-color: var(--btc); color: var(--btc); }
+.cta-block .cta-btn.btc:hover { background: var(--btc); color: var(--base); }
+
+/* --- Tenet blocks (philosophy) --- */
+.tenet-block {
+  padding: 36px 0;
+  border-bottom: 1px solid var(--hairline-soft);
+}
+.tenet-block:last-child { border-bottom: none; }
+.tenet-block .tenet-title {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+  color: var(--gold);
+}
+.tenet-block .tenet-body {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+  max-width: 65ch;
+}
+
+/* --- Ledger note --- */
+.ledger-note {
+  border: 1px solid var(--hairline);
+  padding: 28px;
+  background: var(--surface);
+  position: relative;
+}
+.ledger-note::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.2), transparent);
+}
+.ledger-note .ledger-title {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+.ledger-note .ledger-text {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+/* --- Numbered rail sections with left rail --- */
+.section-row {
+  display: grid;
+  grid-template-columns: var(--rail-w) 1fr;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+.section-row .rail {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding-top: 8px;
+}
+
+/* ============================================
+   GLOBAL NETWORK-OF-HUBS BACKGROUND
+   ============================================ */
+.global-network-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.45;
+}
+.global-network-bg .gn-line {
+  stroke: var(--text-dim);
+  stroke-width: 0.6;
+  opacity: 0.12;
+}
+.global-network-bg .gn-pulse {
+  fill: var(--gold);
+  opacity: 0;
+}
+.global-network-bg .gn-pulse.active {
+  animation: gnPulseTravel 4s linear infinite;
+}
+.global-network-bg .gn-node {
+  fill: var(--text-dim);
+  opacity: 0.25;
+  transition: fill 0.4s ease, opacity 0.4s ease;
+}
+.global-network-bg .gn-node-label {
+  fill: var(--text-dim);
+  opacity: 0.2;
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: opacity 0.4s ease;
+}
+.global-network-bg .gn-node.active {
+  fill: var(--gold);
+  opacity: 1;
+}
+.global-network-bg .gn-node-label.active {
+  opacity: 0.7;
+}
+
+@keyframes gnPulseTravel {
+  0%   { opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+/* ============================================
+   RETRO ROBOT LOADER
+   ============================================ */
+.retro-robot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--base);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.retro-robot-overlay.visible {
+  opacity: 1;
+}
+.retro-robot {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+}
+.retro-robot .robot-body {
+  animation: robotBob 0.6s steps(2, end) infinite;
+}
+.retro-robot .robot-antenna {
+  animation: robotAntenna 0.4s steps(2, end) infinite;
+}
+.retro-robot .robot-arm-l {
+  animation: robotArmL 0.5s steps(2, end) infinite;
+}
+.retro-robot .robot-arm-r {
+  animation: robotArmR 0.5s steps(2, end) infinite;
+}
+
+@keyframes robotBob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+@keyframes robotAntenna {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+@keyframes robotArmL {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(8deg); }
+}
+@keyframes robotArmR {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(-8deg); }
+}
+
+/* Robot offline state — bottom corner, persistent */
+.retro-robot-offline {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 150;
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.retro-robot-offline.visible {
+  opacity: 0.6;
+}
+.retro-robot-offline .robot-body {
+  animation: robotBob 0.6s steps(2, end) infinite;
+}
+.retro-robot-offline .robot-antenna {
+  animation: robotAntenna 0.3s steps(2, end) infinite;
+}
+
+/* ============================================
+   ECOSYSTEM STRIP (OKIN family)
+   ============================================ */
+.ecosystem-strip {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  overflow: hidden;
+}
+.ecosystem-strip .ecosystem-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 13px 21px;
+  border-right: 1px solid var(--hairline);
+  flex-shrink: 0;
+}
+.ecosystem-strip .ecosystem-tiles {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: 1;
+}
+.ecosystem-strip .ecosystem-tile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 21px;
+  border-right: 1px solid var(--hairline);
+  transition: background 0.15s ease;
+}
+.ecosystem-strip .ecosystem-tile:last-child { border-right: none; }
+.ecosystem-strip .ecosystem-tile:hover { background: rgba(237,231,218,0.03); }
+.ecosystem-strip .ecosystem-tile-name {
+  font-family: var(--serif);
+  font-size: 0.85rem;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+.ecosystem-strip .ecosystem-tile-tag {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ============================================
+   HERO GLOW + MOTIF
+   ============================================ */
+
+/* Hero warm glow — controlled ember at low opacity */
+#view-thesis > .section:first-of-type {
+  position: relative;
+  overflow: hidden;
+}
+#view-thesis > .section:first-of-type::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  width: 80%;
+  height: 140%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(232,134,45,0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: heroGlow 6s ease-in-out infinite;
+}
+@keyframes heroGlow {
+  0%, 100% { opacity: 0.04; }
+  50% { opacity: 0.10; }
+}
+#view-thesis > .section:first-of-type > .grid {
+  position: relative;
+  z-index: 1;
+}
+
+/* Floating network motif */
+.hero-motif {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+  animation: motifDrift 14s ease-in-out infinite;
+}
+.hero-motif svg {
+  width: 100%;
+  height: 100%;
+}
+@keyframes motifDrift {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(10px, -8px); }
+  50% { transform: translate(20px, 0); }
+  75% { transform: translate(8px, 6px); }
+}
+
+/* Business hero — secondary subhead scale, tightened */
+.business-hero-sub {
+  font-family: var(--serif);
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  line-height: 1.35;
+  font-weight: 400;
+  color: var(--text-dim);
+  max-width: 55ch;
+  margin-bottom: var(--sp2);
+}
+
+/* Solutions hero sub — green accent */
+.green-accent {
+  color: var(--green);
+}
+
+/* ============================================
+   SCROLL REVEAL
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.28s ease-out, transform 0.28s ease-out;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   DATA PULSE
+   ============================================ */
+.pulse-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.pulse-dot.live {
+  background: var(--teal);
+  animation: dataPulse 2s ease-in-out infinite;
+}
+.pulse-dot.offline {
+  background: rgba(237,231,218,0.4);
+}
+@keyframes dataPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.6; }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+  .pulse-dot { animation: none !important; }
+  .hero-motif { animation: none !important; }
+  .living-sky { animation: none !important; opacity: 0.06; }
+  .global-network-bg .gn-pulse { animation: none !important; opacity: 0 !important; }
+  .retro-robot .robot-body,
+  .retro-robot .robot-antenna,
+  .retro-robot .robot-arm-l,
+  .retro-robot .robot-arm-r,
+  .retro-robot-offline .robot-body,
+  .retro-robot-offline .robot-antenna { animation: none !important; }
+}
+
+/* ============================================
+   ATMOSPHERE TOGGLE + NIGHT MODE
+   ============================================ */
+
+.atmosphere-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  background: var(--surface);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+.atmosphere-toggle:hover {
+  border-color: rgba(237,231,218,0.18);
+}
+.atmosphere-toggle span {
+  padding: 5px 12px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.atmosphere-toggle .toggle-ember {
+  background: var(--ember);
+  color: var(--base);
+}
+.atmosphere-toggle .toggle-dark {
+  background: transparent;
+  color: var(--text-dim);
+}
+body.night .atmosphere-toggle .toggle-ember {
+  background: transparent;
+  color: var(--text-dim);
+}
+body.night .atmosphere-toggle .toggle-dark {
+  background: #2a2218;
+  color: var(--text);
+}
+
+/* Night mode — deeper, cooler dark */
+body.night {
+  --base: #0A0908;
+  --surface: #110E0B;
+  --surface-lift: #14110E;
+  --hairline: #1E1914;
+  --hairline-soft: rgba(237,231,218,0.04);
+  --text: #E5DFD2;
+  --text-dim: #8A7F6E;
+  --text-faint: rgba(229,223,210,0.3);
+  --ember: #D67A2A;
+  --gold: #C9A42F;
+  --data-bg: #0F0D0A;
+  --data-text: #E5DFD2;
+}
+body.night .masthead {
+  background: rgba(10,9,8,0.92);
+  border-bottom-color: #1E1914;
+}
+body.night .top-nav {
+  background: rgba(10,9,8,0.88);
+  border-bottom-color: #1E1914;
+}
+body.night .mempool-strip {
+  background: #0F0D0A;
+  border-bottom-color: #0F0D0A;
+}
+body.night #view-thesis > .section:first-of-type::before {
+  background: radial-gradient(ellipse at center, rgba(214,122,42,0.04) 0%, transparent 70%);
+}
+
+/* ============================================
+   LIVING SKY — breathing dark gradient
+   ============================================ */
+.living-sky {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.living-sky.is-active { opacity: 1; }
+.living-sky::before,
+.living-sky::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  will-change: background-position, opacity;
+}
+.living-sky::before {
+  width: 120%;
+  height: 80%;
+  left: -10%;
+  top: -20%;
+  background: radial-gradient(ellipse at 30% 20%, rgba(232,134,45,0.08) 0%, rgba(212,175,55,0.05) 40%, transparent 70%);
+  background-size: 300% 300%;
+  animation: skyDriftA 24s ease-in-out infinite;
+}
+.living-sky::after {
+  width: 100%;
+  height: 70%;
+  left: 10%;
+  top: -10%;
+  background: radial-gradient(ellipse at 70% 30%, rgba(34,211,238,0.05) 0%, rgba(180,80,90,0.04) 45%, transparent 70%);
+  background-size: 300% 300%;
+  animation: skyDriftB 24s ease-in-out infinite;
+}
+@keyframes skyDriftA {
+  0%   { background-position: 0% 50%; opacity: 0.85; }
+  25%  { background-position: 50% 30%; opacity: 1.0; }
+  50%  { background-position: 100% 50%; opacity: 0.9; }
+  75%  { background-position: 50% 70%; opacity: 0.7; }
+  100% { background-position: 0% 50%; opacity: 0.85; }
+}
+@keyframes skyDriftB {
+  0%   { background-position: 100% 50%; opacity: 0.7; }
+  25%  { background-position: 50% 70%; opacity: 0.85; }
+  50%  { background-position: 0% 50%; opacity: 1.0; }
+  75%  { background-position: 50% 30%; opacity: 0.9; }
+  100% { background-position: 100% 50%; opacity: 0.7; }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .grid { padding: 0 16px; gap: 12px; }
+  .col-6, .col-4, .col-3, .col-8, .col-5, .col-7 { grid-column: 1 / -1; }
+  .door-grid { grid-template-columns: 1fr; }
+  .door-business { border-right: none; border-bottom: 1px solid var(--hairline); }
+  .manifesto-band { grid-template-columns: 1fr; }
+  .manifesto-item { border-right: none; border-bottom: 1px solid var(--hairline); }
+  .manifesto-item:last-child { border-bottom: none; }
+  .solution-row { grid-template-columns: 1fr; }
+  .solution-cell { border-right: 1px solid var(--hairline); border-bottom: none; }
+  .flow { flex-direction: column; }
+  .flow-step { border-right: 1px solid var(--hairline); border-bottom: none; }
+  .flow-step:last-child { border-bottom: none; }
+  .top-nav { overflow-x: auto; gap: 0; }
+  .nav-link { padding: 8px 12px; font-size: 0.7rem; }
+  .mempool-strip { gap: 16px; padding: 0 16px; }
+  .section { padding: var(--sp5) 0; }
+  .section-lg { padding: var(--sp6) 0; }
+  .section-row { grid-template-columns: 1fr; gap: 8px; }
+  .section-row .rail { padding-top: 0; }
+  .footer-watermark { font-size: 2rem; }
+  .display { font-size: clamp(2.5rem, 10vw, 4.5rem); }
+  .masthead-hub-title { font-size: 0.9rem; }
+  .ecosystem-strip { flex-direction: column; }
+  .ecosystem-strip .ecosystem-label { border-right: none; border-bottom: 1px solid var(--hairline); width: 100%; }
+  .ecosystem-strip .ecosystem-tiles { flex-direction: column; width: 100%; }
+  .ecosystem-strip .ecosystem-tile { border-right: none; border-bottom: 1px solid var(--hairline); width: 100%; }
+  .ecosystem-strip .ecosystem-tile:last-child { border-bottom: none; }
+}
+}
+
+/* ============================================
+   CUSTOM CURSOR FOLLOWER
+   ============================================ */
+
+
+
+@media (hover: none), (pointer: coarse) {
+  
+}
+@media (prefers-reduced-motion: reduce) {
+  
+}
+
+/* ============================================
+   KONAMI MANIFESTO OVERLAY
+   ============================================ */
+.konami-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(14,12,10,0.92);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  cursor: pointer;
+}
+.konami-overlay.visible { opacity: 1; pointer-events: auto; }
+.konami-text {
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s;
+}
+.konami-overlay.visible .konami-text { opacity: 1; transform: translateY(0); }
+.konami-hint {
+  position: absolute;
+  bottom: 40px; left: 0; right: 0;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ============================================
+   SATOSHI TOAST
+   ============================================ */
+.satoshi-toast {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  z-index: 400;
+  background: rgba(22,19,15,0.96);
+  border: 1px solid rgba(212,175,55,0.2);
+  padding: 16px 24px;
+  max-width: 480px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.satoshi-toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+.satoshi-toast .toast-quote {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.satoshi-toast .toast-attr {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* ============================================
+   TPOK CARD
+   ============================================ */
+.card-accent-gold { border-left: 2px solid var(--gold); }
+
+<style>
+/* AI Readiness Questionnaire — reskinned to The Hub palette */
+#aiq-root{
+  --bg-primary:var(--base);
+  --bg-secondary:var(--surface);
+  --bg-tertiary:var(--surface-lift);
+  --bg-card:var(--surface);
+  --bg-card-hover:var(--surface-lift);
+  --bg-input:var(--base);
+  --text-primary:var(--text);
+  --text-secondary:var(--text-dim);
+  --text-muted:var(--text-faint);
+  --accent-gold:var(--gold);
+  --accent-ember:var(--ember);
+  --accent-teal:var(--teal);
+  --accent-teal-dim:rgba(34,211,238,0.12);
+  --border:var(--hairline);
+  --border-focus:rgba(34,211,238,0.4);
+  --danger:#ef4444;
+  --warning:#f59e0b);
+  --success:var(--green);
+  --radius:10px;
+  --radius-sm:6px;
+  --shadow:0 4px 24px rgba(0,0,0,0.4);
+  --transition:0.2s ease;
+  background:var(--base);
+  color:var(--text);
+  line-height:1.6;
+  min-height:100vh;
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+}
+#aiq-root::before{
+  content:'';
+  position:fixed;
+  top:0;left:0;right:0;
+  height:400px;
+  background:radial-gradient(ellipse at 50% 0%,rgba(232,134,45,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(212,175,55,0.04) 0%,transparent 50%);
+  pointer-events:none;
+  z-index:0;
+}
+
+#aiq-root{--bg-primary:#0a0f1e;--bg-secondary:#0f1629;--bg-tertiary:#162040;--bg-card:#1a2545;--bg-card-hover:#1f2d52;--bg-input:#141d35;--text-primary:#e8ecf5;--text-secondary:#a8b2c7;--text-muted:#6b7a99;--accent-gold:#d4af37;--accent-ember:#e8862e;--accent-teal:#22d3ee;--accent-teal-dim:rgba(34,211,238,0.15);--border:rgba(255,255,255,0.08);--border-focus:rgba(34,211,238,0.5);--danger:#ef4444;--warning:#f59e0b;--success:#22d3ee;--radius:12px;--radius-sm:8px;--shadow:0 4px 24px rgba(0,0,0,0.3);--transition:0.2s ease}
+#aiq-root, #aiq-root *{margin:0;padding:0;box-sizing:border-box}
+#aiq-root{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+#aiq-root::before{content:'';position:fixed;top:0;left:0;right:0;height:400px;background:radial-gradient(ellipse at 50% 0%,rgba(34,211,238,0.08) 0%,transparent 70%),radial-gradient(ellipse at 80% 20%,rgba(212,175,55,0.05) 0%,transparent 50%);pointer-events:none;z-index:0}
+#aiq-root .container{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:24px 20px 80px;min-height:100vh;display:flex;flex-direction:column}
+#aiq-root .header{display:flex;align-items:center;justify-content:space-between;padding:16px 0 24px;border-bottom:1px solid var(--border);margin-bottom:32px}
+#aiq-root .logo{font-size:18px;font-weight:700;letter-spacing:0.5px;color:var(--text-primary)}
+#aiq-root .logo span{color:var(--accent-gold)}
+#aiq-root .progress-container{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--text-muted);font-weight:500}
+#aiq-root .progress-bar{width:120px;height:4px;background:var(--bg-tertiary);border-radius:2px;overflow:hidden}
+#aiq-root .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-teal),var(--accent-gold));border-radius:2px;transition:width 0.4s ease}
+#aiq-root .step{display:none;flex:1;animation:aiq_fadeIn 0.3s ease}
+#aiq-root .step.active{display:block}
+@keyframes aiq_fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+#aiq-root .step h1{font-size:28px;font-weight:700;margin-bottom:8px;background:linear-gradient(135deg,var(--text-primary),var(--accent-teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+#aiq-root .step h2{font-size:22px;font-weight:700;margin-bottom:6px;color:var(--text-primary)}
+#aiq-root .step .subtitle{font-size:15px;color:var(--text-secondary);margin-bottom:28px}
+#aiq-root .dimension-intro{font-size:14px;color:var(--text-muted);margin-bottom:24px;padding:14px 18px;background:var(--bg-tertiary);border-left:3px solid var(--accent-teal);border-radius:0 var(--radius-sm) var(--radius-sm) 0;line-height:1.5}
+#aiq-root .form-group{margin-bottom:28px}
+#aiq-root .form-group label.field-label{display:block;font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+#aiq-root .form-group input[type="text"], #aiq-root .form-group input[type="email"], #aiq-root .form-group input[type="tel"], #aiq-root .form-group input[type="number"], #aiq-root .form-group select, #aiq-root .form-group textarea{width:100%;padding:12px 16px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:15px;font-family:inherit;transition:border-color var(--transition),box-shadow var(--transition)}
+#aiq-root .form-group input:focus, #aiq-root .form-group select:focus, #aiq-root .form-group textarea:focus{outline:none;border-color:var(--accent-teal);box-shadow:0 0 0 3px var(--accent-teal-dim)}
+#aiq-root .form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23a8b2c7' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
+#aiq-root .form-group textarea{resize:vertical;min-height:100px}
+#aiq-root .options{display:flex;flex-direction:column;gap:10px}
+#aiq-root .option-card{position:relative;display:flex;align-items:flex-start;gap:14px;padding:16px 18px;background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all var(--transition);user-select:none}
+#aiq-root .option-card:hover{background:var(--bg-card-hover);border-color:rgba(34,211,238,0.3);transform:translateY(-1px)}
+#aiq-root .option-card.selected{border-color:var(--accent-teal);background:var(--accent-teal-dim);box-shadow:0 0 0 1px var(--accent-teal)}
+#aiq-root .option-card input{position:absolute;opacity:0;pointer-events:none}
+#aiq-root .option-card .check{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:2px solid var(--text-muted);display:flex;align-items:center;justify-content:center;transition:all var(--transition);margin-top:1px}
+#aiq-root .option-card.multi .check{border-radius:6px}
+#aiq-root .option-card.selected .check{border-color:var(--accent-teal);background:var(--accent-teal)}
+#aiq-root .option-card.selected .check::after{content:'';width:10px;height:10px;background:white;border-radius:50%}
+#aiq-root .option-card.multi.selected .check::after{width:6px;height:10px;background:transparent;border:2px solid white;border-top:none;border-left:none;border-radius:0;transform:rotate(45deg) translate(-1px,-1px)}
+#aiq-root .option-card .opt-text{font-size:15px;line-height:1.4;color:var(--text-primary)}
+#aiq-root .question{margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+#aiq-root .question:last-child{border-bottom:none;margin-bottom:0}
+#aiq-root .question-text{font-size:16px;font-weight:600;margin-bottom:14px;color:var(--text-primary);line-height:1.4}
+#aiq-root .question-text .q-num{color:var(--accent-gold);font-size:14px;margin-right:6px}
+#aiq-root .error-msg{display:none;color:var(--danger);font-size:14px;margin-top:12px;padding:10px 16px;background:rgba(239,68,68,0.1);border-radius:var(--radius-sm);border-left:3px solid var(--danger)}
+#aiq-root .error-msg.visible{display:block;animation:aiq_shake 0.4s ease}
+@keyframes aiq_shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+#aiq-root .buttons{display:flex;gap:12px;margin-top:36px;padding-top:24px;border-top:1px solid var(--border)}
+#aiq-root .btn{padding:13px 28px;border-radius:var(--radius);font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:all var(--transition);border:none;display:inline-flex;align-items:center;gap:8px}
+#aiq-root .btn-primary{background:linear-gradient(135deg,var(--accent-teal),#0ea5c9);color:#0a0f1e;box-shadow:0 4px 16px rgba(34,211,238,0.3)}
+#aiq-root .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(34,211,238,0.4)}
+#aiq-root .btn-primary:active{transform:translateY(0)}
+#aiq-root .btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
+#aiq-root .btn-secondary:hover{background:var(--bg-card-hover);border-color:rgba(255,255,255,0.15)}
+#aiq-root .btn:disabled{opacity:0.5;cursor:not-allowed;transform:none!important}
+#aiq-root .landing-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--accent-teal),var(--accent-gold));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#0a0f1e;margin-bottom:24px}
+#aiq-root .landing-features{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0}
+#aiq-root .feature{padding:16px;background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border)}
+#aiq-root .feature .feature-icon{font-size:24px;margin-bottom:8px}
+#aiq-root .feature .feature-title{font-size:14px;font-weight:600;margin-bottom:4px}
+#aiq-root .feature .feature-desc{font-size:13px;color:var(--text-muted)}
+#aiq-root .privacy-note{display:flex;align-items:flex-start;gap:12px;padding:16px;background:var(--bg-tertiary);border-radius:var(--radius);border:1px solid var(--border);margin-top:20px;font-size:14px;color:var(--text-secondary)}
+#aiq-root .privacy-note .icon{font-size:20px;flex-shrink:0}
+#aiq-root .results-header{text-align:center;margin-bottom:36px}
+#aiq-root .score-circle{width:160px;height:160px;margin:0 auto 24px;position:relative}
+#aiq-root .score-circle svg{width:100%;height:100%;transform:rotate(-90deg)}
+#aiq-root .score-circle .score-value{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:42px;font-weight:700;color:var(--text-primary)}
+#aiq-root .tier-badge{display:inline-block;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+#aiq-root .tier-badge.t0{background:rgba(239,68,68,0.15);color:#ef4444}
+#aiq-root .tier-badge.t1{background:rgba(245,158,11,0.15);color:#f59e0b}
+#aiq-root .tier-badge.t2{background:rgba(34,211,238,0.15);color:#22d3ee}
+#aiq-root .tier-badge.t3{background:rgba(212,175,55,0.15);color:#d4af37}
+#aiq-root .tier-badge.t4{background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(34,211,238,0.2));color:#d4af37}
+#aiq-root .dim-bars{margin:32px 0}
+#aiq-root .dim-bar-row{margin-bottom:16px}
+#aiq-root .dim-bar-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:14px}
+#aiq-root .dim-bar-name{color:var(--text-secondary);font-weight:500}
+#aiq-root .dim-bar-value{font-weight:700;font-size:15px}
+#aiq-root .dim-bar-track{height:8px;background:var(--bg-tertiary);border-radius:4px;overflow:hidden}
+#aiq-root .dim-bar-fill{height:100%;border-radius:4px;transition:width 1s ease;width:0}
+#aiq-root .dim-bar-fill.red{background:#ef4444}
+#aiq-root .dim-bar-fill.amber{background:#f59e0b}
+#aiq-root .dim-bar-fill.teal{background:#22d3ee}
+#aiq-root .dim-bar-fill.gold{background:linear-gradient(90deg,#d4af37,#f0d76e)}
+#aiq-root .results-section{margin:32px 0}
+#aiq-root .results-section h3{font-size:18px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+#aiq-root .opportunities, #aiq-root .risks{display:flex;flex-direction:column;gap:10px}
+#aiq-root .opp-item, #aiq-root .risk-item{padding:14px 18px;border-radius:var(--radius-sm);font-size:14px;line-height:1.5}
+#aiq-root .opp-item{background:rgba(34,211,238,0.08);border-left:3px solid var(--accent-teal)}
+#aiq-root .risk-item{background:rgba(245,158,11,0.08);border-left:3px solid var(--warning)}
+#aiq-root .action-items{display:flex;flex-direction:column;gap:8px}
+#aiq-root .action-item{padding:12px 16px;background:var(--bg-card);border-radius:var(--radius-sm);font-size:14px;border:1px solid var(--border);display:flex;align-items:flex-start;gap:10px}
+#aiq-root .action-item .bullet{color:var(--accent-ember);font-weight:700;flex-shrink:0}
+#aiq-root .dq-message{padding:14px 18px;border-radius:var(--radius-sm);font-size:14px;line-height:1.5;background:rgba(245,158,11,0.08);border-left:3px solid var(--warning);margin-bottom:12px}
+#aiq-root .next-step{padding:20px;background:var(--bg-tertiary);border-radius:var(--radius);border:1px solid var(--border);font-size:15px;line-height:1.6;margin-top:24px}
+#aiq-root .next-step .label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--accent-gold);font-weight:700;margin-bottom:6px}
+#aiq-root .export-buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+#aiq-root .internal-toggle{text-align:center;margin-top:40px;padding-top:24px;border-top:1px solid var(--border)}
+#aiq-root .internal-toggle button{background:none;border:none;color:var(--text-muted);font-size:12px;cursor:pointer;font-family:inherit;padding:6px 12px;border-radius:4px;transition:color var(--transition)}
+#aiq-root .internal-toggle button:hover{color:var(--text-secondary)}
+#aiq-root .internal-view{display:none;margin-top:32px;padding:24px;background:var(--bg-secondary);border-radius:var(--radius);border:1px solid rgba(245,158,11,0.3)}
+#aiq-root .internal-view.visible{display:block}
+#aiq-root .internal-view h4{font-size:16px;font-weight:700;color:var(--warning);margin-bottom:16px}
+#aiq-root .internal-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+#aiq-root .internal-table th, #aiq-root .internal-table td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+#aiq-root .internal-table th{color:var(--text-muted);font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:0.5px}
+#aiq-root .internal-table td{color:var(--text-secondary)}
+#aiq-root .dq-tag{display:inline-block;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;background:rgba(239,68,68,0.15);color:#ef4444;margin:2px 4px 2px 0}
+#aiq-root .no-dq{color:var(--text-muted);font-size:13px}
+#aiq-root .geographic-result{padding:12px 16px;background:var(--bg-tertiary);border-radius:var(--radius-sm);font-size:14px;margin-bottom:16px}
+@media print{#aiq-root{background:white;color:black}#aiq-root::before{display:none}#aiq-root .container{max-width:100%;padding:0}#aiq-root .header, #aiq-root .buttons, #aiq-root .export-buttons, #aiq-root .internal-toggle, #aiq-root .internal-view{display:none!important}#aiq-root .step{display:none}#aiq-root .step.active{display:block}#aiq-root .option-card{break-inside:avoid}#aiq-root .dim-bar-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (max-width:640px){#aiq-root .container{padding:16px 16px 60px}#aiq-root .step h1{font-size:24px}#aiq-root .step h2{font-size:20px}#aiq-root .landing-features{grid-template-columns:1fr}#aiq-root .buttons{flex-direction:column}#aiq-root .btn{justify-content:center}#aiq-root .progress-bar{width:80px}#aiq-root .progress-container span{display:none}#aiq-root .option-card{padding:14px 16px}#aiq-root .question-text{font-size:15px}#aiq-root .export-buttons{flex-direction:column}#aiq-root .internal-table{font-size:12px}#aiq-root .internal-table th, #aiq-root .internal-table td{padding:6px 8px}}
+#aiq-root *:focus-visible{outline:2px solid var(--accent-teal);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){#aiq-root, #aiq-root *, #aiq-root *::before, #aiq-root *::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+
+</style>
+</style>
+</head>
+<body>
+
+<!-- ===== GLOBAL NETWORK BACKGROUND ===== -->
+<svg class="global-network-bg" id="globalNetwork" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <!-- Connection lines -->
+  <line class="gn-line" x1="600" y1="380" x2="180" y2="180"/>
+  <line class="gn-line" x1="600" y1="380" x2="1020" y2="180"/>
+  <line class="gn-line" x1="600" y1="380" x2="150" y2="560"/>
+  <line class="gn-line" x1="600" y1="380" x2="1050" y2="560"/>
+  <line class="gn-line" x1="600" y1="380" x2="600" y2="100"/>
+  <line class="gn-line" x1="180" y1="180" x2="150" y2="560"/>
+  <line class="gn-line" x1="1020" y1="180" x2="1050" y2="560"/>
+  <line class="gn-line" x1="600" y1="100" x2="180" y2="180"/>
+  <line class="gn-line" x1="600" y1="100" x2="1020" y2="180"/>
+  <line class="gn-line" x1="150" y1="560" x2="80" y2="700"/>
+  <line class="gn-line" x1="1050" y1="560" x2="1120" y2="700"/>
+  <line class="gn-line" x1="80" y1="700" x2="1120" y2="700"/>
+
+  <!-- Pulse circles — animated along lines via JS positioning -->
+  <circle class="gn-pulse" id="gnPulseHome" r="3" />
+  <circle class="gn-pulse" id="gnPulseBiz" r="2.5" />
+  <circle class="gn-pulse" id="gnPulseEarn" r="2.5" />
+  <circle class="gn-pulse" id="gnPulseSol" r="2.5" />
+  <circle class="gn-pulse" id="gnPulsePhil" r="2.5" />
+  <circle class="gn-pulse" id="gnPulseAssess" r="2.5" />
+
+  <!-- Nodes -->
+  <circle class="gn-node gn-node-home" id="gnNodeHome" cx="600" cy="380" r="7" data-route="/"/>
+  <circle class="gn-node" id="gnNodeBusiness" cx="180" cy="180" r="5.5" data-route="/business"/>
+  <circle class="gn-node" id="gnNodeEarn" cx="1020" cy="180" r="5.5" data-route="/earn"/>
+  <circle class="gn-node" id="gnNodeSolutions" cx="150" cy="560" r="5.5" data-route="/solutions"/>
+  <circle class="gn-node" id="gnNodePhilosophy" cx="1050" cy="560" r="5.5" data-route="/philosophy"/>
+  <circle class="gn-node" id="gnNodeTpok" cx="600" cy="100" r="5" />
+  <circle class="gn-node" id="gnNodePeer1" cx="80" cy="700" r="4" />
+  <circle class="gn-node" id="gnNodePeer2" cx="1120" cy="700" r="4" />
+
+  <!-- Labels -->
+  <text class="gn-node-label" x="600" y="400" text-anchor="middle" id="gnLabelHome">HOME</text>
+  <text class="gn-node-label" x="180" y="160" text-anchor="middle" id="gnLabelBiz">BUSINESS</text>
+  <text class="gn-node-label" x="1020" y="160" text-anchor="middle" id="gnLabelEarn">EARN</text>
+  <text class="gn-node-label" x="150" y="540" text-anchor="middle" id="gnLabelSol">SOLUTIONS</text>
+  <text class="gn-node-label" x="1050" y="540" text-anchor="middle" id="gnLabelPhil">PHILOSOPHY</text>
+  <text class="gn-node-label" x="600" y="85" text-anchor="middle" id="gnLabelTpok">TPOK</text>
+  <text class="gn-node-label" x="80" y="720" text-anchor="middle" id="gnLabelPeer1">PEER</text>
+  <text class="gn-node-label" x="1120" y="720" text-anchor="middle" id="gnLabelPeer2">PEER</text>
+  <circle class="gn-node" id="gnNodeAssess" cx="600" cy="680" r="5" data-route="/assess"/>
+  <text class="gn-node-label" x="600" y="700" text-anchor="middle" id="gnLabelAssess">ASSESS</text>
+</svg>
+
+<!-- ===== RETRO ROBOT OVERLAY (page load) ===== -->
+<div class="retro-robot-overlay" id="retroRobotOverlay" aria-hidden="true">
+  <svg class="retro-robot" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <!-- Antenna -->
+    <rect class="robot-antenna" x="15" y="2" width="2" height="4" fill="#d4af37"/>
+    <rect x="14" y="0" width="4" height="2" fill="#d4af37"/>
+    <!-- Head -->
+    <g class="robot-body">
+      <rect x="10" y="6" width="12" height="10" fill="#9C8F7A"/>
+      <!-- Eyes -->
+      <rect x="12" y="9" width="3" height="3" fill="#0E0C0A"/>
+      <rect x="17" y="9" width="3" height="3" fill="#0E0C0A"/>
+      <rect x="13" y="10" width="1" height="1" fill="#3fb950"/>
+      <rect x="18" y="10" width="1" height="1" fill="#3fb950"/>
+      <!-- Mouth -->
+      <rect x="13" y="13" width="6" height="1" fill="#0E0C0A"/>
+      <!-- Neck -->
+      <rect x="14" y="16" width="4" height="2" fill="#6B5F50"/>
+      <!-- Body -->
+      <rect x="9" y="18" width="14" height="10" fill="#9C8F7A"/>
+      <rect x="11" y="20" width="3" height="3" fill="#0E0C0A"/>
+      <rect x="14.5" y="20" width="3" height="3" fill="#0E0C0A"/>
+      <rect x="18" y="20" width="3" height="3" fill="#0E0C0A"/>
+      <rect x="11" y="24" width="10" height="1" fill="#6B5F50"/>
+      <rect x="11" y="26" width="10" height="1" fill="#6B5F50"/>
+      <!-- Arms -->
+      <rect class="robot-arm-l" x="5" y="19" width="4" height="8" fill="#9C8F7A" style="transform-origin:9px 19px"/>
+      <rect class="robot-arm-r" x="23" y="19" width="4" height="8" fill="#9C8F7A" style="transform-origin:23px 19px"/>
+      <!-- Hands -->
+      <rect x="5" y="27" width="4" height="2" fill="#6B5F50"/>
+      <rect x="23" y="27" width="4" height="2" fill="#6B5F50"/>
+      <!-- Legs -->
+      <rect x="11" y="28" width="4" height="3" fill="#6B5F50"/>
+      <rect x="17" y="28" width="4" height="3" fill="#6B5F50"/>
+    </g>
+  </svg>
+</div>
+
+<!-- ===== RETRO ROBOT OFFLINE (persistent corner) ===== -->
+<div class="retro-robot-offline" id="retroRobotOffline" aria-hidden="true">
+  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <rect class="robot-antenna" x="15" y="2" width="2" height="4" fill="#e8862d"/>
+    <rect x="14" y="0" width="4" height="2" fill="#e8862d"/>
+    <g class="robot-body">
+      <rect x="10" y="6" width="12" height="10" fill="#9C8F7A"/>
+      <rect x="12" y="9" width="3" height="3" fill="#0E0C0A"/>
+      <rect x="17" y="9" width="3" height="3" fill="#0E0C0A"/>
+      <rect x="13" y="10" width="1" height="1" fill="#e8862d"/>
+      <rect x="18" y="10" width="1" height="1" fill="#e8862d"/>
+      <rect x="13" y="13" width="6" height="1" fill="#0E0C0A"/>
+      <rect x="14" y="16" width="4" height="2" fill="#6B5F50"/>
+      <rect x="9" y="18" width="14" height="10" fill="#9C8F7A"/>
+      <rect x="5" y="19" width="4" height="8" fill="#9C8F7A"/>
+      <rect x="23" y="19" width="4" height="8" fill="#9C8F7A"/>
+      <rect x="11" y="28" width="4" height="3" fill="#6B5F50"/>
+      <rect x="17" y="28" width="4" height="3" fill="#6B5F50"/>
+    </g>
+  </svg>
+</div>
+
+<!-- ===== MASTHEAD ===== -->
+<header class="masthead" role="banner">
+  <div class="masthead-zone masthead-left">
+    <div class="masthead-brand"><span class="brand-gold">OKIN</span> Ent</div>
+  </div>
+  <div class="masthead-zone masthead-center">
+    <div class="masthead-hub-title">THE HUB</div>
+  </div>
+  <div class="masthead-zone masthead-right">
+    <button class="atmosphere-toggle" id="atmosphereToggle" aria-pressed="false" aria-label="Toggle atmosphere between Ember and Dark">
+      <span class="toggle-ember">Ember</span>
+      <span class="toggle-dark">Dark</span>
+    </button>
+    <div class="masthead-tag">v6.2 · assess</div>
+  </div>
+</header>
+
+<!-- ===== MEMPOOL STRIP ===== -->
+<div class="mempool-strip" id="mempoolStrip" aria-label="Live Bitcoin network data">
+  <!-- filled by JS, fallback on file:// -->
+</div>
+
+<!-- ===== TOP NAV ===== -->
+<nav class="top-nav" role="aria-label" id="topNav">
+  <a href="#/" class="nav-link" data-route="/">Thesis</a>
+  <a href="#/business" class="nav-link door-business" data-route="/business">Business</a>
+  <a href="#/earn" class="nav-link door-earn" data-route="/earn">Earn</a>
+  <a href="#/solutions" class="nav-link" data-route="/solutions">Solutions</a>
+  <a href="#/philosophy" class="nav-link door-philosophy" data-route="/philosophy">Philosophy</a>
+  <a href="#/assess" class="nav-link" data-route="/assess">Assess</a>
+</nav>
+
+<!-- ===== APP ===== -->
+<main id="app">
+
+  <!-- ==========================================
+       VIEW: #/ THESIS
+       ========================================== -->
+  <section class="view" id="view-thesis">
+    <div class="section" style="padding-top: 40px; position: relative; overflow: hidden;">
+      <div class="living-sky" id="livingSky" aria-hidden="true"></div>
+      <div class="hero-motif" aria-hidden="true">
+        <svg viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice">
+          <line x1="80" y1="180" x2="280" y2="100" stroke="#e8862d" stroke-width="0.8" opacity="0.35"/>
+          <line x1="280" y1="100" x2="520" y2="220" stroke="#d4af37" stroke-width="0.8" opacity="0.35"/>
+          <line x1="520" y1="220" x2="760" y2="140" stroke="#22d3ee" stroke-width="0.8" opacity="0.35"/>
+          <line x1="520" y1="220" x2="680" y2="320" stroke="#e8862d" stroke-width="0.8" opacity="0.3"/>
+          <line x1="760" y1="140" x2="1020" y2="200" stroke="#d4af37" stroke-width="0.8" opacity="0.35"/>
+          <line x1="280" y1="100" x2="380" y2="300" stroke="#22d3ee" stroke-width="0.8" opacity="0.25"/>
+          <circle cx="80" cy="180" r="4" fill="#e8862d" opacity="0.6"/>
+          <circle cx="280" cy="100" r="4" fill="#d4af37" opacity="0.6"/>
+          <circle cx="520" cy="220" r="4" fill="#22d3ee" opacity="0.6"/>
+          <circle cx="760" cy="140" r="4" fill="#e8862d" opacity="0.6"/>
+          <circle cx="1020" cy="200" r="4" fill="#d4af37" opacity="0.6"/>
+          <circle cx="680" cy="320" r="3" fill="#22d3ee" opacity="0.5"/>
+          <circle cx="380" cy="300" r="3" fill="#e8862d" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="grid">
+        <div class="col-full">
+          <div class="eyebrow">OKIN Ent — The Hub</div>
+          <h1 class="display">Freedom is a<br>technology problem.<br><span style="color: var(--text-dim);">We solve it twice.</span></h1>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dual-door hero -->
+    <div class="grid">
+      <div class="col-full">
+        <div class="door-grid">
+          <div class="door door-business" onclick="window.location.hash='#/business'">
+            <div class="door-label">Door I — Business</div>
+            <h2 class="door-title">Businesses buy back their hours.</h2>
+            <p class="door-desc">We automate the repetitive work drowning your people. Outcome-priced, never tech-flavoured. Data stays on your machines.</p>
+            <span class="door-cta">Enter the Business view</span>
+          </div>
+          <div class="door door-earn" onclick="window.location.hash='#/earn'">
+            <div class="door-label">Door II — Earn</div>
+            <h2 class="door-title">Individuals earn their sovereignty.</h2>
+            <p class="door-desc">Namibia's Bitcoin earning layer. Time, skill, and work convert directly to sats on Lightning. No gatekeepers. No permission needed.</p>
+            <span class="door-cta">Enter the Earn view</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Three-tenet manifesto -->
+    <div class="grid">
+      <div class="col-full">
+        <div class="manifesto-band">
+          <div class="manifesto-item">
+            <div class="manifesto-num">I.</div>
+            <div class="manifesto-title">Outcome over artifact.</div>
+            <p class="manifesto-text">We ship working systems, not decks. If the number did not move, we did not finish.</p>
+          </div>
+          <div class="manifesto-item">
+            <div class="manifesto-num">II.</div>
+            <div class="manifesto-title">Proof over promise.</div>
+            <p class="manifesto-text">Every claim has a verification path. Risks stated openly. We say what we do not know.</p>
+          </div>
+          <div class="manifesto-item">
+            <div class="manifesto-num">III.</div>
+            <div class="manifesto-title">Sovereignty scales.</div>
+            <p class="manifesto-text">Own your tools. Own your savings. Become harder to exploit. That is the point.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thesis statement -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-8">
+          <div class="eyebrow">The removal of rent-takers</div>
+          <p class="body-lg drop-cap">An intermediary inserts itself between the worker and the value. Takes rent. Leaves the worker tired and the business fragile. We interrupt that pattern — on the workflow side and on the money side — with tools that remove the intermediary by design.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       VIEW: #/business
+       ========================================== -->
+  <section class="view" id="view-business">
+    <div class="section" style="padding-top: 40px;">
+      <div class="grid">
+        <div class="col-full">
+          <div class="eyebrow" style="color: var(--ember);">Door I — Business</div>
+          <h1 class="display">Freedom is a<br>technology problem.</h1>
+          <p class="business-hero-sub">We turn repetitive work into <span style="color: var(--ember);">systems that run themselves.</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Positioning -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-7">
+          <div class="section-label">Positioning</div>
+          <h2 class="display-hed">The pitch is the outcome, never the technology.</h2>
+          <p class="body-md">We never call ourselves an AI company. Automation, orchestration, inference — means, not ends. The end: fewer hours, better results, data never leaving your machines.</p>
+        </div>
+        <div class="col-4" style="margin-left: 100px;">
+          <div class="card card-accent-ember">
+            <div class="card-title">Data sovereignty</div>
+            <p class="card-body">Inference runs on your hardware. No model provider sees your data. No extraction. No surprise terms changes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anchor Programme -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-full">
+          <div class="section-label bordered">Anchor Programme</div>
+          <h2 class="display-hed" style="margin-bottom: 24px;">Intelligent automation deployments</h2>
+          <p class="body-lg">A structured, outcome-priced deployment. We find the highest-friction work and replace it with systems that run without babysitting. Measured by hours returned.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Component Services -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-full">
+          <div class="section-label">Component Services</div>
+        </div>
+        <div class="col-4">
+          <div class="card card-accent-ember card-accent-btc">
+            <div class="card-title">Deployments</div>
+            <div class="card-sub">What gets automated</div>
+            <p class="card-body">Document workflows. Reconciliation. Reporting. Triage. Scoped by hours lost, priced by outcome. Working systems, not decks.</p>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="card card-accent-ember">
+            <div class="card-title">"Where Do Your Hours Go?"</div>
+            <div class="card-sub">Assessment · N$37,000 – N$200,000 fixed</div>
+            <p class="card-body">Maps where every person-hour goes. Output: ranked automation candidates, hours reclaimed, cost of inaction. 50% credited toward deployment.</p>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="card card-accent-ember">
+            <div class="card-title">Pricing philosophy</div>
+            <div class="card-sub">Price-per-business · 50% expansion credit</div>
+            <p class="card-body">Not per seat, hour, or token. Per engagement. Expand scope, get 50% of prior costs credited forward. Compounding incentive.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Named Methodology -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-full">
+          <div class="section-label bordered">Named Methodology</div>
+          <h2 class="display-hed" style="margin-bottom: 32px;">Assess · Deploy · Prove · Expand</h2>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-6" style="padding-left: 40px;">
+          <div class="method-block">
+            <div class="method-step">Assess — the hours audit</div>
+            <p class="method-sub">Before automation, we measure. Where do people spend time a system could handle? What is the real cost?</p>
+          </div>
+          <div class="method-block">
+            <div class="method-step">Deploy — outcome-priced build</div>
+            <p class="method-sub">We build what the audit justified. Open-source, client-controlled. Outcome-priced. If it does not land, we did not earn.</p>
+          </div>
+        </div>
+        <div class="col-6" style="padding-left: 40px;">
+          <div class="method-block">
+            <div class="method-step">Prove — verification ledger</div>
+            <p class="method-sub">Baseline before, measured after. Risks in writing. Edge cases stated. A number without a confidence interval is a guess.</p>
+          </div>
+          <div class="method-block">
+            <div class="method-step">Expand — 50% credit compounds</div>
+            <p class="method-sub">Proven deployments earn 50% expansion credit. Build more, compound the benefit. We only win when the system keeps winning.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proof ledger band -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-full">
+          <div class="ledger-note">
+            <div class="ledger-title">Honest-risk note</div>
+            <p class="ledger-text">Bitcoin is volatile. Automation changes roles. We say so because pretending otherwise kills trust. Every engagement includes a written risk statement.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Readiness CTA -->
+    <div class="section-sm">
+      <div class="grid">
+        <div class="col-full">
+          <div class="card card-accent-gold" style="text-align: center; cursor: pointer;" onclick="window.location.hash='#/assess'">
+            <div class="card-title">Measure your AI readiness</div>
+            <div class="card-sub">Free assessment · 5 minutes · 100% private</div>
+            <p class="card-body">Find out if your business is ready — and exactly what that looks like.</p>
+            <div style="margin-top: 16px;">
+              <span class="cta-btn ember" onclick="event.stopPropagation(); window.location.hash='#/assess'">Start the assessment</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="section-sm">
+      <div class="grid">
+        <div class="col-full">
+          <div class="cta-block">
+            <a class="cta-btn ember" href="#/solutions">Book the hours audit</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       VIEW: #/earn
+       ========================================== -->
+  <section class="view" id="view-earn">
+    <div class="section" style="padding-top: 40px;">
+      <div class="grid">
+        <div class="col-full">
+          <div class="eyebrow" style="color: var(--btc);">Door II — Earn</div>
+          <h1 class="display">Don't Just Buy Bitcoin.<br><span style="color: var(--btc);">Earn It.</span></h1>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero equity -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-8">
+          <div class="eyebrow" style="color: var(--btc);">Namibia's Bitcoin earning layer</div>
+          <h2 class="display-hed">Earn sats with the time, skills, and work you already have.</h2>
+          <p class="body-lg">The earning rail of The Hub. Every pillar converts what you can do today into bitcoin on Lightning. No bank account. No permission. Proof of work and a wallet.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Three Pillars -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-full">
+          <div class="section-label bordered">Three Pillars</div>
+          <h2 class="display-hed" style="margin-bottom: 32px;">Three ways to stack sats.</h2>
+        </div>
+        <div class="col-4">
+
+          <div class="pillar-card">
+            <span class="pillar-icon">⚡</span>
+            <div class="pillar-name">TimeForce</div>
+            <div class="pillar-audience">For anyone with time and willingness</div>
+            <p class="pillar-desc">Exchange time and skills for sats. Short tasks, immediate settlement. Move, clean, verify, show up. Proof-of-work meets proof-of-attendance.</p>
+            <div class="pillar-mechanic">Match → Do → Verify → Lightning settlement</div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="pillar-card">
+            <span class="pillar-icon">💼</span>
+            <div class="pillar-name">EasyJobs</div>
+            <div class="pillar-audience">For skilled workers seeking Bitcoin-native careers</div>
+            <p class="pillar-desc">Bitcoin-only career placements. Roles at companies that pay in sats. Operations to engineering. Salary runs on Lightning. No fiat detour.</p>
+            <div class="pillar-mechanic">Profile → Match → Salary in sats → Stacked</div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="pillar-card">
+            <span class="pillar-icon">🛠️</span>
+            <div class="pillar-name">EasyDevs</div>
+            <div class="pillar-audience">For builders, designers, and technical freelancers</div>
+            <p class="pillar-desc">Freelance bounties for wallet features, node dashboards, Lightning integrations. Paid in bitcoin on completion. No 20% platform cut.</p>
+            <div class="pillar-mechanic">Bounty posted → Build → Review → Sats released</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earning Mechanics mini-flow -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-full">
+          <div class="section-label bordered">Earning Mechanics</div>
+          <h2 class="display-hed" style="margin-bottom: 32px;">How it works.</h2>
+        </div>
+        <div class="col-full">
+          <div class="flow">
+            <div class="flow-step">
+              <div class="flow-num">Step 01</div>
+              <div class="flow-name">Skill or Time</div>
+              <p class="flow-desc">An hour, a skill, a task. That is your entry. No minimum. No resume gate.</p>
+            </div>
+            <div class="flow-step">
+              <div class="flow-num">Step 02</div>
+              <div class="flow-name">Match</div>
+              <p class="flow-desc">Paired with a need — gig, job, bounty. By capability, not credentials.</p>
+            </div>
+            <div class="flow-step">
+              <div class="flow-num">Step 03</div>
+              <div class="flow-name">Earn Sats</div>
+              <p class="flow-desc">Complete the work. Verification happens. Payment in your Lightning wallet. Minutes, not months.</p>
+            </div>
+            <div class="flow-step">
+              <div class="flow-num">Step 04</div>
+              <div class="flow-name">Stack</div>
+              <p class="flow-desc">Sats compound. Pay for things. Self-custody. Move across borders. The chain doesn't close.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Living Proof -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-7">
+          <div class="section-label" style="color: var(--btc);">Living Proof</div>
+          <h2 class="display-hed">The network is alive right now.</h2>
+          <p class="body-md">The strip pulls live Bitcoin data. If it is updating, the network is processing. If the network is processing, your route to earning is open. When data is unavailable, an <em>OFFLINE SNAPSHOT</em> shows last known values. Either way, the strip stays honest.</p>
+        </div>
+        <div class="col-4" style="margin-left: 40px;">
+          <div class="card card-accent-btc">
+            <div class="card-title">Why this matters</div>
+            <p class="card-body">Settles on a chain that has never been offline. Does not require your bank's permission to confirm.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="section-sm">
+      <div class="grid">
+        <div class="col-full">
+          <div class="cta-block">
+            <a class="cta-btn btc" href="#/solutions">Start earning sats</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       VIEW: #/solutions
+       ========================================== -->
+  <section class="view" id="view-solutions">
+    <div class="section" style="padding-top: 40px;">
+      <div class="grid">
+        <div class="col-full">
+          <div class="eyebrow">Cross-cutting — For both audiences</div>
+          <h1 class="display">Tools that pay for<br>themselves. <span class="green-accent">Money that moves.</span></h1>
+        </div>
+      </div>
+    </div>
+
+    <!-- Solution rows -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-full">
+          <div class="section-label bordered">Solutions</div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-full">
+          <div class="solution-row">
+            <div class="solution-cell">
+              <div class="sol-num">Solution 01</div>
+              <div class="sol-title">Productivity Packages</div>
+              <p class="sol-body">Ready-configured tooling for individuals and teams. Document automation to chat orchestration. $29–149. Bitcoin accepted. Self-hosted option.</p>
+            </div>
+            <div class="solution-cell">
+              <div class="sol-num">Solution 02</div>
+              <div class="sol-title">Sovereign Portable Computing</div>
+              <p class="sol-body">Privacy-first portable machines. Open-source OS, verified boot, self-hosted. Your machine, keys, and data.</p>
+            </div>
+            <div class="solution-cell">
+              <div class="sol-num">Solution 03</div>
+              <div class="sol-title">Money Transfer</div>
+              <p class="sol-body">Send at 2–4%. Regional average: 8.78%. The gap is intermediary rent. Route through Lightning, shrink it. We provide the rails.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison positioning -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-7">
+          <div class="section-label">Positioning — not a promise</div>
+          <h2 class="display-hed">The cost gap is real. We do not pretend to eliminate it.</h2>
+          <p class="body-lg">2–4% versus the 8.78% regional average. Corridor realities, not marketing. The exact rate depends on corridor, volume, and timing. No fine print.</p>
+        </div>
+        <div class="col-4" style="margin-left: 100px;">
+          <div class="card card-accent-teal">
+            <div class="card-title">What we do not claim</div>
+            <p class="card-body">We do not claim zero cost, zero friction, or coverage we do not have. Tool comparison, not a guarantee.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OKIN Ent ecosystem strip -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-full">
+          <div class="section-label" style="margin-bottom: 21px;">The OKIN Ent ecosystem</div>
+          <div class="ecosystem-strip">
+            <div class="ecosystem-label">Under The Hub</div>
+            <div class="ecosystem-tiles">
+              <div class="ecosystem-tile">
+                <span class="ecosystem-tile-name">EasySats</span>
+                <span class="ecosystem-tile-tag">Earn</span>
+              </div>
+              <div class="ecosystem-tile">
+                <span class="ecosystem-tile-name">TPOK</span>
+                <span class="ecosystem-tile-tag">Ecosystem</span>
+              </div>
+            </div>
+          </div>
+          <!-- TODO: user to supply real copy for each property -->
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="section-sm">
+      <div class="grid">
+        <div class="col-full">
+          <div class="cta-block">
+            <a class="cta-btn" href="#/business">See what fits your business</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       VIEW: #/philosophy
+       ========================================== -->
+  <section class="view" id="view-philosophy">
+    <div class="section" style="padding-top: 40px;">
+      <div class="grid">
+        <div class="col-full">
+          <div class="eyebrow" style="color: var(--gold);">Doctrine</div>
+          <h1 class="display">FreedomTech.<br><span style="color: var(--gold);">The removal of<br>rent-takers.</span></h1>
+        </div>
+      </div>
+    </div>
+
+    <!-- FreedomTech doctrine -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-8">
+          <div class="section-label" style="color: var(--gold);">FreedomTech — full text</div>
+          <h2 class="display-hed">FreedomTech is the removal of unnecessary intermediaries — from your workflow and from your money — using tools that are open, verifiable, and controlled by the people who use them.</h2>
+          <p class="body-lg" style="margin-top: 24px;">That is the whole doctrine. Every system we build exists to make one or more intermediaries unnecessary. Not disrupted. Not "democratised." Unnecessary. The rent flows back to the person who earned it.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Three tenets expanded -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-full">
+          <div class="section-label bordered">Three Tenets — expanded</div>
+        </div>
+        <div class="col-8">
+          <div class="tenet-block">
+            <div class="tenet-title">I. Outcome over artifact.</div>
+            <p class="tenet-body">A system saving ten hours a week beats a custom model with a whitepaper. We optimise for the measurable change. No number moved, work not finished.</p>
+          </div>
+          <div class="tenet-block">
+            <div class="tenet-title">II. Proof over promise.</div>
+            <p class="tenet-body">Every deployment has a verification baseline. Every risk in writing, not buried. Trust compounds, marketing decays. We prove first.</p>
+          </div>
+          <div class="tenet-block">
+            <div class="tenet-title">III. Sovereignty scales.</div>
+            <p class="tenet-body">A Lightning wallet and self-hosted toolstack is harder to exploit than five SaaS subscriptions and a bank. Scale to a team, a business, a region. Sovereignty is infrastructure. Distributed ownership makes extraction expensive.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TPOK -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-full">
+          <div class="section-label" style="color: var(--gold); margin-bottom: 21px;">TPOK — The Pursuit of Knowledge</div>
+          <div class="card card-accent-gold" style="max-width: 600px;">
+            <div class="card-title">Edutainment events — learning frontier tech the fun way.</div>
+            <div class="card-sub">Bitcoin · Lightning nodes · Nostr · and more</div>
+            <p class="card-body">OKIN Ent's edutainment wing. A chill social session learning Bitcoin and frontier tech over good conversation. No slides. Walk away with a working Lightning wallet and a mental model that sticks because you used it. When built for real, TPOK gets its own page.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Closing thesis -->
+    <div class="section">
+      <div class="grid">
+        <div class="col-full">
+          <div class="hairline-row">Closing statement</div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-8">
+          <h2 class="display-sm">The removal-of-rent-takers thesis.</h2>
+          <p class="body-lg" style="margin-top: 24px;">Every system asks: <em>who is taking rent, and can we make them unnecessary?</em> The tools exist. The technology is open. The rails are live. The only missing piece is the decision.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="section-sm">
+      <div class="grid">
+        <div class="col-full">
+          <div class="cta-block">
+            <a class="cta-btn" href="#/business">See it in practice</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section class="view" id="view-assess">
+<div id="aiq-root">
+<div class="container">
+<div class="header">
+<div class="logo">OKIN<span>Ent</span></div>
+<div class="progress-container">
+<span id="stepCounter">Step 1 of 6</span>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:17%"></div></div>
+</div>
+</div>
+
+<div class="step active" data-step="0" data-type="landing">
+<div class="landing-icon">AI</div>
+<h1>Is Your Business Ready for an AI Assistant?</h1>
+<p class="subtitle">Is your business ready for an AI assistant? Find out in 5 minutes.</p>
+<div class="landing-features">
+<div class="feature"><div class="feature-icon">⏱</div><div class="feature-title">Under 5 minutes</div><div class="feature-desc">No preparation needed.</div></div>
+<div class="feature"><div class="feature-icon">🔒</div><div class="feature-title">100% Private</div><div class="feature-desc">Nothing is sent to any server.</div></div>
+<div class="feature"><div class="feature-icon">📊</div><div class="feature-title">Instant Results</div><div class="feature-desc">Results immediately.</div></div>
+<div class="feature"><div class="feature-icon">🤝</div><div class="feature-title">No Obligation</div><div class="feature-desc">Not a sales pitch.</div></div>
+</div>
+<div class="privacy-note"><span class="icon">🔐</span><span>Stored in this browser tab only. Progress saves locally. We never send your information anywhere.</span></div>
+<div class="buttons"><button class="btn btn-primary" onclick="aiq_next()">Start</button></div>
+</div>
+
+<div class="step" data-step="1" data-type="contact">
+<h2>About You</h2>
+<p class="subtitle">A few details to tailor your results.</p>
+<div class="form-group"><label class="field-label">Company Name</label><input type="text" id="contact-company" placeholder="e.g., Smart Polar Distributors" required></div>
+<div class="form-group"><label class="field-label">Your Name</label><input type="text" id="contact-name" placeholder="e.g., Johannes van der Merwe" required></div>
+<div class="form-group"><label class="field-label">Your Role</label><input type="text" id="contact-role" placeholder="e.g., Managing Director"></div>
+<div class="form-group"><label class="field-label">Email</label><input type="email" id="contact-email" placeholder="you@company.com"></div>
+<div class="form-group"><label class="field-label">Phone</label><input type="tel" id="contact-phone" placeholder="+264 ..."></div>
+<div class="form-group"><label class="field-label">Country</label><select id="contact-country"><option value="">Select country...</option><option value="namibia">Namibia</option><option value="kenya">Kenya</option><option value="south_africa">South Africa</option><option value="botswana">Botswana</option><option value="zambia">Zambia</option><option value="zimbabwe">Zimbabwe</option><option value="angola">Angola</option><option value="other">Other</option></select></div>
+<div class="form-group"><label class="field-label">Industry</label><input type="text" id="contact-industry" placeholder="e.g., Logistics & Distribution"></div>
+<div class="error-msg" id="contactError">Please fill in at least your company name and country.</div>
+<div class="buttons"><button class="btn btn-secondary" onclick="aiq_prev()">Back</button><button class="btn btn-primary" onclick="aiq_next()">Continue</button></div>
+</div>
+
+<div class="step" data-step="5" data-type="results" id="resultsStep"></div>
+</div>
+</div>
+</section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="hub-footer" role="contentinfo">
+  <div class="grid">
+    <div class="col-full">
+      <div class="footer-verification">
+        <strong>Verification ethos.</strong> Every figure has a source or an explicit "positioning only" label. Live strip pulls from public endpoints; unreachable, a dated fallback shows. We do not fabricate data.
+      </div>
+      <div class="footer-links">
+        <a href="#/philosophy">Terms</a>
+        <a href="#/philosophy">Privacy</a>
+        <a href="#/business">Business</a>
+        <a href="#/earn">Earn</a>
+        <a href="#/solutions">Solutions</a>
+      </div>
+      <div class="footer-legacy">
+        Legacy OKIN properties redirect to The Hub. Operated independently. Prior routing consolidated here.
+      </div>
+    </div>
+  </div>
+  <div class="footer-watermark">OKIN</div>
+</footer>
+
+<!-- ===== KONAMI MANIFESTO OVERLAY ===== -->
+<div class="konami-overlay" id="konamiOverlay" aria-hidden="true">
+  <div class="konami-text">Boot. And be commanded by none.</div>
+  <div class="konami-hint">click or press Esc to dismiss</div>
+</div>
+
+<!-- ===== SATOSHI TOAST ===== -->
+<div class="satoshi-toast" id="satoshiToast" aria-hidden="true">
+  <div class="toast-quote">"The root problem with conventional currency is all the trust that's required to make it work."</div>
+  <div class="toast-attr">— loosely attributed to Satoshi Nakamoto</div>
+</div>
+
+<!-- ============================================
+     SCRIPTS
+     ============================================ -->
+<script>
+(function() {
+  'use strict';
+
+  // ===== ROUTES =====
+  var routes = {
+    '/': 'view-thesis',
+    '/business': 'view-business',
+    '/earn': 'view-earn',
+    '/solutions': 'view-solutions',
+    '/philosophy': 'view-philosophy',
+    '/assess': 'view-assess'
+  };
+
+  var defaultRoute = '/';
+  var currentRoute = '/';
+  var allViews = document.querySelectorAll('.view');
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ===== RETRO ROBOT =====
+  var robotOverlay = document.getElementById('retroRobotOverlay');
+  var robotOffline = document.getElementById('retroRobotOffline');
+
+  function showRobotOverlay() {
+    if (reducedMotion) return;
+    if (robotOverlay) robotOverlay.classList.add('visible');
+  }
+  function hideRobotOverlay() {
+    if (robotOverlay) robotOverlay.classList.remove('visible');
+  }
+  function showRobotOffline() {
+    if (robotOffline) robotOffline.classList.add('visible');
+  }
+  function hideRobotOffline() {
+    if (robotOffline) robotOffline.classList.remove('visible');
+  }
+
+  // Show overlay on initial load
+  showRobotOverlay();
+
+  // ===== NETWORK NODE HIGHLIGHTING =====
+  function updateActiveNode(route) {
+    var nodeMap = {
+      '/': 'gnNodeHome',
+      '/business': 'gnNodeBusiness',
+      '/earn': 'gnNodeEarn',
+      '/solutions': 'gnNodeSolutions',
+      '/philosophy': 'gnNodePhilosophy',
+      '/assess': 'gnNodeAssess'
+    };
+    var labelMap = {
+      '/': 'gnLabelHome',
+      '/business': 'gnLabelBiz',
+      '/earn': 'gnLabelEarn',
+      '/solutions': 'gnLabelSol',
+      '/philosophy': 'gnLabelPhil',
+      '/assess': 'gnLabelAssess'
+    };
+
+    // Reset all nodes and labels
+    var allNodes = document.querySelectorAll('.gn-node');
+    var allLabels = document.querySelectorAll('.gn-node-label');
+    for (var i = 0; i < allNodes.length; i++) allNodes[i].classList.remove('active');
+    for (var j = 0; j < allLabels.length; j++) allLabels[j].classList.remove('active');
+
+    // Activate current route's node
+    var activeNodeId = nodeMap[route];
+    var activeLabelId = labelMap[route];
+    var activeNode = document.getElementById(activeNodeId);
+    var activeLabel = document.getElementById(activeLabelId);
+    if (activeNode) activeNode.classList.add('active');
+    if (activeLabel) activeLabel.classList.add('active');
+
+    // TPOK node always softly present
+    var tpokNode = document.getElementById('gnNodeTpok');
+    var tpokLabel = document.getElementById('gnLabelTpok');
+    if (tpokNode) tpokNode.style.opacity = '0.6';
+    if (tpokLabel) tpokLabel.style.opacity = '0.4';
+  }
+
+  // ===== PULSE ANIMATION (traveling dots along lines) =====
+  var pulseData = [
+    { id: 'gnPulseHome',   x1: 600, y1: 380, x2: 180, y2: 180, duration: 4 },
+    { id: 'gnPulseBiz',    x1: 180, y1: 180, x2: 150, y2: 560, duration: 5 },
+    { id: 'gnPulseEarn',   x1: 1020, y1: 180, x2: 1050, y2: 560, duration: 5 },
+    { id: 'gnPulseSol',    x1: 150, y1: 560, x2: 80, y2: 700, duration: 6 },
+    { id: 'gnPulsePhil',   x1: 1050, y1: 560, x2: 1120, y2: 700, duration: 6 },
+    { id: 'gnPulseAssess', x1: 600, y1: 380, x2: 600, y2: 680, duration: 5 }
+  ];
+
+  function startPulseAnimations() {
+    if (reducedMotion) return;
+    for (var i = 0; i < pulseData.length; i++) {
+      (function(p) {
+        var el = document.getElementById(p.id);
+        if (!el) return;
+        el.classList.add('active');
+        el.setAttribute('cx', p.x1);
+        el.setAttribute('cy', p.y1);
+        function animatePulse() {
+          if (reducedMotion) return;
+          el.animate(
+            [
+              { cx: p.x1, cy: p.y1, opacity: 0 },
+              { cx: p.x1 + (p.x2 - p.x1) * 0.1, cy: p.y1 + (p.y2 - p.y1) * 0.1, opacity: 0.6, offset: 0.1 },
+              { cx: p.x1 + (p.x2 - p.x1) * 0.9, cy: p.y1 + (p.y2 - p.y1) * 0.9, opacity: 0.6, offset: 0.9 },
+              { cx: p.x2, cy: p.y2, opacity: 0 }
+            ],
+            { duration: p.duration * 1000, easing: 'linear', fill: 'forwards' }
+          ).onfinish = function() {
+            el.setAttribute('cx', p.x1);
+            el.setAttribute('cy', p.y1);
+            animatePulse();
+          };
+        }
+        animatePulse();
+      })(pulseData[i]);
+    }
+  }
+
+  // ===== VIEW SWITCHING =====
+  function showView(route) {
+    var viewId = routes[route];
+    if (!viewId) {
+      route = defaultRoute;
+      viewId = routes[route];
+    }
+
+    var currentActive = document.querySelector('.view.active');
+    var target = document.getElementById(viewId);
+
+    if (currentActive === target) {
+      updateActiveNode(route);
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    // Tear down assess if leaving
+    if (currentRoute === '/assess' && typeof aiq_teardown === 'function') {
+      aiq_teardown();
+    }
+
+    function switchView() {
+      for (var i = 0; i < allViews.length; i++) {
+        allViews[i].classList.remove('active');
+      }
+      if (target) {
+        target.classList.add('active');
+        target.style.opacity = '0';
+        void target.offsetHeight;
+        target.style.transition = 'opacity 0.2s ease';
+        target.style.opacity = '1';
+      }
+      var navLinks = document.querySelectorAll('.nav-link');
+      for (var j = 0; j < navLinks.length; j++) {
+        navLinks[j].classList.remove('active');
+        if (navLinks[j].getAttribute('data-route') === route) {
+          navLinks[j].classList.add('active');
+        }
+      }
+      updateActiveNode(route);
+      currentRoute = route;
+      window.scrollTo(0, 0);
+
+      // Initialize assess if entering
+      if (route === '/assess' && typeof aiq_init === 'function') {
+        setTimeout(aiq_init, 50);
+      }
+    }
+
+    // Show robot briefly during transition
+    if (!reducedMotion && currentActive) {
+      showRobotOverlay();
+    }
+
+    if (currentActive) {
+      currentActive.style.transition = 'opacity 0.2s ease';
+      currentActive.style.opacity = '0';
+      setTimeout(function() {
+        switchView();
+        setTimeout(hideRobotOverlay, 200);
+      }, 200);
+    } else {
+      switchView();
+      setTimeout(hideRobotOverlay, 400);
+    }
+  }
+
+  window.addEventListener('hashchange', handleHash);
+
+  // ===== MEMPOOL STRIP =====
+  var strip = document.getElementById('mempoolStrip');
+  var fallbackData = {
+    height: 840000,
+    fee: 3,
+    btcUsd: 67000,
+    btcNad: 1150000,
+    ts: '2025-05-01T00:00:00Z'
+  };
+
+  function renderFallback() {
+    hideRobotOffline();
+    var ts = fallbackData.ts ? fallbackData.ts.replace('T', ' ').replace('Z', ' UTC') : '';
+    strip.innerHTML = '<span class="strip-item"><span class="strip-fallback-tag"><span class="pulse-dot offline"></span>OFFLINE SNAPSHOT</span></span>' +
+      '<span class="strip-sep"></span>' +
+      '<span class="strip-item"><span class="strip-label">Height </span><span class="strip-val btc">' + fallbackData.height.toLocaleString() + '</span></span>' +
+      '<span class="strip-sep"></span>' +
+      '<span class="strip-item"><span class="strip-label">Fee </span><span class="strip-val teal">~' + fallbackData.fee + ' sat/vB</span></span>' +
+      '<span class="strip-sep"></span>' +
+      '<span class="strip-item"><span class="strip-label">BTC/USD </span><span class="strip-val">$' + fallbackData.btcUsd.toLocaleString() + '</span></span>' +
+      '<span class="strip-sep"></span>' +
+      '<span class="strip-item"><span class="strip-label">BTC/NAD </span><span class="strip-val btc">N$' + fallbackData.btcNad.toLocaleString() + '</span></span>' +
+      '<span class="strip-sep"></span>' +
+      '<span class="strip-item"><span class="strip-label">As of </span><span class="strip-val">' + ts + '</span></span>';
+    // Show robot in offline state
+    setTimeout(showRobotOffline, 300);
+  }
+
+  function renderLive(data) {
+    hideRobotOffline();
+    var feeDisplay = data.fee !== null ? ('~' + data.fee + ' sat/vB') : '—';
+    strip.innerHTML =
+      '<span class="strip-item"><span class="strip-label" style="color:var(--teal);"><span class="pulse-dot live"></span>LIVE</span></span>' +
+      '<span class="strip-sep"></span>' +
+      '<span class="strip-item"><span class="strip-label">Height </span><span class="strip-val btc">' + (data.height ? data.height.toLocaleString() : '—') + '</span></span>' +
+      '<span class="strip-sep"></span>' +
+      '<span class="strip-item"><span class="strip-label">Fee </span><span class="strip-val teal">' + feeDisplay + '</span></span>' +
+      '<span class="strip-sep"></span>' +
+      '<span class="strip-item"><span class="strip-label">BTC/USD </span><span class="strip-val">$' + (data.btcUsd ? data.btcUsd.toLocaleString() : '—') + '</span></span>' +
+      '<span class="strip-sep"></span>' +
+      '<span class="strip-item"><span class="strip-label">BTC/NAD </span><span class="strip-val btc">N$' + (data.btcNad ? data.btcNad.toLocaleString() : '—') + '</span></span>';
+  }
+
+  // ===== SCROLL REVEAL =====
+  function initReveal() {
+    var revealEls = document.querySelectorAll('.section:not(:first-child), .card, .manifesto-item, .method-block, .pillar-card, .flow-step, .solution-cell, .tenet-block, .ledger-note, .door, .cta-block, .display-hed, .body-lg, .body-md, .business-hero-sub, .ecosystem-strip');
+    for (var i = 0; i < revealEls.length; i++) {
+      revealEls[i].classList.add('reveal');
+    }
+
+    // Stagger children in containers
+    var staggerContainers = ['.solution-row', '.flow', '.manifesto-band', '.door-grid'];
+    for (var s = 0; s < staggerContainers.length; s++) {
+      var containers = document.querySelectorAll(staggerContainers[s]);
+      for (var c = 0; c < containers.length; c++) {
+        var children = containers[c].children;
+        for (var k = 0; k < children.length; k++) {
+          children[k].style.transitionDelay = (k * 60) + 'ms';
+        }
+      }
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+      for (var e = 0; e < entries.length; e++) {
+        if (entries[e].isIntersecting) {
+          entries[e].target.classList.add('is-visible');
+        }
+      }
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    for (var j = 0; j < revealEls.length; j++) {
+      observer.observe(revealEls[j]);
+    }
+  }
+
+  // ===== ATMOSPHERE TOGGLE =====
+  (function() {
+    var toggle = document.getElementById('atmosphereToggle');
+    var sky = document.getElementById('livingSky');
+    if (!toggle) return;
+
+    if (sky && !reducedMotion) {
+      sky.classList.add('is-active');
+    }
+
+    var saved = null;
+    try { saved = localStorage.getItem('atmosphereMode'); } catch(e) {}
+    if (saved === 'night') {
+      document.body.classList.add('night');
+      toggle.setAttribute('aria-pressed', 'true');
+    }
+
+    toggle.addEventListener('click', function() {
+      var isNight = document.body.classList.toggle('night');
+      toggle.setAttribute('aria-pressed', isNight ? 'true' : 'false');
+      try { localStorage.setItem('atmosphereMode', isNight ? 'night' : 'ember'); } catch(e) {}
+    });
+  })();
+
+  // ===== KONAMI CODE =====
+  var konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  var konamiIdx = 0;
+  var konamiOverlay = document.getElementById('konamiOverlay');
+
+  function initKonami() {
+    if (!konamiOverlay) return;
+    document.addEventListener('keydown', function(e) {
+      if (e.key === konamiSeq[konamiIdx]) {
+        konamiIdx++;
+        if (konamiIdx === konamiSeq.length) {
+          konamiIdx = 0;
+          konamiOverlay.classList.add('visible');
+          konamiOverlay.setAttribute('aria-hidden', 'false');
+        }
+      } else {
+        konamiIdx = 0;
+      }
+    });
+    konamiOverlay.addEventListener('click', function() {
+      konamiOverlay.classList.remove('visible');
+      konamiOverlay.setAttribute('aria-hidden', 'true');
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && konamiOverlay.classList.contains('visible')) {
+        konamiOverlay.classList.remove('visible');
+        konamiOverlay.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
+
+  // ===== SATOSHI TOAST (triple-click on OKIN Ent wordmark) =====
+  var satoshiToast = document.getElementById('satoshiToast');
+  var toastTimeout = null;
+  var brandEl = document.querySelector('.masthead-brand');
+  var clickCount = 0;
+  var clickResetTimer = null;
+
+  function initSatoshiToast() {
+    if (!satoshiToast || !brandEl) return;
+    brandEl.style.cursor = 'default';
+    brandEl.addEventListener('click', function(e) {
+      clickCount++;
+      if (clickResetTimer) clearTimeout(clickResetTimer);
+      clickResetTimer = setTimeout(function() { clickCount = 0; }, 600);
+      if (clickCount >= 3) {
+        clickCount = 0;
+        satoshiToast.classList.add('visible');
+        satoshiToast.setAttribute('aria-hidden', 'false');
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(function() {
+          satoshiToast.classList.remove('visible');
+          satoshiToast.setAttribute('aria-hidden', 'true');
+        }, 5000);
+      }
+    });
+  }
+
+
+  // ===== FETCH ROBUSTNESS: wrap all fetch in try/catch =====
+  function safeFetch(url) {
+    return fetch(url, { cache: 'no-store' }).then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r;
+    });
+  }
+
+  // ===== FETCH MEMPOOL (robust) =====
+  function fetchMempool() {
+    try {
+      var data = { height: null, fee: null, btcUsd: null, btcNad: null };
+      var pending = 0;
+      var done = false;
+      var nadRatePerBtc = null;
+      var bitpayUsdRate = null;
+
+      function checkDone() {
+        if (done) return;
+        pending--;
+        if (pending <= 0) {
+          done = true;
+          if (data.height || data.fee || data.btcUsd) {
+            renderLive(data);
+          } else {
+            renderFallback();
+          }
+        }
+      }
+
+      // Mempool.space: block height + fee
+      pending++;
+      safeFetch('https://mempool.space/api/blocks/tip/height')
+        .then(function(r) { return r.text(); })
+        .then(function(t) { data.height = parseInt(t, 10); })
+        .catch(function() { /* leave null */ })
+        .then(checkDone);
+
+      pending++;
+      safeFetch('https://mempool.space/api/v1/fees/recommended')
+        .then(function(r) { return r.json(); })
+        .then(function(j) { if (j && j.hourFee) data.fee = j.hourFee; })
+        .catch(function() { /* leave null */ })
+        .then(checkDone);
+
+      // BTC/USD from CoinGecko
+      pending++;
+      safeFetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd')
+        .then(function(r) { return r.json(); })
+        .then(function(j) { if (j && j.bitcoin && j.bitcoin.usd) data.btcUsd = j.bitcoin.usd; })
+        .catch(function() { /* leave null */ })
+        .then(checkDone);
+
+      // BTC/NAD from Bitpay rates API
+      pending++;
+      safeFetch('https://bitpay.com/api/rates')
+        .then(function(r) { return r.json(); })
+        .then(function(rates) {
+          var usdEntry = null, nadEntry = null;
+          for (var i = 0; i < rates.length; i++) {
+            if (rates[i].code === 'USD') usdEntry = rates[i];
+            if (rates[i].code === 'NAD') nadEntry = rates[i];
+          }
+          if (usdEntry) bitpayUsdRate = usdEntry.rate;
+          if (nadEntry) {
+            nadRatePerBtc = nadEntry.rate;
+            data.btcNad = Math.round(nadRatePerBtc);
+          }
+        })
+        .catch(function() { /* leave null */ })
+        .then(checkDone);
+
+      // If all fetches are slow, fallback after 6s
+      setTimeout(function() {
+        if (!done) {
+          done = true;
+          if (data.height || data.fee || data.btcUsd) {
+            renderLive(data);
+          } else {
+            renderFallback();
+          }
+        }
+      }, 6000);
+    } catch(e) {
+      // Last-resort: if fetchMempool itself throws, show fallback
+      try { renderFallback(); } catch(e2) {}
+    }
+  }
+
+  // ===== SAFETY TIMEOUT: robot overlay MUST dismiss =====
+  var robotSafetyTimer = null;
+
+  function startRobotSafety() {
+    robotSafetyTimer = setTimeout(function() {
+      hideRobotOverlay();
+      robotSafetyTimer = null;
+    }, 4000);
+  }
+
+  // ===== ROUTE DEBOUNCE =====
+  var routeLock = false;
+
+  function showViewSafe(route) {
+    if (routeLock) return;
+    routeLock = true;
+    showView(route);
+    setTimeout(function() { routeLock = false; }, 300);
+  }
+
+  // Override handleHash to use debounced showView
+  function handleHash() {
+    var hash = window.location.hash;
+    if (!hash || hash === '#') {
+      showViewSafe(defaultRoute);
+      return;
+    }
+    var route = hash.replace(/^#/, '');
+    if (routes[route]) {
+      showViewSafe(route);
+    } else {
+      showViewSafe(defaultRoute);
+    }
+  }
+
+  // ===== INITIALIZATION =====
+  function init() {
+    try { handleHash(); } catch(e) {}
+    try { fetchMempool(); } catch(e) { try { renderFallback(); } catch(e2) {} }
+    setInterval(function() { try { fetchMempool(); } catch(e) {} }, 60000);
+    try { startPulseAnimations(); } catch(e) {}
+    try { initReveal(); } catch(e) {}
+    try { initCursorFollower(); } catch(e) {}
+    try { initKonami(); } catch(e) {}
+    try { initSatoshiToast(); } catch(e) {}
+
+    // Hide initial robot overlay after first paint + safety timeout
+    setTimeout(hideRobotOverlay, 800);
+    startRobotSafety();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+<script>
+(function(){
+"use strict";
+
+const aiq_RUBRIC={"dimensions":[{"id":"d1","name":"Your Information","weight":0.25,"intro":"The real blocker. If we can't get to your business records, we can't build anything. We need to understand what software you run the business on and whether we can connect to it.","maxPoints":62,"questions":[{"id":"q1","type":"single","text":"How many core business software systems do you currently use?","options":[{"label":"0 — paper-based only","points":0,"dq":"dq6"},{"label":"1 system","points":3},{"label":"2 systems","points":6},{"label":"3 systems","points":8},{"label":"4 or more systems","points":10}]},{"id":"q2","type":"multi","text":"What are the main software systems you run the business on? (Select all that apply)","options":[{"label":"Accounting or invoicing software (e.g., Pastel, SAP, Xero, IQ Retail)","points":3},{"label":"Vehicle tracking or fleet monitoring (e.g., Cartrack, Ituran)","points":3},{"label":"Customer or sales tracking","points":2},{"label":"Staff or payroll system","points":1},{"label":"Stock or inventory management","points":2},{"label":"A system built just for your business","points":1},{"label":"None of the above","points":0,"dq":"dq6"}]},{"id":"q3","type":"single","text":"Which statement best describes how you can get your information out of your business software?","options":[{"label":"We can already export or download our data whenever we want","points":10},{"label":"Our software company can switch that on for us if we ask","points":7},{"label":"Our software company is slow or unhelpful about it","points":3,"dq":"dq7"},{"label":"Our data is locked in and we cannot get it out","points":0,"dq":"dq1"},{"label":"Our software company has refused","points":0,"dq":"dq1"}]},{"id":"q5","type":"single","text":"How far back does your reliable business data go in your primary system?","options":[{"label":"3+ years","points":10},{"label":"1-3 years","points":8},{"label":"6-12 months","points":5},{"label":"Less than 6 months","points":2},{"label":"We have no reliable records kept on a computer","points":0,"dq":"dq6"}]},{"id":"q6","type":"single","text":"In your experience, how complete and accurate are the records in your primary system?","options":[{"label":"Highly reliable — we use it for daily decisions","points":10},{"label":"Mostly reliable — occasional gaps or errors","points":7},{"label":"Somewhat reliable — frequent manual corrections needed","points":3},{"label":"Unreliable — we don't trust it","points":1},{"label":"No records exist on a computer","points":0}]},{"id":"q8","type":"single","text":"Do you have a second system that sees the same work from another angle? For example, your invoicing software says what you delivered, and a vehicle tracker says where the van actually went.","options":[{"label":"Yes, and the information complements each other","points":10},{"label":"Yes, but the information overlaps significantly","points":5},{"label":"There is a second system but it's not comparable","points":3},{"label":"No second system exists","points":0}]}]},{"id":"d2","name":"The Problem Worth Fixing","weight":0.20,"intro":"A clear problem with a measurable cost is what makes a smart assistant worth building. We need to understand the value case.","maxPoints":30,"questions":[{"id":"q9","type":"single","text":"Can you name a specific business problem that costs your company money every month?","options":[{"label":"Yes, and we can put a number to it","points":10},{"label":"Yes, but we haven't put a number to it yet","points":6},{"label":"We have a general sense but no specific problem","points":2},{"label":"No specific problem comes to mind","points":0}]},{"id":"q10","type":"single","text":"What is the approximate monthly cost of your most expensive recurring problem?","options":[{"label":"Over NAD 100,000 / USD 5,500+","points":10},{"label":"NAD 50,000-100,000 / USD 2,800-5,500","points":8},{"label":"NAD 20,000-50,000 / USD 1,100-2,800","points":5},{"label":"NAD 5,000-20,000 / USD 280-1,100","points":2},{"label":"Under NAD 5,000 / USD 280","points":0}]},{"id":"q11","type":"single","text":"Does the problem involve comparing or matching up information from two different systems?","options":[{"label":"Yes — this is exactly the problem","points":10},{"label":"Somewhat — there's a manual comparison element","points":5},{"label":"No — it's a single-system issue","points":2}]},{"id":"q14","type":"text","text":"What decision would you make faster or better if you had the right information at the right time?"}]},{"id":"d3","name":"Where Things Run","weight":0.15,"intro":"Where your business information lives and how reliable your internet is affects how we set things up.","maxPoints":18,"questions":[{"id":"q15","type":"single","text":"Where do you prefer to keep your business information?","options":[{"label":"On a computer in our own building","points":10},{"label":"Online, but in a private space dedicated to us","points":7},{"label":"Online, in a standard cloud service (Microsoft 365, Google Workspace)","points":5},{"label":"No preference — we need guidance","points":3}]},{"id":"q17","type":"single","text":"How reliable is your internet connection at your main place of business?","options":[{"label":"Fibre or dedicated line — very reliable","points":8},{"label":"ADSL or stable mobile data — mostly reliable","points":5},{"label":"Unstable — frequent outages","points":1},{"label":"No reliable internet available","points":0}]}]},{"id":"d4","name":"How Modern Your Systems Are","weight":0.12,"intro":"How up-to-date your software is and whether you have computer support determines how quickly we can get going.","maxPoints":20,"questions":[{"id":"q21","type":"single","text":"How modern are the systems you rely on most?","options":[{"label":"Modern cloud-based platforms (last 5 years)","points":10},{"label":"Established systems with regular updates","points":6},{"label":"Older systems but functional","points":3},{"label":"Very old systems that are hard to maintain","points":1}]},{"id":"q23","type":"single","text":"Do you have an in-house computer person or a contracted IT support company?","options":[{"label":"Yes, a dedicated in-house person","points":10},{"label":"Yes, a contracted support company","points":7},{"label":"No computer support at all","points":0}]}]},{"id":"d5","name":"Your Team","weight":0.10,"intro":"Bringing in a smart assistant requires change in the business. We need to know who's driving this and whether the team is prepared.","maxPoints":28,"questions":[{"id":"q25","type":"single","text":"Who in your company has the authority to approve and fund this project?","options":[{"label":"Both a senior sponsor and a budget owner have been named","points":10},{"label":"A senior sponsor has been named","points":7,"dq":"dq3"},{"label":"A budget owner has been named","points":7,"dq":"dq2"},{"label":"No specific person has been named yet","points":0,"dq":["dq2","dq3"]}]},{"id":"q27","type":"single","text":"Is there someone in your organisation who will champion this project day-to-day?","options":[{"label":"Yes, a clear champion is ready","points":10},{"label":"Possibly — someone is interested but not confirmed","points":5},{"label":"No champion identified","points":0}]},{"id":"q28","type":"single","text":"How comfortable is your staff with learning new software tools?","options":[{"label":"Very comfortable — we use multiple tools daily","points":8},{"label":"Somewhat comfortable — open to learning with support","points":5},{"label":"Not comfortable — staff resist new technology","points":1}]}]},{"id":"d6","name":"Scope","weight":0.08,"intro":"How many different jobs in your team would need their own assistant directly affects the size and cost of the build.","maxPoints":10,"questions":[{"id":"q32","type":"single","text":"How many different jobs in your team would need their own assistant? For example: the person who plans deliveries, the person who handles orders, the person doing paperwork.","options":[{"label":"1-2 roles","points":3},{"label":"3-5 roles","points":6},{"label":"6-10 roles","points":8},{"label":"11+ roles","points":10}]}]},{"id":"d7","name":"Budget","weight":0.05,"intro":"Your budget range determines which setup is the right fit for your business.","maxPoints":10,"questions":[{"id":"q34","type":"single","text":"What is your approximate budget for this project (including setup and first year)?","options":[{"label":"NAD 450,000+ / USD 25,000+","points":10},{"label":"NAD 180,000-400,000 / USD 10,000-22,000","points":8},{"label":"NAD 70,000-160,000 / USD 3,800-8,800","points":6},{"label":"NAD 25,000-55,000 / USD 1,400-3,000","points":3},{"label":"Under NAD 25,000 / USD 1,400","points":1},{"label":"We are expecting this to be done for free","points":0,"dq":"dq4"}]}]},{"id":"d8","name":"Privacy","weight":0.05,"intro":"Privacy and compliance requirements affect how we handle your information and what safeguards we build in.","maxPoints":10,"questions":[{"id":"q38","type":"single","text":"Are you required to keep customer information inside the country, or handle it under privacy rules?","options":[{"label":"Yes, we handle regulated personal data (customer IDs, financial records) with strict privacy requirements","points":10},{"label":"We handle some regulated data but have no strict location requirements","points":6},{"label":"We don't handle regulated personal data","points":3}]}]}]};
+const aiq_DISQUALIFIERS={"dq1":{"code":"DQ1","name":"Software company refuses access","description":"The software company won't let us connect to your records. This needs to be resolved before we can proceed."},"dq2":{"code":"DQ2","name":"No senior sponsor","description":"No one with the authority to approve this project has been named. Without that person, the project cannot move forward."},"dq3":{"code":"DQ3","name":"No budget owner","description":"No one to approve the budget has been named. We need both a sponsor and a budget owner to proceed."},"dq4":{"code":"DQ4","name":"Expecting free work","description":"We understand the desire to try before you commit, but our work requires real setup, real data, and real integration. We do not offer free pilots — but we do offer a detailed, no-obligation scoping session so you know exactly what you're buying."},"dq6":{"code":"DQ6","name":"Records on paper","description":"Your records are currently on paper. Getting them onto a computer is a separate project that needs to happen first. We can advise on the right path."},"dq7":{"code":"DQ7","name":"Software company unhelpful","description":"Your software company is slow or unhelpful about giving you access to your own records. This will cause delays, but it can be overcome."},"dq8":{"code":"DQ8","name":"No computer support","description":"For larger builds, you need at least some computer support — even just a local IT person or company."}};
+const aiq_TIERS={
+  "T0": {
+    "name": "Not Yet Ready",
+    "description": "A few things need to be in place before we start. This is a plan to get there, not a rejection. Fix the gaps and come back.",
+    "whatWeBuild": "First we get your records onto a computer your software company will let us connect to. We can show you how. Nothing gets built until that's done.",
+    "nextStep": "Close the gaps above, then come back. Start with the information-access steps."
+  },
+  "T1": {
+    "name": "Starter",
+    "description": "You have enough to begin. One focused assistant will show real value fast and give you something to build on.",
+    "whatWeBuild": "One assistant aimed at the single role or problem that hurts most. Installed on your own equipment, tested, with training and a year of support.",
+    "nextStep": "Book a scoping call. We pin down that one assistant and how it plugs into your business."
+  },
+  "T2": {
+    "name": "Department Ready",
+    "description": "You have two systems to connect and a team ready to use it. That's enough for a proper department rollout.",
+    "whatWeBuild": "A department assistant linking two of your systems, set up for your team, with training and a year of support.",
+    "nextStep": "Book a discovery call. We map your systems and how they join up."
+  },
+  "T3": {
+    "name": "Full Build — Our Reference Level",
+    "description": "You've got the systems, the data access, the senior buy-in, and a second system to compare against. This is the one we do best.",
+    "whatWeBuild": "Assistants across several roles, joining your office system with your vehicles or other systems, on your own equipment, trained and supported for a year. The real win is matching what the office says happened with what your vehicles actually did — so you see which jobs actually make money.",
+    "nextStep": "Book a discovery call and get ready to share access to your systems."
+  },
+  "T4": {
+    "name": "MULTI-SITE BUSINESS",
+    "description": "You run multiple sites with complex operations and a mandate from the top. That's a bigger build, done right.",
+    "whatWeBuild": "A multi-site setup across locations and roles, with a clear roadmap and dedicated support.",
+    "nextStep": "Book a strategy workshop and we design the multi-site roadmap together."
+  }
+};
+let aiq_currentStep=0;
+let aiq_answers={};
+let aiq_rawPoints={};
+let aiq_dimScores={};
+let aiq_compositeScore=0;
+let aiq_finalTier='';
+let aiq_triggeredDQs=[];
+let aiq_geoModifier=0;
+let aiq_geoNote='';
+
+var aiq_rootEl=null;
+function aiq_init(){
+  aiq_rootEl=document.getElementById('aiq-root');
+  aiq_buildDimensionSteps();
+  aiq_loadProgress();
+  aiq_renderStep();
+  aiq_rootEl.addEventListener('change',aiq_changeHandler);
+  aiq_rootEl.addEventListener('keydown',aiq_keydownHandler);
+}
+
+function aiq_teardown(){
+  if(aiq_rootEl){
+    aiq_rootEl.removeEventListener('change',aiq_changeHandler);
+    aiq_rootEl.removeEventListener('keydown',aiq_keydownHandler);
+  }
+}
+
+function aiq_buildDimensionSteps(){
+  const container=aiq_rootEl.querySelector('.container');
+  const resultsStep=document.getElementById('resultsStep');
+  const stepGroups=[
+    {dims:['d1','d4'],title:'Your Information & Systems',subtitle:'Understanding the software you run your business on and how we can work with it.'},
+    {dims:['d2','d3'],title:'The Problem Worth Fixing & Where Things Run',subtitle:'What you need solved and where your business information lives.'},
+    {dims:['d5','d6','d7','d8'],title:'Your Team & Budget',subtitle:'Who is driving this, how big it is, and what you can invest.'}
+  ];
+  stepGroups.forEach((group,stepIdx)=>{
+    const stepNum=stepIdx+2;
+    const stepDiv=document.createElement('div');
+    stepDiv.className='step';
+    stepDiv.dataset.step=stepNum;
+    stepDiv.dataset.type='dimension';
+    stepDiv.dataset.dims=group.dims.join(',');
+    let h='<h2>'+group.title+'</h2>';
+    h+='<p class="subtitle">'+group.subtitle+'</p>';
+    group.dims.forEach(dimId=>{
+      const dim=aiq_RUBRIC.dimensions.find(d=>d.id===dimId);
+      h+='<div class="dimension-intro">'+dim.intro+'</div>';
+      dim.questions.forEach(q=>{
+        h+='<div class="question" data-qid="'+q.id+'">';
+        h+='<div class="question-text"><span class="q-num">'+q.id.toUpperCase()+'</span>'+q.text+'</div>';
+        if(q.type==='text'){
+          h+='<textarea id="'+q.id+'" placeholder="Type your answer here..."></textarea>';
+        } else if(q.type==='numeric'){
+          h+='<input type="number" id="'+q.id+'" min="0" placeholder="Enter a number...">';
+        } else if(q.type==='single'){
+          h+='<div class="options">';
+          q.options.forEach((opt,oi)=>{
+            const dqAttr=opt.dq?'data-dq="'+opt.dq+'" ':'';
+            h+='<label class="option-card" for="'+q.id+'_'+oi+'" '+dqAttr+'data-points="'+opt.points+'">';
+            h+='<input type="radio" name="'+q.id+'" id="'+q.id+'_'+oi+'" value="'+oi+'" '+dqAttr+'>';
+            h+='<span class="check"></span>';
+            h+='<span class="opt-text">'+opt.label+'</span>';
+            h+='</label>';
+          });
+          h+='</div>';
+        } else if(q.type==='multi'){
+          h+='<div class="options">';
+          q.options.forEach((opt,oi)=>{
+            const dqAttr=opt.dq?'data-dq="'+opt.dq+'" ':'';
+            h+='<label class="option-card multi" for="'+q.id+'_'+oi+'" '+dqAttr+'data-points="'+opt.points+'">';
+            h+='<input type="checkbox" name="'+q.id+'" id="'+q.id+'_'+oi+'" value="'+oi+'" '+dqAttr+'>';
+            h+='<span class="check"></span>';
+            h+='<span class="opt-text">'+opt.label+'</span>';
+            h+='</label>';
+          });
+          h+='</div>';
+        }
+        h+='</div>';
+      });
+    });
+    h+='<div class="error-msg" id="err_step_'+stepNum+'">Please answer all questions before continuing.</div>';
+    h+='<div class="buttons"><button class="btn btn-secondary" onclick="aiq_prev()">Back</button><button class="btn btn-primary" onclick="aiq_next()">Continue</button></div>';
+    stepDiv.innerHTML=h;
+    container.insertBefore(stepDiv,resultsStep);
+  });
+}
+
+function aiq_renderStep(){
+  aiq_rootEl.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  const step=aiq_rootEl.querySelector('.step[data-step="'+aiq_currentStep+'"]');
+  if(step){step.classList.add('active');window.scrollTo(0,0)}
+  const totalSteps=6;
+  const pct=Math.round((aiq_currentStep/(totalSteps-1))*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('stepCounter').textContent='Step '+(aiq_currentStep+1)+' of '+totalSteps;
+  if(aiq_currentStep===5) aiq_renderResults();
+}
+
+function aiq_next(){
+  if(aiq_currentStep===1&&!aiq_validateContact())return;
+  if(aiq_currentStep>=2&&aiq_currentStep<=4){
+    if(!aiq_validateStep(aiq_currentStep))return;
+  }
+  aiq_saveProgress();
+  aiq_currentStep++;
+  if(aiq_currentStep>5)aiq_currentStep=5;
+  aiq_renderStep();
+}
+
+function aiq_prev(){if(aiq_currentStep>0){aiq_currentStep--;aiq_renderStep()}}
+
+function aiq_validateContact(){
+  const company=document.getElementById('contact-company').value.trim();
+  const country=document.getElementById('contact-country').value;
+  const err=document.getElementById('contactError');
+  if(!company||!country){err.classList.add('visible');return false}
+  err.classList.remove('visible');
+  return true;
+}
+
+function aiq_validateStep(stepNum){
+  const step=aiq_rootEl.querySelector('.step[data-step="'+stepNum+'"]');
+  const dimIds=step.dataset.dims.split(',');
+  let allAnswered=true;
+  dimIds.forEach(dimId=>{
+    const dim=aiq_RUBRIC.dimensions.find(d=>d.id===dimId);
+    dim.questions.forEach(q=>{
+      if(q.type==='text')return;
+      if(q.type==='single'){
+        if(!aiq_rootEl.querySelector('input[name="'+q.id+'"]:checked'))allAnswered=false;
+      } else if(q.type==='multi'){
+        if(aiq_rootEl.querySelectorAll('input[name="'+q.id+'"]:checked').length===0)allAnswered=false;
+      } else if(q.type==='numeric'){
+        const val=document.getElementById(q.id).value.trim();
+        if(val==='')allAnswered=false;
+      }
+    });
+  });
+  const err=document.getElementById('err_step_'+stepNum);
+  if(!allAnswered){err.classList.add('visible');return false}
+  err.classList.remove('visible');
+  return true;
+}
+
+function aiq_findQuestion(qid){
+  for(const dim of aiq_RUBRIC.dimensions){for(const q of dim.questions){if(q.id===qid)return q}}
+  return null;
+}
+
+function aiq_computeScores(){
+  aiq_answers={};
+  aiq_rawPoints={};
+  aiq_triggeredDQs=[];
+  aiq_answers.company=document.getElementById('contact-company').value;
+  aiq_answers.contactName=document.getElementById('contact-name').value;
+  aiq_answers.role=document.getElementById('contact-role').value;
+  aiq_answers.email=document.getElementById('contact-email').value;
+  aiq_answers.phone=document.getElementById('contact-phone').value;
+  aiq_answers.country=document.getElementById('contact-country').value;
+  aiq_answers.industry=document.getElementById('contact-industry').value;
+
+  aiq_RUBRIC.dimensions.forEach(dim=>{
+    dim.questions.forEach(q=>{
+      if(q.type==='text'){aiq_answers[q.id]=document.getElementById(q.id).value;return}
+      if(q.type==='single'){
+        const checked=aiq_rootEl.querySelector('input[name="'+q.id+'"]:checked');
+        if(checked){
+          const idx=parseInt(checked.value);
+          const opt=q.options[idx];
+          aiq_answers[q.id]=opt.points;
+          if(opt.dq){
+            if(Array.isArray(opt.dq))aiq_triggeredDQs.push(...opt.dq);
+            else aiq_triggeredDQs.push(opt.dq);
+          }
+        } else {aiq_answers[q.id]=0}
+      } else if(q.type==='multi'){
+        const checked=aiq_rootEl.querySelectorAll('input[name="'+q.id+'"]:checked');
+        let pts=0;
+        checked.forEach(c=>{
+          const idx=parseInt(c.value);
+          const opt=q.options[idx];
+          pts+=opt.points;
+          if(opt.dq){
+            if(Array.isArray(opt.dq))aiq_triggeredDQs.push(...opt.dq);
+            else aiq_triggeredDQs.push(opt.dq);
+          }
+        });
+        aiq_answers[q.id]=pts;
+      } else if(q.type==='numeric'){
+        const val=parseInt(document.getElementById(q.id).value)||0;
+        let pts=0;
+        for(const r of q.ranges){if(val>=r.min){pts=r.points;break}}
+        aiq_answers[q.id]=pts;
+      }
+    });
+  });
+
+  aiq_dimScores={};
+  aiq_RUBRIC.dimensions.forEach(dim=>{
+    let earned=0;
+    dim.questions.forEach(q=>{
+      if(q.type==='text')return;
+      earned+=(aiq_answers[q.id]||0);
+    });
+    aiq_rawPoints[dim.id]=earned;
+    aiq_dimScores[dim.id]=(earned/dim.maxPoints)*100;
+  });
+
+  aiq_compositeScore=0;
+  aiq_RUBRIC.dimensions.forEach(dim=>{
+    aiq_compositeScore+=aiq_dimScores[dim.id]*dim.weight;
+  });
+
+  aiq_finalTier=aiq_getTier(aiq_compositeScore);
+
+  const blockingDQs=['dq1','dq2','dq3','dq4','dq6','dq7'];
+  const hasBlockingDQ=aiq_triggeredDQs.some(d=>blockingDQs.includes(d));
+  if(hasBlockingDQ)aiq_finalTier='T0';
+
+  aiq_applyGeographicGate();
+
+  if(aiq_answers.q23!==undefined&&aiq_answers.q23===0&&aiq_isTierAtLeast('T2')){
+    if(!aiq_triggeredDQs.includes('dq8'))aiq_triggeredDQs.push('dq8');
+    aiq_finalTier='T1';
+  }
+
+  if(hasBlockingDQ)aiq_finalTier='T0';
+}
+
+function aiq_getTier(score){
+  if(score<35)return 'T0';
+  if(score<50)return 'T1';
+  if(score<65)return 'T2';
+  if(score<85)return 'T3';
+  return 'T4';
+}
+
+function aiq_isTierAtLeast(tier){
+  const order=['T0','T1','T2','T3','T4'];
+  return order.indexOf(aiq_finalTier)>=order.indexOf(tier);
+}
+
+function aiq_applyGeographicGate(){
+  const country=aiq_answers.country;
+  aiq_geoModifier=0;
+  aiq_geoNote='';
+  const cname={kenya:'Kenya',south_africa:'South Africa',botswana:'Botswana',zambia:'Zambia',zimbabwe:'Zimbabwe',angola:'Angola'};
+  if(country==='namibia'){
+    aiq_geoNote='Namibia — Full service available. On-site installation, training, and support.';
+  } else if(country==='kenya'||country==='south_africa'){
+    aiq_geoNote=(cname[country]||country)+' — Service available with periodic on-site visits alongside remote delivery.';
+  } else if(['botswana','zambia','zimbabwe','angola'].includes(country)){
+    aiq_geoModifier=-10;
+    aiq_geoNote=(cname[country]||country)+' — Southern Africa. Delivered remote-first, with on-site visits arranged as needed. Because we are not routinely on the ground here, this build carries a longer setup period and more of the day-to-day running sits with your team.';
+  } else {
+    aiq_geoModifier=-20;
+    aiq_geoNote='Outside our service region — Delivered remotely. Your team would need someone on site to handle the computer side, and we would agree support hours in advance. We would be honest with you before starting about whether this is a good fit.';
+  }
+  if(aiq_geoModifier<0){
+    aiq_compositeScore=Math.max(0,aiq_compositeScore+aiq_geoModifier);
+    aiq_finalTier=aiq_getTier(aiq_compositeScore);
+  }
+}
+
+function aiq_renderResults(){
+  aiq_computeScores();
+  const resultsDiv=document.getElementById('resultsStep');
+  const tier=aiq_TIERS[aiq_finalTier];
+  const scoreInt=Math.round(aiq_compositeScore);
+  const tierClass=aiq_finalTier.toLowerCase();
+  const opportunities=aiq_buildOpportunities();
+  const risks=buildRisks();
+  const actionItems=aiq_buildActionItems();
+
+  let h='<div class="results-header">';
+  h+='<div class="score-circle">';
+  h+='<svg viewBox="0 0 160 160"><circle cx="80" cy="80" r="70" fill="none" stroke="#162040" stroke-width="10"/><circle cx="80" cy="80" r="70" fill="none" stroke="'+aiq_getScoreColor(scoreInt)+'" stroke-width="10" stroke-dasharray="'+(scoreInt*4.4)+' 440" stroke-linecap="round"/></svg>';
+  h+='<div class="score-value">'+scoreInt+'</div>';
+  h+='</div>';
+  h+='<div class="tier-badge '+tierClass+'">'+tier.name+'</div>';
+  h+='<h2>Your Results</h2>';
+  h+='<p class="subtitle">'+tier.description+'</p>';
+  h+='</div>';
+
+  if(aiq_triggeredDQs.length>0){
+    h+='<div class="results-section"><h3>What Needs to Change</h3>';
+    aiq_triggeredDQs.forEach(dq=>{
+      const dqInfo=aiq_DISQUALIFIERS[dq];
+      if(dqInfo)h+='<div class="dq-message">'+dqInfo.description+'</div>';
+    });
+    h+='</div>';
+  }
+
+  h+='<div class="results-section"><h3>What We Would Build for You</h3><div class="opp-item">'+tier.whatWeBuild+'</div></div>';
+
+  h+='<div class="results-section"><h3>What It Costs</h3><div class="opp-item">'+tier.price+'</div></div>';
+
+  h+='<div class="results-section"><h3>Your Strengths</h3><div class="opportunities">';
+  opportunities.forEach(o=>{h+='<div class="opp-item">'+o+'</div>'});
+  h+='</div></div>';
+
+  h+='<div class="results-section"><h3>Risks to Watch</h3><div class="risks">';
+  risks.forEach(r=>{h+='<div class="risk-item">'+r+'</div>'});
+  h+='</div></div>';
+
+  if(actionItems.length>0){
+    h+='<div class="results-section"><h3>Action Items</h3><div class="action-items">';
+    actionItems.forEach(a=>{h+='<div class="action-item"><span class="bullet">!</span><span>'+a+'</span></div>'});
+    h+='</div></div>';
+  }
+
+  h+='<div class="aiq_next-step"><div class="label">Recommended Next Step</div>'+tier.nextStep+'</div>';
+
+  h+='<div class="export-buttons"><button class="btn btn-primary" onclick="aiq_downloadJSON()">Download Results</button><button class="btn btn-secondary" onclick="aiq_copySummary()">Copy Summary</button><button class="btn btn-secondary" onclick="window.print()">Print / Save PDF</button></div>';
+
+  if(new URLSearchParams(location.search).get('internal')==='1'){
+    h+='<div class="internal-view visible" id="internalView">';
+    h+='<h4>Internal Sales View</h4>';
+    h+=aiq_buildInternalView();
+    h+='</div>';
+  }
+
+  resultsDiv.innerHTML=h;
+
+  setTimeout(()=>{
+    aiq_rootEl.querySelectorAll('.dim-bar-fill').forEach(bar=>{
+      bar.style.width=bar.dataset.width+'%';
+    });
+  },100);
+}
+
+function aiq_getBandClass(score){
+  if(score<50)return 'red';
+  if(score<65)return 'amber';
+  if(score<85)return 'teal';
+  return 'gold';
+}
+
+function aiq_getScoreColor(score){
+  if(score<50)return '#ef4444';
+  if(score<65)return '#f59e0b';
+  if(score<85)return '#22d3ee';
+  return '#d4af37';
+}
+
+function aiq_buildOpportunities(){
+  const opps=[];
+  if(aiq_answers.q9>=6)opps.push('You named a specific problem with a clear financial payoff.');
+  if(aiq_answers.q10>=5)opps.push('Monthly savings are achievable.');
+  if(aiq_answers.q11>=5)opps.push('Cross-system margin: matching office records with vehicle or staff reality.');
+  if(aiq_answers.q14&&aiq_answers.q14.trim())opps.push('Faster decision named: "'+aiq_answers.q14.trim().substring(0,100)+'..."');
+  if(opps.length===0)opps.push('We will dig into the specifics on the discovery call.');
+  return opps.slice(0,3);
+}
+
+function aiq_buildRisks(){
+  const risks=[];
+  if(aiq_answers.q3<=3)risks.push('Record access may be blocked.');
+  if(aiq_answers.q5<=2)risks.push('Thin historical data.');
+  if(aiq_answers.q6<=3)risks.push('Primary system data quality is weak.');
+  if(aiq_answers.q8<=3)risks.push('No second system for cross-checking.');
+  if(risks.length===0)risks.push('No blockers. Standard discovery from here.');
+  return risks.slice(0,3);
+}
+
+function aiq_buildActionItems(){
+  const items=[];
+  const systems=aiq_getSelectedSystems();
+  const s0=systems.length?systems[0]:'your primary software company';
+  if(aiq_answers.q3===7)items.push('Contact '+s0+' — they can enable record access.');
+  if(aiq_answers.q3===3)items.push('Engage '+s0+' — expect delays, they may be slow.');
+  if(aiq_answers.q3===0)items.push('No data export path — find another way to access your records.');
+  if(items.length===0)items.push('No immediate blockers. Confirm access with your software company during discovery.');
+  return items;
+}
+
+function aiq_getSelectedSystems(){
+  const systems=[];
+  const q2=aiq_RUBRIC.dimensions[0].questions.find(q=>q.id==='q2');
+  if(q2){
+    q2.options.forEach((opt,i)=>{
+      const cb=document.getElementById('q2_'+i);
+      if(cb&&cb.checked)systems.push(opt.label.split('(')[0].trim());
+    });
+  }
+  return systems;
+}
+
+function aiq_buildInternalView(){
+  let h='<div class="geographic-result">'+aiq_geoNote+'</div>';
+  h+='<div style="margin-bottom:20px"><strong style="font-size:13px;color:var(--text-muted)">aiq_DISQUALIFIERS:</strong><br>';
+  if(aiq_triggeredDQs.length===0){
+    h+='<span class="no-dq">None triggered</span>';
+  } else {
+    aiq_triggeredDQs.forEach(dq=>{
+      const dqInfo=aiq_DISQUALIFIERS[dq];
+      if(dqInfo)h+='<span class="dq-tag">'+dqInfo.code+': '+dqInfo.name+'</span>';
+    });
+  }
+  h+='</div>';
+  h+='<div style="margin-bottom:20px"><strong style="font-size:13px;color:var(--text-muted)">INDICATIVE PRICE BAND:</strong><br><span style="color:var(--accent-gold);font-size:15px;font-weight:600">'+aiq_TIERS[aiq_finalTier].price+'</span></div>';
+  h+='<table class="internal-table"><thead><tr><th>Dimension</th><th>Earned</th><th>Max</th><th>Score</th><th>Weight</th><th>Weighted</th></tr></thead><tbody>';
+  aiq_RUBRIC.dimensions.forEach(dim=>{
+    const earned=aiq_rawPoints[dim.id]||0;
+    const score=aiq_dimScores[dim.id].toFixed(2);
+    const weighted=(aiq_dimScores[dim.id]*dim.weight).toFixed(2);
+    h+='<tr><td><strong>'+dim.id.toUpperCase()+'</strong> '+dim.name+'</td><td>'+earned+'</td><td>'+dim.maxPoints+'</td><td>'+score+'%</td><td>'+dim.weight+'</td><td>'+weighted+'</td></tr>';
+  });
+  h+='<tr style="font-weight:700"><td>COMPOSITE</td><td>-</td><td>-</td><td>-</td><td>1.00</td><td>'+aiq_compositeScore.toFixed(2)+'</td></tr>';
+  if(aiq_geoModifier!==0){
+    h+='<tr style="color:var(--warning)"><td>GEOGRAPHIC MODIFIER</td><td colspan="4"></td><td>'+aiq_geoModifier+'</td></tr>';
+    h+='<tr style="font-weight:700"><td>ADJUSTED COMPOSITE</td><td colspan="4"></td><td>'+aiq_compositeScore.toFixed(2)+'</td></tr>';
+  }
+  h+='</tbody></table>';
+  h+='<div style="font-size:13px;color:var(--text-muted);margin-top:12px"><strong>TIER LOGIC:</strong> Composite '+aiq_compositeScore.toFixed(2)+' → Tier '+aiq_finalTier+' ('+aiq_TIERS[aiq_finalTier].range+')';
+  if(aiq_triggeredDQs.length>0)h+='<br><strong>OVERRIDE:</strong> Disqualifier(s) triggered → forced to '+aiq_finalTier;
+  h+='</div>';
+  return h;
+}
+
+function aiq_downloadJSON(){
+  aiq_computeScores();
+  const data={timestamp:new Date().toISOString(),contact:{company:aiq_answers.company,name:aiq_answers.contactName,role:aiq_answers.role,email:aiq_answers.email,phone:aiq_answers.phone,country:aiq_answers.country,industry:aiq_answers.industry},aiq_answers:aiq_answers,dimensionScores:{},aiq_rawPoints:aiq_rawPoints,composite:Math.round(aiq_compositeScore*100)/100,tier:aiq_finalTier,tierName:aiq_TIERS[aiq_finalTier].name,disqualifiers:aiq_triggeredDQs,geographicModifier:aiq_geoModifier};
+    // Client-facing export: strip internal scoring mechanics unless ?internal=1.
+    if(new URLSearchParams(location.search).get('internal')!=='1'){
+      delete data.geographicModifier; delete data.disqualifiers; delete data.aiq_rawPoints;
+    }
+  aiq_RUBRIC.dimensions.forEach(dim=>{data.dimensionScores[dim.id]=Math.round(aiq_dimScores[dim.id]*100)/100});
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  const date=new Date().toISOString().split('T')[0];
+  const safeName=(aiq_answers.company||'company').replace(/[^a-z0-9]/gi,'_').toLowerCase();
+  a.download='okai_readiness_'+safeName+'_'+date+'.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function aiq_copySummary(){
+  aiq_computeScores();
+  const tier=aiq_TIERS[aiq_finalTier];
+  let text='AI Readiness Assessment Summary\n===============================\n\n';
+  text+='Company: '+(aiq_answers.company||'Not provided')+'\n';
+  text+='Contact: '+(aiq_answers.contactName||'Not provided')+'\n';
+  text+='Country: '+(aiq_answers.country||'Not provided')+'\n';
+  text+='Industry: '+(aiq_answers.industry||'Not provided')+'\n\n';
+  text+='Score: '+Math.round(aiq_compositeScore)+'/100\n';
+  text+='Tier: '+tier.name+'\n\n';
+  text+=''+tier.description+'\n\n';
+  text+='What we would build: '+tier.whatWeBuild+'\n\n';
+  text+='Investment: '+tier.price+'\n\n';
+  text+='Recommended Next Step: '+tier.nextStep+'\n';
+  navigator.clipboard.writeText(text).then(()=>{alert('Summary copied to clipboard.')}).catch(()=>{alert('Could not copy. Please select and copy the text manually.')});
+}
+
+function aiq_toggleInternal(){document.getElementById('internalView').classList.toggle('visible')}
+
+function aiq_saveProgress(){
+  const data={aiq_currentStep,aiq_answers,contact:{company:document.getElementById('contact-company')?.value||'',name:document.getElementById('contact-name')?.value||'',role:document.getElementById('contact-role')?.value||'',email:document.getElementById('contact-email')?.value||'',phone:document.getElementById('contact-phone')?.value||'',country:document.getElementById('contact-country')?.value||'',industry:document.getElementById('contact-industry')?.value||''}};
+  try{localStorage.setItem('okai_q',JSON.stringify(data))}catch(e){}
+}
+
+function aiq_loadProgress(){
+  try{
+    const data=JSON.parse(localStorage.getItem('okai_q'));
+    if(!data)return;
+    if(data.contact){
+      if(data.contact.company)document.getElementById('contact-company').value=data.contact.company;
+      if(data.contact.name)document.getElementById('contact-name').value=data.contact.name;
+      if(data.contact.role)document.getElementById('contact-role').value=data.contact.role;
+      if(data.contact.email)document.getElementById('contact-email').value=data.contact.email;
+      if(data.contact.phone)document.getElementById('contact-phone').value=data.contact.phone;
+      if(data.contact.country)document.getElementById('contact-country').value=data.contact.country;
+      if(data.contact.industry)document.getElementById('contact-industry').value=data.contact.industry;
+    }
+    setTimeout(()=>aiq_restoreDimensionAnswers(data.aiq_answers),100);
+    if(data.aiq_currentStep&&data.aiq_currentStep>0)aiq_currentStep=data.aiq_currentStep;
+  }catch(e){}
+}
+
+function aiq_restoreDimensionAnswers(saved){
+  if(!saved)return;
+  for(const[qid,val]of Object.entries(saved)){
+    if(!qid.startsWith('q'))continue;
+    const radio=aiq_rootEl.querySelector('input[name="'+qid+'"][value="'+val+'"]');
+    if(radio)radio.checked=true;
+    const checkboxes=aiq_rootEl.querySelectorAll('input[name="'+qid+'"]');
+    if(checkboxes.length>0&&checkboxes[0].type==='checkbox'){
+      const q=aiq_findQuestion(qid);
+      if(q){
+        let remaining=val;
+        const sortedOpts=q.options.map((o,i)=>({...o,idx:i})).sort((a,b)=>b.points-a.points);
+        for(const opt of sortedOpts){
+          if(opt.points>0&&remaining>=opt.points){
+            const cb=document.getElementById(qid+'_'+opt.idx);
+            if(cb)cb.checked=true;
+            remaining-=opt.points;
+          }
+        }
+      }
+    }
+    const numInput=document.getElementById(qid);
+    if(numInput&&numInput.type==='number')numInput.value=val;
+    const textInput=document.getElementById(qid);
+    if(textInput&&textInput.tagName==='TEXTAREA')textInput.value=val;
+  }
+  aiq_rootEl.querySelectorAll('.option-card').forEach(card=>{
+    const input=card.querySelector('input');
+    if(input&&input.checked)card.classList.add('selected');
+  });
+}
+
+function aiq_changeHandler(e){
+  if(e.target.closest('.option-card')){
+    const card=e.target.closest('.option-card');
+    const input=card.querySelector('input');
+    if(input.type==='radio'){
+      aiq_rootEl.querySelectorAll('input[name="'+input.name+'"]').forEach(r=>{r.closest('.option-card').classList.remove('selected')});
+    }
+    if(input.checked)card.classList.add('selected');else card.classList.remove('selected');
+  }
+}
+
+function aiq_keydownHandler(e){
+  if(e.key==='Enter'&&e.target.tagName!=='TEXTAREA'){
+    const active=document.activeElement;
+    if(active&&active.classList.contains('option-card')){
+      const input=active.querySelector('input');
+      if(input)input.click();
+    } else {aiq_next()}
+  }
+}
+
+// init() wired to #/assess route
+
+})();
+</script>
+</body>
+</html>
