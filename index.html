@@ -1344,6 +1344,7 @@ body.night #view-thesis > .section:first-of-type::before {
    ============================================ */
 .card-accent-gold { border-left: 2px solid var(--gold); }
 
+</style>
 <style>
 /* AI Readiness Questionnaire — reskinned to The Hub palette */
 #aiq-root{
@@ -1491,7 +1492,6 @@ body.night #view-thesis > .section:first-of-type::before {
 @media (prefers-reduced-motion:reduce){#aiq-root, #aiq-root *, #aiq-root *::before, #aiq-root *::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
 
 </style>
-</style>
 </head>
 <body>
 
@@ -1625,7 +1625,7 @@ body.night #view-thesis > .section:first-of-type::before {
 </div>
 
 <!-- ===== TOP NAV ===== -->
-<nav class="top-nav" role="aria-label" id="topNav">
+<nav class="top-nav" role="navigation" aria-label="Main navigation" id="topNav">
   <a href="#/" class="nav-link" data-route="/">Thesis</a>
   <a href="#/business" class="nav-link door-business" data-route="/business">Business</a>
   <a href="#/earn" class="nav-link door-earn" data-route="/earn">Earn</a>
@@ -2637,17 +2637,36 @@ body.night #view-thesis > .section:first-of-type::before {
 
       // Mempool.space: block height + fee
       pending++;
-      safeFetch('https://mempool.space/api/blocks/tip/height')
+      safeFetch('https://blockstream.info/api/blocks/tip/height')
         .then(function(r) { return r.text(); })
         .then(function(t) { data.height = parseInt(t, 10); })
-        .catch(function() { /* leave null */ })
+        .catch(function() {
+          return safeFetch('https://mempool.space/api/blocks/tip/height')
+            .then(function(r) { return r.text(); })
+            .then(function(t) { data.height = parseInt(t, 10); })
+            .catch(function() {
+              return safeFetch('https://blockchain.info/q/getblockcount')
+                .then(function(r) { return r.text(); })
+                .then(function(t) { data.height = parseInt(t, 10); })
+                .catch(function() { /* leave null */ });
+            });
+        })
         .then(checkDone);
 
       pending++;
-      safeFetch('https://mempool.space/api/v1/fees/recommended')
+      safeFetch('https://blockstream.info/api/fee-estimates')
         .then(function(r) { return r.json(); })
-        .then(function(j) { if (j && j.hourFee) data.fee = j.hourFee; })
-        .catch(function() { /* leave null */ })
+        .then(function(j) {
+          // Blockstream returns sat/vB keyed by target block count
+          var v = j && (j['6'] || j['3'] || j['1']);
+          if (v) data.fee = Math.max(1, Math.round(v));
+        })
+        .catch(function() {
+          return safeFetch('https://mempool.space/api/v1/fees/recommended')
+            .then(function(r) { return r.json(); })
+            .then(function(j) { if (j && j.hourFee) data.fee = j.hourFee; })
+            .catch(function() { /* leave null */ });
+        })
         .then(checkDone);
 
       // BTC/USD from CoinGecko
