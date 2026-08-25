@@ -1166,7 +1166,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-weight: 400;
   color: var(--text-dim);
   max-width: 55ch;
-  margin-bottom: var(--sp2);
+  margin: 40px auto var(--sp2);
+  text-align: center;
 }
 
 /* Solutions hero sub — green accent */
@@ -1722,6 +1723,9 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 .ledger-text,
 .manifesto-text {
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 400px;
 }
 
 /* --- Depth / Elevation tiers --- */
@@ -2368,7 +2372,7 @@ ul, ol {
     <!-- Three-tenet manifesto -->
     <div class="grid">
       <div class="col-full">
-        <div class="manifesto-band scroll-reveal" style="position:relative;">
+        <div class="manifesto-band scroll-reveal" style="position:relative;margin-top:60px;">
           <div class="bg-numeral" aria-hidden="true" style="top:-60px;left:50%;transform:translateX(-50%);">I.</div>
           <div class="manifesto-item">
             <div class="manifesto-num">I.</div>
@@ -2436,8 +2440,8 @@ ul, ol {
       <div class="grid">
         <div class="col-full">
           <div class="section-label bordered">Anchor Programme</div>
-          <h2 class="display-hed" style="margin-bottom: 24px;">Intelligent automation deployments</h2>
-          <p class="body-lg">A structured, outcome-priced deployment. We find the highest-friction work and replace it with systems that run without babysitting. Measured by hours returned.</p>
+          <h2 class="display-hed" style="margin-bottom: 24px;text-align:center;">Intelligent automation deployments</h2>
+          <p class="body-lg" style="text-align:center;">A structured, outcome-priced deployment. We find the highest-friction work and replace it with systems that run without babysitting. Measured by hours returned.</p>
         </div>
       </div>
     </div>
@@ -2525,7 +2529,7 @@ ul, ol {
             <div class="card-sub">Free assessment · 5 minutes · 100% private</div>
             <p class="card-body">Find out if your business is ready — and exactly what that looks like.</p>
             <div style="margin-top: 16px;">
-              <span class="cta-btn ember" onclick="event.stopPropagation(); window.location.hash='#/assess'">Start the assessment</span>
+              <span class="cta-btn ember" style="background:var(--ember);color:var(--base);border-color:var(--ember);" onclick="event.stopPropagation(); window.location.hash='#/assess'">Start the assessment</span>
             </div>
           </div>
         </div>
@@ -2561,9 +2565,9 @@ ul, ol {
     <div class="section">
       <div class="grid">
         <div class="col-8">
-          <div class="eyebrow" style="color: var(--btc);">Namibia's Bitcoin earning layer</div>
-          <h2 class="display-hed">Earn sats with the time, skills, and work you already have.</h2>
-          <p class="body-lg">The earning rail of The Hub. Every pillar converts what you can do today into bitcoin on Lightning. No bank account. No permission. Proof of work and a wallet.</p>
+          <div class="eyebrow" style="color: var(--btc);text-align:center;">Namibia's Bitcoin earning layer</div>
+          <h2 class="display-hed" style="text-align:center;">Earn sats with the time, skills, and work you already have.</h2>
+          <p class="body-lg" style="text-align:center;">The earning rail of The Hub. Every pillar converts what you can do today into bitcoin on Lightning. No bank account. No permission. Proof of work and a wallet.</p>
         </div>
       </div>
     </div>
@@ -2580,28 +2584,28 @@ ul, ol {
 
           <a class="pillar-card" href="https://bitcoin.okinent.org/timeforce" target="_blank" rel="noopener noreferrer" aria-label="TimeForce on EasySats (opens in a new tab)">
             <span class="pillar-icon">01</span>
-            <div class="pillar-name">TimeForce<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></div>
-            <div class="pillar-audience">For anyone with time and willingness</div>
-            <p class="pillar-desc">Exchange time and skills for sats. Short tasks, immediate settlement. Move, clean, verify, show up. Proof-of-work meets proof-of-attendance.</p>
-            <div class="pillar-mechanic">Match → Do → Verify → Lightning settlement</div>
+            <div class="pillar-name" style="text-align:center;">TimeForce<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></div>
+            <div class="pillar-audience" style="text-align:center;">For anyone with time and willingness</div>
+            <p class="pillar-desc" style="text-align:center;">Exchange time and skills for sats. Short tasks, immediate settlement. Move, clean, verify, show up. Proof-of-work meets proof-of-attendance.</p>
+            <div class="pillar-mechanic" style="text-align:center;">Match → Do → Verify → Lightning settlement</div>
           </a>
         </div>
         <div class="col-4">
           <a class="pillar-card" href="https://bitcoin.okinent.org/easyjobs" target="_blank" rel="noopener noreferrer" aria-label="EasyJobs on EasySats (opens in a new tab)">
             <span class="pillar-icon">02</span>
-            <div class="pillar-name">EasyJobs<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></div>
-            <div class="pillar-audience">For skilled workers seeking Bitcoin-native careers</div>
-            <p class="pillar-desc">Bitcoin-only career placements. Roles at companies that pay in sats. Operations to engineering. Salary runs on Lightning. No fiat detour.</p>
-            <div class="pillar-mechanic">Profile → Match → Salary in sats → Stacked</div>
+            <div class="pillar-name" style="text-align:center;">EasyJobs<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></div>
+            <div class="pillar-audience" style="text-align:center;">For skilled workers seeking Bitcoin-native careers</div>
+            <p class="pillar-desc" style="text-align:center;">Bitcoin-only career placements. Roles at companies that pay in sats. Operations to engineering. Salary runs on Lightning. No fiat detour.</p>
+            <div class="pillar-mechanic" style="text-align:center;">Profile → Match → Salary in sats → Stacked</div>
           </a>
         </div>
         <div class="col-4">
           <a class="pillar-card" href="https://bitcoin.okinent.org/easydevs" target="_blank" rel="noopener noreferrer" aria-label="EasyDevs on EasySats (opens in a new tab)">
             <span class="pillar-icon">03</span>
-            <div class="pillar-name">EasyDevs<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></div>
-            <div class="pillar-audience">For builders, designers, and technical freelancers</div>
-            <p class="pillar-desc">Freelance bounties for wallet features, node dashboards, Lightning integrations. Paid in bitcoin on completion. No 20% platform cut.</p>
-            <div class="pillar-mechanic">Bounty posted → Build → Review → Sats released</div>
+            <div class="pillar-name" style="text-align:center;">EasyDevs<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></div>
+            <div class="pillar-audience" style="text-align:center;">For builders, designers, and technical freelancers</div>
+            <p class="pillar-desc" style="text-align:center;">Freelance bounties for wallet features, node dashboards, Lightning integrations. Paid in bitcoin on completion. No 20% platform cut.</p>
+            <div class="pillar-mechanic" style="text-align:center;">Bounty posted → Build → Review → Sats released</div>
           </a>
         </div>
       </div>
@@ -2736,7 +2740,7 @@ ul, ol {
         <div class="col-full">
           <div class="section-label" style="margin-bottom: 21px;">The OKIN Ent ecosystem</div>
           <div class="ecosystem-strip">
-            <div class="ecosystem-label">Under The Hub</div>
+            <div class="ecosystem-label" style="text-align:center;">Under The Hub</div>
             <div class="ecosystem-tiles">
               <a class="ecosystem-tile" href="https://bitcoin.okinent.org/" target="_blank" rel="noopener noreferrer" aria-label="EasySats (opens in a new tab)">
                 <span class="ecosystem-tile-name">EasySats<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></span>
@@ -2774,7 +2778,7 @@ ul, ol {
       <div class="grid">
         <div class="col-full">
           <div class="eyebrow" style="color: var(--ember);">Doctrine</div>
-          <h1 class="display">FreedomTech.<br><span style="color: var(--ember);">The removal of<br>rent-takers.</span></h1>
+          <h1 class="display" style="text-align:center;">FreedomTech.<br><span style="color: var(--ember);">The removal of<br>rent-takers.</span></h1>
         </div>
       </div>
     </div>
@@ -2785,7 +2789,7 @@ ul, ol {
         <div class="col-8">
           <div class="section-label" style="color: var(--ember);">FreedomTech — full text</div>
           <h2 class="display-hed section-sticky-hed">FreedomTech is the removal of unnecessary intermediaries — from your workflow and from your money — using tools that are open, verifiable, and controlled by the people who use them.</h2>
-          <p class="body-lg" style="margin-top: 24px;">That is the whole doctrine. Every system we build exists to make one or more intermediaries unnecessary. Not disrupted. Not "democratised." Unnecessary. The rent flows back to the person who earned it.</p>
+          <p class="body-lg" style="margin-top: 24px;text-align:center;">That is the whole doctrine. Every system we build exists to make one or more intermediaries unnecessary. Not disrupted. Not "democratised." Unnecessary. The rent flows back to the person who earned it.</p>
         </div>
       </div>
     </div>
@@ -2797,17 +2801,17 @@ ul, ol {
           <div class="section-label bordered">Three Tenets — expanded</div>
         </div>
         <div class="col-8">
-          <div class="tenet-block">
-            <div class="tenet-title">I. Outcome over artifact.</div>
-            <p class="tenet-body">A system saving ten hours a week beats a custom model with a whitepaper. We optimise for the measurable change. No number moved, work not finished.</p>
+          <div class="tenet-block" style="text-align:center;">
+            <div class="tenet-title" style="text-align:center;">I. Outcome over artifact.</div>
+            <p class="tenet-body" style="text-align:center;">A system saving ten hours a week beats a custom model with a whitepaper. We optimise for the measurable change. No number moved, work not finished.</p>
           </div>
-          <div class="tenet-block">
-            <div class="tenet-title">II. Proof over promise.</div>
-            <p class="tenet-body">Every deployment has a verification baseline. Every risk in writing, not buried. Trust compounds, marketing decays. We prove first.</p>
+          <div class="tenet-block" style="text-align:center;">
+            <div class="tenet-title" style="text-align:center;">II. Proof over promise.</div>
+            <p class="tenet-body" style="text-align:center;">Every deployment has a verification baseline. Every risk in writing, not buried. Trust compounds, marketing decays. We prove first.</p>
           </div>
-          <div class="tenet-block">
-            <div class="tenet-title">III. Sovereignty scales.</div>
-            <p class="tenet-body">A Lightning wallet and self-hosted toolstack is harder to exploit than five SaaS subscriptions and a bank. Scale to a team, a business, a region. Sovereignty is infrastructure. Distributed ownership makes extraction expensive.</p>
+          <div class="tenet-block" style="text-align:center;">
+            <div class="tenet-title" style="text-align:center;">III. Sovereignty scales.</div>
+            <p class="tenet-body" style="text-align:center;">A Lightning wallet and self-hosted toolstack is harder to exploit than five SaaS subscriptions and a bank. Scale to a team, a business, a region. Sovereignty is infrastructure. Distributed ownership makes extraction expensive.</p>
           </div>
         </div>
       </div>
@@ -2836,8 +2840,8 @@ ul, ol {
       </div>
       <div class="grid">
         <div class="col-8">
-          <h2 class="display-sm">The removal-of-rent-takers thesis.</h2>
-          <p class="body-lg" style="margin-top: 24px;">Every system asks: <em>who is taking rent, and can we make them unnecessary?</em> The tools exist. The technology is open. The rails are live. The only missing piece is the decision.</p>
+          <h2 class="display-sm" style="text-align:center;">The removal-of-rent-takers thesis.</h2>
+          <p class="body-lg" style="margin-top: 24px;text-align:center;">Every system asks: <em>who is taking rent, and can we make them unnecessary?</em> The tools exist. The technology is open. The rails are live. The only missing piece is the decision.</p>
         </div>
       </div>
     </div>
@@ -2876,7 +2880,7 @@ ul, ol {
 <div class="feature"><div class="feature-title">04 — No Obligation</div><div class="feature-desc">Not a sales pitch.</div></div>
 </div>
 <div class="assessment-divider"></div>
-<div class="privacy-note"><span>Stored in this browser tab only. Progress saves locally. We never send your information anywhere.</span></div>
+<div class="privacy-note" style="text-align:center;"><span>Stored in this browser tab only. Progress saves locally. We never send your information anywhere.</span></div>
 <div class="buttons"><button class="btn btn-primary" onclick="aiq_next()">Start</button></div>
 </div>
 
@@ -2925,7 +2929,7 @@ ul, ol {
 <!-- ===== KONAMI MANIFESTO OVERLAY ===== -->
 <div class="konami-overlay" id="konamiOverlay" aria-hidden="true">
   <div class="konami-text">You, are the Greatest Brand You will ever Represent.</div>
-  <div class="konami-hint">click or press Esc to dismiss</div>
+  
 </div>
 
 <!-- ===== QUOTE TOAST (rotating African voices) ===== -->
@@ -2941,7 +2945,7 @@ ul, ol {
   <div class="retro-sprite-stage" id="retroSpriteStage">
     <svg class="sprite-svg" id="retroSpriteSvg" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"></svg>
   </div>
-  <div class="retro-dismiss-hint">click or press Esc to dismiss</div>
+  
 </div>
 
 <!-- ============================================
