@@ -1945,78 +1945,59 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 
 
 /* ===== CENTER ALL CONTENT ===== */
-#app p,
-#app h1,
-#app h2,
-#app h3,
-#app h4,
-#app li,
-#app .card-body,
-#app .card-title,
-#app .card-sub,
-#app .pillar-name,
-#app .pillar-desc,
-#app .door-desc,
-#app .door-title,
-#app .section-label,
-#app .manifesto-body,
-#app .tenet-body,
-#app .flow-content,
-#app .step-content,
-#app .step-title,
-#app .display,
-#app .subhead,
-#app .eyebrow,
-#app .cta-body,
-#app .cta-title,
-#app .section-title,
-#app .section-intro,
-#app .door-label,
-#app .hero-sub,
-#app .hero-title {
+/* Center everything in #app by default */
+#app {
   text-align: center;
 }
 
-/* Center card and section content containers */
-#app .card,
-#app .pillar-card,
-#app .door,
-#app .manifesto-item,
-#app .tenet-block,
-#app .flow-step,
-#app .step,
-#app .cta-block,
-#app .section,
-#app .hero-content {
+/* Center all text elements */
+#app h1, #app h2, #app h3, #app h4, #app h5, #app h6,
+#app p, #app li, #app a, #app span, #app div,
+#app .display, #app .display-hed, #app .subhead,
+#app .eyebrow, #app .body-lg, #app .body-md, #app .body-sm,
+#app .card-title, #app .card-body, #app .card-sub,
+#app .pillar-name, #app .pillar-desc, #app .pillar-audience, #app .pillar-mechanic,
+#app .door-title, #app .door-desc, #app .door-label, #app .door-cta,
+#app .section-label, #app .section-title, #app .section-intro,
+#app .manifesto-body, #app .manifesto-title, #app .manifesto-num,
+#app .tenet-body, #app .tenet-title,
+#app .flow-content, #app .step-content, #app .step-title,
+#app .cta-body, #app .cta-title,
+#app .hero-sub, #app .hero-title,
+#app .tpok-content, #app .assess-content,
+#app .ecosystem-tile, #app .solution-cell, #app .solution-row,
+#app .display-hed {
   text-align: center;
 }
 
-/* Center lists and their items */
-#app ul,
-#app ol {
+/* Center lists */
+#app ul, #app ol {
   text-align: center;
   list-style-position: inside;
   padding-left: 0;
 }
 
-/* Keep the top bar left-aligned (don't touch masthead/nav) */
-.masthead,
-.top-nav,
-.mempool-strip {
+/* Center grid columns */
+#app .col-full, #app .col-8, #app .col-6, #app .col-4, #app .col-3 {
+  text-align: center;
+}
+
+/* Keep the top bar left-aligned */
+.masthead, .top-nav, .mempool-strip {
   text-align: left;
 }
 
-/* Center ecosystem tiles and solution cells */
-#app .ecosystem-tile,
-#app .solution-cell,
-#app .solution-row {
-  text-align: center;
+/* Center the masthead zones */
+.masthead-zone {
+  justify-content: center;
 }
+.masthead-left { justify-content: center; }
+.masthead-center { justify-content: center; }
+.masthead-right { justify-content: center; }
 
-/* Center the TPOK and assess content */
-#app .tpok-content,
-#app .assess-content {
-  text-align: center;
+/* Center the mempool strip content */
+.mempool-strip {
+  justify-content: center;
 }
 </style>
 <style>
