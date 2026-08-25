@@ -130,8 +130,66 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   letter-spacing: 0.02em;
   color: var(--text);
 }
-.masthead-brand .brand-gold {
+.masthead-brand .brand-accent {
   color: var(--ember);
+}
+
+/* ===== OKIN SEAL — single inline SVG symbol, tinted via currentColor ===== */
+.okin-seal {
+  display: block;
+  color: currentColor;
+  flex: none;
+}
+.okin-seal-k {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 62px;
+}
+.okin-seal-arc {
+  font-family: var(--serif);
+  font-size: 11.5px;
+  letter-spacing: 1.7px;
+}
+/* 1 — masthead */
+.masthead-left { gap: 10px; }
+.masthead-seal {
+  width: 28px;
+  height: 28px;
+  color: var(--ember);
+}
+/* 2 — footer sign-off (positioning lives in the .footer-watermark rule below) */
+/* 3 — philosophy editorial device */
+.seal-editorial {
+  position: relative;
+  min-height: 220px;
+}
+.seal-editorial-mark {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 208px;
+  height: 208px;
+  color: var(--gold);
+  opacity: 0.09;
+  pointer-events: none;
+  z-index: 0;
+}
+.seal-editorial > .grid { position: relative; z-index: 1; }
+@media (max-width: 900px) {
+  .seal-editorial-mark { width: 150px; height: 150px; opacity: 0.07; }
+}
+/* 4 — assess landing mark */
+.assess-seal-mark {
+  width: 34px;
+  height: 34px;
+  color: var(--text-dim);
+  margin-bottom: var(--sp2);
+  pointer-events: none;
+}
+/* The seal is a seal, not a loader: never animate it. */
+@media (prefers-reduced-motion: reduce) {
+  .okin-seal, .okin-seal * { animation: none !important; transition: none !important; }
 }
 .masthead-hub-title {
   font-family: var(--serif);
@@ -274,14 +332,13 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .footer-verification strong { color: var(--text); font-weight: 500; }
 .footer-watermark {
-  font-family: var(--serif);
-  font-size: 3rem;
-  color: var(--text);
-  opacity: 0.04;
+  width: 140px;
+  height: 140px;
+  color: var(--text-faint);
+  opacity: 0.16;
   position: absolute;
   bottom: var(--sp4);
   right: 28px;
-  letter-spacing: 0.05em;
   pointer-events: none;
 }
 .footer-links {
@@ -1255,7 +1312,7 @@ body.night #view-thesis > .section:first-of-type::before {
   .section-lg { padding: var(--sp6) 0; }
   .section-row { grid-template-columns: 1fr; gap: 8px; }
   .section-row .rail { padding-top: 0; }
-  .footer-watermark { font-size: 2rem; }
+  .footer-watermark { width: 92px; height: 92px; }
   .display { font-size: clamp(2.5rem, 10vw, 4.5rem); }
   .masthead-hub-title { font-size: 0.9rem; }
   .ecosystem-strip { flex-direction: column; }
@@ -1628,6 +1685,30 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 
 <body>
 
+<!-- ===== OKIN SEAL — defined ONCE, reused via <use>. The ring IS the letter "O". ===== -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="okin-seal" viewBox="0 0 200 200">
+      <!-- bottom arc guide for the curved legend -->
+      <path id="okin-seal-arc-path" d="M35 100A65 65 0 0 0 165 100" fill="none"/>
+      <!-- double ring: thicker outer + thinner inner -->
+      <circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-width="7"/>
+      <circle cx="100" cy="100" r="81" fill="none" stroke="currentColor" stroke-width="2.4"/>
+      <g fill="currentColor">
+        <!-- serif capitals K and N, tightly kerned around the central I -->
+        <text class="okin-seal-k" x="67" y="122" text-anchor="middle">K</text>
+        <text class="okin-seal-k" x="133" y="122" text-anchor="middle">N</text>
+        <!-- the I: taller stem, normal thick serif foot, NO top serif -->
+        <path d="M95 62h10v52h9.5v8H85.5v-8H95z"/>
+        <!-- African continent silhouette replacing the I's top serif -->
+        <path transform="translate(82.5 21) scale(.35)" d="M14 4 74 0 86 26 100 44 76 52 74 72 62 96 48 118 34 96 24 74 26 60 8 54 0 40 2 26Z"/>
+        <!-- legend on the bottom arc -->
+        <text class="okin-seal-arc"><textPath href="#okin-seal-arc-path" startOffset="50%" text-anchor="middle">SPAWNED 1987</textPath></text>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
 <!-- ===== GLOBAL NETWORK BACKGROUND ===== -->
 <svg class="global-network-bg" id="globalNetwork" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
   <!-- Connection lines -->
@@ -1738,7 +1819,8 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 <!-- ===== MASTHEAD ===== -->
 <header class="masthead" role="banner">
   <div class="masthead-zone masthead-left">
-    <div class="masthead-brand"><span class="brand-gold">OKIN</span> Ent</div>
+    <svg class="okin-seal masthead-seal" role="img" viewBox="0 0 200 200"><title>OKIN Ent</title><use href="#okin-seal"/></svg>
+    <div class="masthead-brand"><span class="brand-accent">OKIN</span> Ent</div>
   </div>
   <div class="masthead-zone masthead-center">
     <div class="masthead-hub-title">THE HUB</div>
@@ -2281,7 +2363,8 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
     </div>
 
     <!-- Closing thesis -->
-    <div class="section">
+    <div class="section seal-editorial">
+      <svg class="okin-seal seal-editorial-mark" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><use href="#okin-seal"/></svg>
       <div class="grid">
         <div class="col-full">
           <div class="hairline-row">Closing statement</div>
@@ -2319,6 +2402,7 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 </div>
 
 <div class="step active" data-step="0" data-type="landing">
+<svg class="okin-seal assess-seal-mark" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><use href="#okin-seal"/></svg>
 <div class="assessment-eyebrow">ASSESSMENT / 8 DIMENSIONS</div>
 <h1>Is Your Business Ready for an AI Assistant?</h1>
 <p class="subtitle">Is your business ready for an AI assistant? Find out in 5 minutes.</p>
@@ -2332,6 +2416,8 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 <div class="privacy-note"><span>Stored in this browser tab only. Progress saves locally. We never send your information anywhere.</span></div>
 <div class="buttons"><button class="btn btn-primary" onclick="aiq_next()">Start</button></div>
 </div>
+
+<div class="step" data-step="1" data-type="contact">
 <h2>About You</h2>
 <p class="subtitle">A few details to tailor your results.</p>
 <div class="form-group"><label class="field-label">Company Name</label><input type="text" id="contact-company" placeholder="e.g., Kavango Trading CC" required></div>
@@ -2371,7 +2457,7 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
       </div>
     </div>
   </div>
-  <div class="footer-watermark">OKIN</div>
+  <svg class="okin-seal footer-watermark" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><use href="#okin-seal"/></svg>
 </footer>
 
 <!-- ===== KONAMI MANIFESTO OVERLAY ===== -->
@@ -3495,7 +3581,7 @@ function aiq_renderResults(){
   const scoreInt=Math.round(aiq_compositeScore);
   const tierClass=aiq_finalTier.toLowerCase();
   const opportunities=aiq_buildOpportunities();
-  const risks=buildRisks();
+  const risks=aiq_buildRisks();
   const actionItems=aiq_buildActionItems();
 
   let h='<div class="results-header">';
@@ -3757,6 +3843,15 @@ function aiq_keydownHandler(e){
 }
 
 // init() wired to #/assess route
+// Export the entry points the inline handlers and the router need: this IIFE
+// otherwise hides every aiq_* symbol, leaving Start inert and aiq_init unreachable.
+window.aiq_init=aiq_init;
+window.aiq_teardown=aiq_teardown;
+window.aiq_next=aiq_next;
+window.aiq_prev=aiq_prev;
+window.aiq_downloadJSON=aiq_downloadJSON;
+window.aiq_copySummary=aiq_copySummary;
+window.aiq_toggleInternal=aiq_toggleInternal;
 
 })();
 </script>
