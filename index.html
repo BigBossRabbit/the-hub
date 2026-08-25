@@ -16,21 +16,34 @@
 
 /* --- Custom Properties --- */
 :root {
-  --base: #0E0C0A;
-  --surface: #16130F;
-  --surface-lift: #1A1611;
-  --hairline: #2A241C;
-  --hairline-soft: rgba(237,231,218,0.06);
-  --text: #EDE7DA;
-  --text-dim: #9C8F7A;
-  --text-faint: rgba(237,231,218,0.35);
-  --gold: #d4af37;
-  --ember: #e8862d;
-  --teal: #22d3ee;
-  --green: #3fb950;
-  --btc: #f7931a;
-  --data-bg: #1A1611;
-  --data-text: #EDE7DA;
+  --base-rgb: 14,12,10;
+  --surface-rgb: 22,19,15;
+  --surface-lift-rgb: 26,22,17;
+  --hairline-rgb: 42,36,28;
+  --text-rgb: 237,231,218;
+  --text-dim-rgb: 156,143,122;
+  --gold-rgb: 212,175,55;
+  --ember-rgb: 232,134,45;
+  --teal-rgb: 34,211,238;
+  --green-rgb: 63,185,80;
+  --btc-rgb: 247,147,26;
+  --danger-rgb: 194,65,12;
+
+  --base: rgb(var(--base-rgb));
+  --surface: rgb(var(--surface-rgb));
+  --surface-lift: rgb(var(--surface-lift-rgb));
+  --hairline: rgb(var(--hairline-rgb));
+  --hairline-soft: rgba(var(--text-rgb),0.06);
+  --text: rgb(var(--text-rgb));
+  --text-dim: rgb(var(--text-dim-rgb));
+  --text-faint: rgba(var(--text-rgb),0.35);
+  --gold: rgb(var(--gold-rgb));
+  --ember: rgb(var(--ember-rgb));
+  --teal: rgb(var(--teal-rgb));
+  --green: rgb(var(--green-rgb));
+  --btc: rgb(var(--btc-rgb));
+  --data-bg: var(--surface-lift);
+  --data-text: var(--text);
 
   /* Golden ratio scale */
   --phi: 1.618;
@@ -99,7 +112,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   padding: 0 28px;
   height: 52px;
   border-bottom: 1px solid var(--hairline);
-  background: rgba(14,12,10,0.92);
+  background: rgba(var(--base-rgb),0.92);
   backdrop-filter: blur(8px);
 }
 .masthead-zone {
@@ -162,7 +175,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .mempool-strip .strip-label {
   text-transform: uppercase;
-  color: rgba(237,231,218,0.5);
+  color: rgba(var(--text-rgb),0.5);
   font-size: 0.6rem;
   letter-spacing: 0.15em;
 }
@@ -171,20 +184,20 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .mempool-strip .strip-val.teal { color: var(--teal); }
 .mempool-strip .strip-sep {
   width: 1px; height: 16px;
-  background: rgba(237,231,218,0.2);
+  background: rgba(var(--text-rgb),0.2);
   flex-shrink: 0;
 }
 .mempool-strip .strip-fallback {
   font-size: 0.65rem;
-  color: rgba(237,231,218,0.7);
+  color: rgba(var(--text-rgb),0.7);
   letter-spacing: 0.08em;
 }
 .mempool-strip .strip-fallback-tag {
   font-size: 0.55rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: rgba(237,231,218,0.7);
-  border: 1px solid rgba(237,231,218,0.3);
+  color: rgba(var(--text-rgb),0.7);
+  border: 1px solid rgba(var(--text-rgb),0.3);
   padding: 1px 5px;
   margin-right: 4px;
 }
@@ -200,7 +213,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   padding: 0 28px;
   height: 44px;
   border-bottom: 1px solid var(--hairline);
-  background: rgba(14,12,10,0.88);
+  background: rgba(var(--base-rgb),0.88);
   backdrop-filter: blur(6px);
 }
 .nav-link {
@@ -403,12 +416,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.25), transparent);
+  background: linear-gradient(90deg, transparent, rgba(var(--gold-rgb),0.25), transparent);
   opacity: 0;
   transition: opacity 0.2s ease;
 }
 .card:hover {
-  border-color: rgba(237,231,218,0.18);
+  border-color: rgba(var(--text-rgb),0.18);
   transform: translateY(-4px);
   box-shadow: 0 2px 12px rgba(0,0,0,0.4);
 }
@@ -505,9 +518,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background: var(--surface);
   border-right: 1px solid var(--hairline);
 }
-.door-business:hover { background: rgba(232,134,45,0.04); }
+.door-business:hover { background: rgba(var(--ember-rgb),0.04); }
 .door-earn { background: var(--surface); }
-.door-earn:hover { background: rgba(247,147,26,0.04); }
+.door-earn:hover { background: rgba(var(--btc-rgb),0.04); }
 .door .door-label {
   font-family: var(--mono);
   font-size: 0.6rem;
@@ -590,12 +603,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(var(--gold-rgb),0.2), transparent);
   opacity: 0;
   transition: opacity 0.2s ease;
 }
 .pillar-card:hover {
-  border-color: rgba(237,231,218,0.18);
+  border-color: rgba(var(--text-rgb),0.18);
   transform: translateY(-4px);
   box-shadow: 0 2px 12px rgba(0,0,0,0.4);
 }
@@ -755,7 +768,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(var(--gold-rgb),0.2), transparent);
 }
 .ledger-note .ledger-title {
   font-family: var(--serif);
@@ -949,7 +962,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   transition: background 0.15s ease;
 }
 .ecosystem-strip .ecosystem-tile:last-child { border-right: none; }
-.ecosystem-strip .ecosystem-tile:hover { background: rgba(237,231,218,0.03); }
+.ecosystem-strip .ecosystem-tile:hover { background: rgba(var(--text-rgb),0.03); }
 .ecosystem-strip .ecosystem-tile-name {
   font-family: var(--serif);
   font-size: 0.85rem;
@@ -981,7 +994,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 80%;
   height: 140%;
   transform: translateX(-50%);
-  background: radial-gradient(ellipse at center, rgba(232,134,45,0.06) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(var(--ember-rgb),0.06) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
   animation: heroGlow 6s ease-in-out infinite;
@@ -1063,7 +1076,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   animation: dataPulse 2s ease-in-out infinite;
 }
 .pulse-dot.offline {
-  background: rgba(237,231,218,0.4);
+  background: rgba(var(--text-rgb),0.4);
 }
 @keyframes dataPulse {
   0%, 100% { transform: scale(1); opacity: 1; }
@@ -1113,7 +1126,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   transition: border-color 0.15s ease;
 }
 .atmosphere-toggle:hover {
-  border-color: rgba(237,231,218,0.18);
+  border-color: rgba(var(--text-rgb),0.18);
 }
 .atmosphere-toggle span {
   padding: 5px 12px;
@@ -1132,39 +1145,35 @@ body.night .atmosphere-toggle .toggle-ember {
   color: var(--text-dim);
 }
 body.night .atmosphere-toggle .toggle-dark {
-  background: #2a2218;
+  background: var(--hairline);
   color: var(--text);
 }
 
 /* Night mode — deeper, cooler dark */
 body.night {
-  --base: #0A0908;
-  --surface: #110E0B;
-  --surface-lift: #14110E;
-  --hairline: #1E1914;
-  --hairline-soft: rgba(237,231,218,0.04);
-  --text: #E5DFD2;
-  --text-dim: #8A7F6E;
-  --text-faint: rgba(229,223,210,0.3);
-  --ember: #D67A2A;
-  --gold: #C9A42F;
-  --data-bg: #0F0D0A;
-  --data-text: #E5DFD2;
+  --base-rgb: 10,9,8;
+  --surface-rgb: 17,14,11;
+  --surface-lift-rgb: 20,17,14;
+  --hairline-rgb: 30,25,20;
+  --text-rgb: 229,223,210;
+  --text-dim-rgb: 138,127,110;
+  --gold-rgb: 201,164,47;
+  --ember-rgb: 214,122,42;
 }
 body.night .masthead {
-  background: rgba(10,9,8,0.92);
-  border-bottom-color: #1E1914;
+  background: rgba(var(--base-rgb),0.92);
+  border-bottom-color: var(--hairline);
 }
 body.night .top-nav {
-  background: rgba(10,9,8,0.88);
-  border-bottom-color: #1E1914;
+  background: rgba(var(--base-rgb),0.88);
+  border-bottom-color: var(--hairline);
 }
 body.night .mempool-strip {
-  background: #0F0D0A;
-  border-bottom-color: #0F0D0A;
+  background: var(--data-bg);
+  border-bottom-color: var(--data-bg);
 }
 body.night #view-thesis > .section:first-of-type::before {
-  background: radial-gradient(ellipse at center, rgba(214,122,42,0.04) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(var(--ember-rgb),0.04) 0%, transparent 70%);
 }
 
 /* ============================================
@@ -1195,7 +1204,7 @@ body.night #view-thesis > .section:first-of-type::before {
   height: 80%;
   left: -10%;
   top: -20%;
-  background: radial-gradient(ellipse at 30% 20%, rgba(232,134,45,0.08) 0%, rgba(212,175,55,0.05) 40%, transparent 70%);
+  background: radial-gradient(ellipse at 30% 20%, rgba(var(--ember-rgb),0.08) 0%, rgba(var(--gold-rgb),0.05) 40%, transparent 70%);
   background-size: 300% 300%;
   animation: skyDriftA 24s ease-in-out infinite;
 }
@@ -1204,7 +1213,7 @@ body.night #view-thesis > .section:first-of-type::before {
   height: 70%;
   left: 10%;
   top: -10%;
-  background: radial-gradient(ellipse at 70% 30%, rgba(34,211,238,0.05) 0%, rgba(180,80,90,0.04) 45%, transparent 70%);
+  background: radial-gradient(ellipse at 70% 30%, rgba(var(--teal-rgb),0.05) 0%, rgba(var(--danger-rgb),0.04) 45%, transparent 70%);
   background-size: 300% 300%;
   animation: skyDriftB 24s ease-in-out infinite;
 }
@@ -1280,7 +1289,7 @@ body.night #view-thesis > .section:first-of-type::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(14,12,10,0.92);
+  background: rgba(var(--base-rgb),0.92);
   backdrop-filter: blur(10px);
   opacity: 0;
   pointer-events: none;
@@ -1320,8 +1329,8 @@ body.night #view-thesis > .section:first-of-type::before {
   left: 50%;
   transform: translateX(-50%) translateY(20px);
   z-index: 400;
-  background: rgba(22,19,15,0.96);
-  border: 1px solid rgba(212,175,55,0.2);
+  background: rgba(var(--surface-rgb),0.96);
+  border: 1px solid rgba(var(--gold-rgb),0.2);
   padding: 16px 24px;
   max-width: 480px;
   opacity: 0;
@@ -1343,12 +1352,141 @@ body.night #view-thesis > .section:first-of-type::before {
   text-transform: uppercase;
   color: var(--text-dim);
 }
+.satoshi-toast .toast-desc {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--gold);
+  margin-top: 2px;
+}
+
+/* ============================================
+   RETRO SPRITE EASTER EGG
+   ============================================ */
+.retro-sprite-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  pointer-events: none;
+  overflow: hidden;
+}
+.retro-sprite-overlay.visible {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.retro-sprite-stage {
+  position: absolute;
+  bottom: 12%;
+  left: -120px;
+  width: 120px;
+  height: 120px;
+  image-rendering: pixelated;
+  will-change: transform;
+}
+.retro-sprite-stage .sprite-svg {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  display: block;
+}
+/* Score readout */
+.retro-score {
+  position: absolute;
+  top: 20px;
+  right: 28px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+/* Roam animation: choppy pixel steps with a pause in the middle for the signature action */
+@keyframes retro-roam {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(calc(50vw - 60px)); }
+  25%  { transform: translateX(calc(50vw - 60px)); }
+  30%  { transform: translateX(calc(50vw - 60px)) translateY(-20px); }
+  35%  { transform: translateX(calc(50vw - 60px)); }
+  40%  { transform: translateX(calc(50vw - 60px)) translateY(-20px); }
+  45%  { transform: translateX(calc(50vw - 60px)); }
+  50%  { transform: translateX(calc(50vw - 60px)); }
+  75%  { transform: translateX(calc(100vw + 120px)) translateY(-20px); }
+  100% { transform: translateX(calc(100vw + 120px)); }
+}
+@keyframes retro-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+/* Signature action: a quick spin/jump during the pause window */
+@keyframes retro-action {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  25%      { transform: translateY(-12px) rotate(-10deg); }
+  50%      { transform: translateY(-16px) rotate(0); }
+  75%      { transform: translateY(-12px) rotate(10deg); }
+}
+.retro-sprite-stage.roaming {
+  animation: retro-roam 14s steps(70, end) forwards;
+}
+.retro-sprite-stage .sprite-svg {
+  animation: retro-bob 0.35s steps(2, end) infinite, retro-action 1.2s steps(4, end) 3s 1;
+}
+/* Dismiss hint */
+.retro-dismiss-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .retro-sprite-stage.roaming {
+    animation: none;
+  }
+  .retro-sprite-stage .sprite-svg {
+    animation: none;
+  }
+}
 
 /* ============================================
    TPOK CARD
    ============================================ */
 .card-accent-gold { border-left: 2px solid var(--gold); }
 
+
+/* Hero motif SVG — colors via CSS */
+
+/* Retro robot SVGs — colors via CSS */
+
+/* Site-wide link + focus consistency */
+a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0}
+.nav-link:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* Hero motif SVG — colors via CSS classes */
+.hero-motif .hm-line-ember { stroke: var(--ember); }
+.hero-motif .hm-line-gold { stroke: var(--gold); }
+.hero-motif .hm-line-teal { stroke: var(--teal); }
+.hero-motif .hm-node-ember { fill: var(--ember); }
+.hero-motif .hm-node-gold { fill: var(--gold); }
+.hero-motif .hm-node-teal { fill: var(--teal); }
+
+/* Retro robot — colors via CSS */
+.retro-robot .robot-antenna { fill: var(--gold); }
+.retro-robot .robot-body rect { fill: var(--text-dim); }
+.retro-robot .robot-eye { fill: var(--base); }
+.retro-robot .robot-led { fill: var(--green); }
+.retro-robot .robot-joint { fill: var(--text-faint); }
+
+.retro-robot-offline .robot-antenna { fill: var(--ember); }
+.retro-robot-offline .robot-body rect { fill: var(--text-dim); }
+.retro-robot-offline .robot-eye { fill: var(--base); }
+.retro-robot-offline .robot-led { fill: var(--ember); }
+.retro-robot-offline .robot-joint { fill: var(--text-faint); }
 </style>
 <style>
 /* AI Readiness Questionnaire — editorial spec-sheet reskin */
@@ -1365,10 +1503,10 @@ body.night #view-thesis > .section:first-of-type::before {
   --accent-gold:var(--gold);--accent-ember:var(--ember);
   --accent-ember:var(--ember);
   --accent-teal:var(--teal);
-  --accent-teal-dim:rgba(34,211,238,0.12);
+  --accent-teal-dim:rgba(var(--teal-rgb),0.12);
   --border:var(--hairline);
-  --border-focus:rgba(34,211,238,0.4);
-  --danger:#c2410c;
+  --border-focus:rgba(var(--teal-rgb),0.4);
+  --danger: rgb(var(--danger-rgb));
   --warning:var(--gold);
   --success:var(--green);
   --radius:0px;
@@ -1401,13 +1539,13 @@ body.night #view-thesis > .section:first-of-type::before {
 #aiq-root .form-group{margin-bottom:var(--sp4)}
 #aiq-root .form-group label.field-label{display:block;font-family:var(--mono);font-size:0.65rem;font-weight:600;color:var(--text-dim);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.1em}
 #aiq-root .form-group input[type="text"], #aiq-root .form-group input[type="email"], #aiq-root .form-group input[type="tel"], #aiq-root .form-group input[type="number"], #aiq-root .form-group select, #aiq-root .form-group textarea{width:100%;padding:var(--sp1) var(--sp2);background:var(--bg-input);border:1px solid var(--hairline);border-radius:var(--radius-sm);color:var(--text);font-size:0.9rem;font-family:var(--sans);transition:border-color var(--transition),box-shadow var(--transition)}
-#aiq-root .form-group input:focus, #aiq-root .form-group select:focus, #aiq-root .form-group textarea:focus{outline:none;border-color:var(--accent-gold);box-shadow:0 0 0 2px rgba(212,175,55,0.18)}
+#aiq-root .form-group input:focus, #aiq-root .form-group select:focus, #aiq-root .form-group textarea:focus{outline:none;border-color:var(--accent-gold);box-shadow:0 0 0 2px rgba(var(--gold-rgb),0.18)}
 #aiq-root .form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239C8F7A' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right var(--sp2) center;padding-right:40px}
 #aiq-root .form-group textarea{resize:vertical;min-height:100px}
 #aiq-root .options{display:flex;flex-direction:column;gap:var(--sp1)}
 #aiq-root .option-card{position:relative;display:flex;align-items:flex-start;gap:var(--sp2);padding:var(--sp2) var(--sp3);background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);user-select:none}
 #aiq-root .option-card:hover{background:var(--surface-lift);border-color:var(--accent-gold)}
-#aiq-root .option-card.selected{border-color:var(--accent-gold);background:rgba(212,175,55,0.06);box-shadow:none;border-left:2px solid var(--accent-gold)}
+#aiq-root .option-card.selected{border-color:var(--accent-gold);background:rgba(var(--gold-rgb),0.06);box-shadow:none;border-left:2px solid var(--accent-gold)}
 #aiq-root .option-card input{position:absolute;opacity:0;pointer-events:none}
 #aiq-root .option-card .check{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:2px solid var(--text-faint);display:flex;align-items:center;justify-content:center;transition:all var(--transition);margin-top:1px}
 #aiq-root .option-card.multi .check{border-radius:2px}
@@ -1419,7 +1557,7 @@ body.night #view-thesis > .section:first-of-type::before {
 #aiq-root .question:last-child{border-bottom:none;margin-bottom:0}
 #aiq-root .question-text{font-family:var(--serif);font-size:1.05rem;font-weight:500;margin-bottom:var(--sp2);color:var(--text);line-height:1.4}
 #aiq-root .question-text .q-num{font-family:var(--mono);color:var(--accent-ember);font-size:0.65rem;margin-right:4px}
-#aiq-root .error-msg{display:none;color:var(--danger);font-size:0.9rem;margin-top:var(--sp2);padding:var(--sp1) var(--sp2);background:rgba(194,65,12,0.08);border-radius:var(--radius-sm);border-left:2px solid var(--danger)}
+#aiq-root .error-msg{display:none;color:var(--danger);font-size:0.9rem;margin-top:var(--sp2);padding:var(--sp1) var(--sp2);background:rgba(var(--danger-rgb),0.08);border-radius:var(--radius-sm);border-left:2px solid var(--danger)}
 #aiq-root .error-msg.visible{display:block;animation:aiq_shake 0.4s ease}
 @keyframes aiq_shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 #aiq-root .buttons{display:flex;gap:var(--sp1);margin-top:var(--sp5);padding-top:var(--sp3);border-top:1px solid var(--hairline)}
@@ -1458,12 +1596,12 @@ body.night #view-thesis > .section:first-of-type::before {
 #aiq-root .results-section h3{font-family:var(--serif);font-size:1.3rem;font-weight:500;margin-bottom:var(--sp2)}
 #aiq-root .opportunities, #aiq-root .risks{display:flex;flex-direction:column;gap:var(--sp1)}
 #aiq-root .opp-item, #aiq-root .risk-item{padding:var(--sp2) var(--sp3);border-radius:var(--radius-sm);font-size:0.9rem;line-height:1.7}
-#aiq-root .opp-item{background:rgba(34,211,238,0.04);border-left:2px solid var(--accent-teal)}
-#aiq-root .risk-item{background:rgba(212,175,55,0.06);border-left:2px solid var(--warning)}
+#aiq-root .opp-item{background:rgba(var(--teal-rgb),0.04);border-left:2px solid var(--accent-teal)}
+#aiq-root .risk-item{background:rgba(var(--gold-rgb),0.06);border-left:2px solid var(--warning)}
 #aiq-root .action-items{display:flex;flex-direction:column;gap:4px}
 #aiq-root .action-item{padding:var(--sp1) var(--sp2);background:var(--surface);border-radius:var(--radius-sm);font-size:0.9rem;border:1px solid var(--hairline);display:flex;align-items:flex-start;gap:var(--sp1)}
 #aiq-root .action-item .bullet{color:var(--accent-ember);font-weight:700;flex-shrink:0;font-family:var(--mono)}
-#aiq-root .dq-message{padding:var(--sp2) var(--sp3);border-radius:var(--radius-sm);font-size:0.9rem;line-height:1.7;background:rgba(212,175,55,0.06);border-left:2px solid var(--warning);margin-bottom:var(--sp1)}
+#aiq-root .dq-message{padding:var(--sp2) var(--sp3);border-radius:var(--radius-sm);font-size:0.9rem;line-height:1.7;background:rgba(var(--gold-rgb),0.06);border-left:2px solid var(--warning);margin-bottom:var(--sp1)}
 #aiq-root .next-step{padding:var(--sp3);background:var(--surface-lift);border-radius:var(--radius-sm);border:1px solid var(--hairline);font-size:0.9rem;line-height:1.75;margin-top:var(--sp3)}
 #aiq-root .next-step .label{font-family:var(--mono);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent-ember);font-weight:600;margin-bottom:4px}
 #aiq-root .export-buttons{display:flex;flex-wrap:wrap;gap:var(--sp1);margin-top:var(--sp4)}
@@ -1477,7 +1615,7 @@ body.night #view-thesis > .section:first-of-type::before {
 #aiq-root .internal-table th, #aiq-root .internal-table td{padding:6px var(--sp1);text-align:left;border-bottom:1px solid var(--hairline)}
 #aiq-root .internal-table th{color:var(--text-faint);font-weight:600;text-transform:uppercase;font-size:0.65rem;letter-spacing:0.1em}
 #aiq-root .internal-table td{color:var(--text-dim)}
-#aiq-root .dq-tag{display:inline-block;padding:2px 6px;border-radius:0;font-family:var(--mono);font-size:0.65rem;font-weight:600;background:rgba(194,65,12,0.1);color:var(--danger);margin:2px 4px 2px 0}
+#aiq-root .dq-tag{display:inline-block;padding:2px 6px;border-radius:0;font-family:var(--mono);font-size:0.65rem;font-weight:600;background:rgba(var(--danger-rgb),0.1);color:var(--danger);margin:2px 4px 2px 0}
 #aiq-root .no-dq{color:var(--text-faint);font-family:var(--mono);font-size:0.65rem}
 #aiq-root .geographic-result{padding:var(--sp1) var(--sp2);background:var(--surface-lift);border-radius:var(--radius-sm);font-size:0.9rem;margin-bottom:var(--sp2)}
 #aiq-root .assessment-eyebrow{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-faint);margin-bottom:var(--sp2);padding-bottom:var(--sp2);border-bottom:1px solid var(--hairline)}
@@ -1541,36 +1679,36 @@ body.night #view-thesis > .section:first-of-type::before {
 <div class="retro-robot-overlay" id="retroRobotOverlay" aria-hidden="true">
   <svg class="retro-robot" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
     <!-- Antenna -->
-    <rect class="robot-antenna" x="15" y="2" width="2" height="4" fill="#d4af37"/>
-    <rect x="14" y="0" width="4" height="2" fill="#d4af37"/>
+    <rect class="robot-antenna" x="15" y="2" width="2" height="4"/>
+    <rect x="14" y="0" width="4" height="2"/>
     <!-- Head -->
     <g class="robot-body">
-      <rect x="10" y="6" width="12" height="10" fill="#9C8F7A"/>
+      <rect x="10" y="6" width="12" height="10"/>
       <!-- Eyes -->
-      <rect x="12" y="9" width="3" height="3" fill="#0E0C0A"/>
-      <rect x="17" y="9" width="3" height="3" fill="#0E0C0A"/>
-      <rect x="13" y="10" width="1" height="1" fill="#3fb950"/>
-      <rect x="18" y="10" width="1" height="1" fill="#3fb950"/>
+      <rect class="robot-eye" x="12" y="9" width="3" height="3"/>
+      <rect class="robot-eye" x="17" y="9" width="3" height="3"/>
+      <rect class="robot-led" x="13" y="10" width="1" height="1"/>
+      <rect class="robot-led" x="18" y="10" width="1" height="1"/>
       <!-- Mouth -->
-      <rect x="13" y="13" width="6" height="1" fill="#0E0C0A"/>
+      <rect x="13" y="13" width="6" height="1"/>
       <!-- Neck -->
-      <rect x="14" y="16" width="4" height="2" fill="#6B5F50"/>
+      <rect class="robot-joint" x="14" y="16" width="4" height="2"/>
       <!-- Body -->
-      <rect x="9" y="18" width="14" height="10" fill="#9C8F7A"/>
-      <rect x="11" y="20" width="3" height="3" fill="#0E0C0A"/>
-      <rect x="14.5" y="20" width="3" height="3" fill="#0E0C0A"/>
-      <rect x="18" y="20" width="3" height="3" fill="#0E0C0A"/>
-      <rect x="11" y="24" width="10" height="1" fill="#6B5F50"/>
-      <rect x="11" y="26" width="10" height="1" fill="#6B5F50"/>
+      <rect x="9" y="18" width="14" height="10"/>
+      <rect x="11" y="20" width="3" height="3"/>
+      <rect x="14.5" y="20" width="3" height="3"/>
+      <rect x="18" y="20" width="3" height="3"/>
+      <rect class="robot-joint" x="11" y="24" width="10" height="1"/>
+      <rect class="robot-joint" x="11" y="26" width="10" height="1"/>
       <!-- Arms -->
-      <rect class="robot-arm-l" x="5" y="19" width="4" height="8" fill="#9C8F7A" style="transform-origin:9px 19px"/>
-      <rect class="robot-arm-r" x="23" y="19" width="4" height="8" fill="#9C8F7A" style="transform-origin:23px 19px"/>
+      <rect class="robot-arm-l" x="5" y="19" width="4" height="8" style="transform-origin:9px 19px"/>
+      <rect class="robot-arm-r" x="23" y="19" width="4" height="8" style="transform-origin:23px 19px"/>
       <!-- Hands -->
-      <rect x="5" y="27" width="4" height="2" fill="#6B5F50"/>
-      <rect x="23" y="27" width="4" height="2" fill="#6B5F50"/>
+      <rect class="robot-joint" x="5" y="27" width="4" height="2"/>
+      <rect class="robot-joint" x="23" y="27" width="4" height="2"/>
       <!-- Legs -->
-      <rect x="11" y="28" width="4" height="3" fill="#6B5F50"/>
-      <rect x="17" y="28" width="4" height="3" fill="#6B5F50"/>
+      <rect class="robot-joint" x="11" y="28" width="4" height="3"/>
+      <rect class="robot-joint" x="17" y="28" width="4" height="3"/>
     </g>
   </svg>
 </div>
@@ -1578,21 +1716,21 @@ body.night #view-thesis > .section:first-of-type::before {
 <!-- ===== RETRO ROBOT OFFLINE (persistent corner) ===== -->
 <div class="retro-robot-offline" id="retroRobotOffline" aria-hidden="true">
   <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-    <rect class="robot-antenna" x="15" y="2" width="2" height="4" fill="#e8862d"/>
-    <rect x="14" y="0" width="4" height="2" fill="#e8862d"/>
+    <rect class="robot-antenna" x="15" y="2" width="2" height="4"/>
+    <rect x="14" y="0" width="4" height="2"/>
     <g class="robot-body">
-      <rect x="10" y="6" width="12" height="10" fill="#9C8F7A"/>
-      <rect x="12" y="9" width="3" height="3" fill="#0E0C0A"/>
-      <rect x="17" y="9" width="3" height="3" fill="#0E0C0A"/>
-      <rect x="13" y="10" width="1" height="1" fill="#e8862d"/>
-      <rect x="18" y="10" width="1" height="1" fill="#e8862d"/>
-      <rect x="13" y="13" width="6" height="1" fill="#0E0C0A"/>
-      <rect x="14" y="16" width="4" height="2" fill="#6B5F50"/>
-      <rect x="9" y="18" width="14" height="10" fill="#9C8F7A"/>
-      <rect x="5" y="19" width="4" height="8" fill="#9C8F7A"/>
-      <rect x="23" y="19" width="4" height="8" fill="#9C8F7A"/>
-      <rect x="11" y="28" width="4" height="3" fill="#6B5F50"/>
-      <rect x="17" y="28" width="4" height="3" fill="#6B5F50"/>
+      <rect x="10" y="6" width="12" height="10"/>
+      <rect class="robot-eye" x="12" y="9" width="3" height="3"/>
+      <rect class="robot-eye" x="17" y="9" width="3" height="3"/>
+      <rect class="robot-led" x="13" y="10" width="1" height="1"/>
+      <rect class="robot-led" x="18" y="10" width="1" height="1"/>
+      <rect x="13" y="13" width="6" height="1"/>
+      <rect class="robot-joint" x="14" y="16" width="4" height="2"/>
+      <rect x="9" y="18" width="14" height="10"/>
+      <rect x="5" y="19" width="4" height="8"/>
+      <rect x="23" y="19" width="4" height="8"/>
+      <rect class="robot-joint" x="11" y="28" width="4" height="3"/>
+      <rect class="robot-joint" x="17" y="28" width="4" height="3"/>
     </g>
   </svg>
 </div>
@@ -1640,19 +1778,19 @@ body.night #view-thesis > .section:first-of-type::before {
       <div class="living-sky" id="livingSky" aria-hidden="true"></div>
       <div class="hero-motif" aria-hidden="true">
         <svg viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice">
-          <line x1="80" y1="180" x2="280" y2="100" stroke="#e8862d" stroke-width="0.8" opacity="0.35"/>
-          <line x1="280" y1="100" x2="520" y2="220" stroke="#d4af37" stroke-width="0.8" opacity="0.35"/>
-          <line x1="520" y1="220" x2="760" y2="140" stroke="#22d3ee" stroke-width="0.8" opacity="0.35"/>
-          <line x1="520" y1="220" x2="680" y2="320" stroke="#e8862d" stroke-width="0.8" opacity="0.3"/>
-          <line x1="760" y1="140" x2="1020" y2="200" stroke="#d4af37" stroke-width="0.8" opacity="0.35"/>
-          <line x1="280" y1="100" x2="380" y2="300" stroke="#22d3ee" stroke-width="0.8" opacity="0.25"/>
-          <circle cx="80" cy="180" r="4" fill="#e8862d" opacity="0.6"/>
-          <circle cx="280" cy="100" r="4" fill="#d4af37" opacity="0.6"/>
-          <circle cx="520" cy="220" r="4" fill="#22d3ee" opacity="0.6"/>
-          <circle cx="760" cy="140" r="4" fill="#e8862d" opacity="0.6"/>
-          <circle cx="1020" cy="200" r="4" fill="#d4af37" opacity="0.6"/>
-          <circle cx="680" cy="320" r="3" fill="#22d3ee" opacity="0.5"/>
-          <circle cx="380" cy="300" r="3" fill="#e8862d" opacity="0.5"/>
+          <line class="hm-line-ember" x1="80" y1="180" x2="280" y2="100"  stroke-width="0.8" opacity="0.35"/>
+          <line class="hm-line-gold" x1="280" y1="100" x2="520" y2="220"  stroke-width="0.8" opacity="0.35"/>
+          <line class="hm-line-teal" x1="520" y1="220" x2="760" y2="140"  stroke-width="0.8" opacity="0.35"/>
+          <line class="hm-line-ember" x1="520" y1="220" x2="680" y2="320"  stroke-width="0.8" opacity="0.3"/>
+          <line class="hm-line-gold" x1="760" y1="140" x2="1020" y2="200"  stroke-width="0.8" opacity="0.35"/>
+          <line class="hm-line-teal" x1="280" y1="100" x2="380" y2="300"  stroke-width="0.8" opacity="0.25"/>
+          <circle class="hm-node-ember" cx="80" cy="180" r="4"  opacity="0.6"/>
+          <circle class="hm-node-gold" cx="280" cy="100" r="4"  opacity="0.6"/>
+          <circle class="hm-node-teal" cx="520" cy="220" r="4"  opacity="0.6"/>
+          <circle class="hm-node-ember" cx="760" cy="140" r="4"  opacity="0.6"/>
+          <circle class="hm-node-gold" cx="1020" cy="200" r="4"  opacity="0.6"/>
+          <circle class="hm-node-teal" cx="680" cy="320" r="3"  opacity="0.5"/>
+          <circle class="hm-node-ember" cx="380" cy="300" r="3"  opacity="0.5"/>
         </svg>
       </div>
       <div class="grid">
@@ -2238,14 +2376,24 @@ body.night #view-thesis > .section:first-of-type::before {
 
 <!-- ===== KONAMI MANIFESTO OVERLAY ===== -->
 <div class="konami-overlay" id="konamiOverlay" aria-hidden="true">
-  <div class="konami-text">Boot. And be commanded by none.</div>
+  <div class="konami-text">You, are the Greatest Brand You will ever Represent.</div>
   <div class="konami-hint">click or press Esc to dismiss</div>
 </div>
 
-<!-- ===== SATOSHI TOAST ===== -->
+<!-- ===== QUOTE TOAST (rotating African voices) ===== -->
 <div class="satoshi-toast" id="satoshiToast" aria-hidden="true">
-  <div class="toast-quote">"The root problem with conventional currency is all the trust that's required to make it work."</div>
-  <div class="toast-attr">— loosely attributed to Satoshi Nakamoto</div>
+  <div class="toast-quote" id="toastQuote"></div>
+  <div class="toast-attr" id="toastAttr"></div>
+  <div class="toast-desc" id="toastDesc"></div>
+</div>
+
+<!-- ===== RETRO SPRITE EASTER EGG ===== -->
+<div class="retro-sprite-overlay" id="retroSpriteOverlay" aria-hidden="true">
+  <div class="retro-score" id="retroScore">SCORE 0000</div>
+  <div class="retro-sprite-stage" id="retroSpriteStage">
+    <svg class="sprite-svg" id="retroSpriteSvg" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+  <div class="retro-dismiss-hint">click or press Esc to dismiss</div>
 </div>
 
 <!-- ============================================
@@ -2571,12 +2719,158 @@ body.night #view-thesis > .section:first-of-type::before {
     });
   }
 
-  // ===== SATOSHI TOAST (triple-click on OKIN Ent wordmark) =====
+  // ===== QUOTE TOAST (rotating African voices) =====
+  // Thanos supplies the verified array. DO NOT invent quotes.
+  const aiq_QUOTES = [
+      {
+            "quote": "Until the lions have their own historians, the history of the hunt will always glorify the hunter.",
+            "author": "Chinua Achebe",
+            "descriptor": "Nigerian novelist"
+      },
+      {
+            "quote": "The single story creates stereotypes, and the problem with stereotypes is not that they are untrue, but that they are incomplete.",
+            "author": "Chimamanda Ngozi Adichie",
+            "descriptor": "Nigerian novelist"
+      },
+      {
+            "quote": "Culture does not make people. People make culture.",
+            "author": "Chimamanda Ngozi Adichie",
+            "descriptor": "Nigerian novelist"
+      },
+      {
+            "quote": "The bullet was the means of physical subjugation. Language was the means of spiritual subjugation.",
+            "author": "Ngugi wa Thiong'o",
+            "descriptor": "Kenyan writer"
+      },
+      {
+            "quote": "The most potent weapon in the hands of the oppressor is the mind of the oppressed.",
+            "author": "Steve Biko",
+            "descriptor": "South African anti-apartheid activist"
+      },
+      {
+            "quote": "We in Africa have no more need of being converted to socialism than we have of being taught democracy.",
+            "author": "Julius Nyerere",
+            "descriptor": "Tanzanian independence leader"
+      },
+      {
+            "quote": "We may have different religions, different languages, different coloured skin, but we all belong to one human race.",
+            "author": "Kofi Annan",
+            "descriptor": "Ghanaian diplomat, UN Secretary-General"
+      },
+      {
+            "quote": "My humanity is bound up in yours, for we can only be human together.",
+            "author": "Desmond Tutu",
+            "descriptor": "South African archbishop"
+      },
+      {
+            "quote": "It's the little things citizens do. That's what will make the difference. My little thing is planting trees.",
+            "author": "Wangari Maathai",
+            "descriptor": "Kenyan environmental activist"
+      },
+      {
+            "quote": "The history of Black Africa will remain suspended in air until African historians dare connect it with the history of Egypt.",
+            "author": "Cheikh Anta Diop",
+            "descriptor": "Senegalese historian"
+      },
+      {
+            "quote": "Comrades, there is no true social revolution without the liberation of women.",
+            "author": "Thomas Sankara",
+            "descriptor": "Burkinabe revolutionary"
+      },
+      {
+            "quote": "Tell no lies. Claim no easy victories.",
+            "author": "Amilcar Cabral",
+            "descriptor": "Bissau-Guinean revolutionary"
+      },
+      {
+            "quote": "We are going to show the world what the Black man can do when he works in freedom.",
+            "author": "Patrice Lumumba",
+            "descriptor": "Congolese independence leader"
+      },
+      {
+            "quote": "We face neither East nor West; we face forward.",
+            "author": "Kwame Nkrumah",
+            "descriptor": "Ghanaian independence leader"
+      },
+      {
+            "quote": "The destiny of this country is now fully in our own hands.",
+            "author": "Sam Nujoma",
+            "descriptor": "Namibian liberation leader, first President"
+      },
+      {
+            "quote": "Africa needs to develop its own processes, systems, courts and institutions. We must build lasting institutions.",
+            "author": "Hage Geingob",
+            "descriptor": "Namibian statesman, third President"
+      },
+      {
+            "quote": "Music is the weapon of the future.",
+            "author": "Fela Kuti",
+            "descriptor": "Nigerian musician and activist"
+      },
+      {
+            "quote": "I will probably die singing.",
+            "author": "Miriam Makeba",
+            "descriptor": "South African singer and activist"
+      },
+      {
+            "quote": "It's not world music, it's African music.",
+            "author": "Youssou N'Dour",
+            "descriptor": "Senegalese singer"
+      },
+      {
+            "quote": "Music is a positive thing. It goes where religion and politics can't.",
+            "author": "Black Coffee",
+            "descriptor": "South African DJ and producer"
+      },
+      {
+            "quote": "As long as I get to wherever I'm going, I won't care how long it took me.",
+            "author": "Nasty C",
+            "descriptor": "South African rapper"
+      }
+];
   var satoshiToast = document.getElementById('satoshiToast');
+  var toastQuoteEl = document.getElementById('toastQuote');
+  var toastAttrEl = document.getElementById('toastAttr');
+  var toastDescEl = document.getElementById('toastDesc');
   var toastTimeout = null;
   var brandEl = document.querySelector('.masthead-brand');
   var clickCount = 0;
   var clickResetTimer = null;
+
+  function pickQuoteIndex() {
+    if (aiq_QUOTES.length <= 1) return 0;
+    var lastIdx = -1;
+    try {
+      var saved = localStorage.getItem('aiq_quote_idx');
+      if (saved !== null) lastIdx = parseInt(saved, 10) || -1;
+    } catch(e) {}
+    var idx;
+    do { idx = Math.floor(Math.random() * aiq_QUOTES.length); } while (idx === lastIdx);
+    try { localStorage.setItem('aiq_quote_idx', String(idx)); } catch(e) {}
+    return idx;
+  }
+
+  function showToast() {
+    if (!satoshiToast || !brandEl) return;
+    var idx = pickQuoteIndex();
+    var q = aiq_QUOTES[idx] || {};
+    toastQuoteEl.textContent = '“' + (q.quote || '') + '”';
+    toastAttrEl.textContent = '— ' + (q.author || '');
+    if (q.descriptor && q.descriptor.trim()) {
+      toastDescEl.textContent = q.descriptor;
+      toastDescEl.style.display = '';
+    } else {
+      toastDescEl.textContent = '';
+      toastDescEl.style.display = 'none';
+    }
+    satoshiToast.classList.add('visible');
+    satoshiToast.setAttribute('aria-hidden', 'false');
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(function() {
+      satoshiToast.classList.remove('visible');
+      satoshiToast.setAttribute('aria-hidden', 'true');
+    }, 6000);
+  }
 
   function initSatoshiToast() {
     if (!satoshiToast || !brandEl) return;
@@ -2587,13 +2881,138 @@ body.night #view-thesis > .section:first-of-type::before {
       clickResetTimer = setTimeout(function() { clickCount = 0; }, 600);
       if (clickCount >= 3) {
         clickCount = 0;
-        satoshiToast.classList.add('visible');
-        satoshiToast.setAttribute('aria-hidden', 'false');
-        if (toastTimeout) clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(function() {
-          satoshiToast.classList.remove('visible');
-          satoshiToast.setAttribute('aria-hidden', 'true');
-        }, 5000);
+        showToast();
+      }
+    });
+    satoshiToast.addEventListener('click', function() {
+      satoshiToast.classList.remove('visible');
+      satoshiToast.setAttribute('aria-hidden', 'true');
+      if (toastTimeout) clearTimeout(toastTimeout);
+    });
+  }
+
+  // ===== RETRO SPRITE EGG (type "RETRO" quickly) =====
+  var retroOverlay = document.getElementById('retroSpriteOverlay');
+  var retroStage = document.getElementById('retroSpriteStage');
+  var retroSvg = document.getElementById('retroSpriteSvg');
+  var retroScoreEl = document.getElementById('retroScore');
+  var retroKeyBuf = '';
+  var retroTimers = [];
+  var retroScoreTimer = null;
+  var retroActive = false;
+  var retroScoreVal = 0;
+
+  // Original pixel-art sprites (no real person / trademarked character)
+  // Baller: chunky basketball player
+  var SPRITE_BALLER = '<rect x="10" y="2" width="12" height="12" fill="var(--text)"/>' +
+    '<rect x="12" y="0" width="8" height="4" fill="var(--text-dim)"/>' +
+    '<rect x="13" y="3" width="2" height="2" fill="var(--base)"/>' +
+    '<rect x="17" y="3" width="2" height="2" fill="var(--base)"/>' +
+    '<rect x="14" y="6" width="4" height="1" fill="var(--base)"/>' +
+    '<rect x="8" y="14" width="4" height="8" fill="var(--text-dim)"/>' +
+    '<rect x="20" y="14" width="4" height="8" fill="var(--text-dim)"/>' +
+    '<rect x="12" y="14" width="8" height="8" fill="var(--ember)"/>' +
+    '<rect x="10" y="22" width="6" height="6" fill="var(--text)"/>' +
+    '<rect x="16" y="22" width="6" height="6" fill="var(--text)"/>' +
+    '<rect x="22" y="10" width="4" height="4" fill="var(--btc)"/>';
+
+  // Chrome Enforcer: blocky cyber-cop
+  var SPRITE_ENFORCER = '<rect x="8" y="2" width="16" height="12" fill="var(--text-dim)"/>' +
+    '<rect x="10" y="4" width="12" height="4" fill="var(--teal)"/>' +
+    '<rect x="12" y="5" width="2" height="2" fill="var(--base)"/>' +
+    '<rect x="18" y="5" width="2" height="2" fill="var(--base)"/>' +
+    '<rect x="10" y="14" width="12" height="10" fill="var(--text)"/>' +
+    '<rect x="6" y="14" width="4" height="8" fill="var(--text-dim)"/>' +
+    '<rect x="22" y="14" width="4" height="8" fill="var(--text-dim)"/>' +
+    '<rect x="10" y="24" width="5" height="6" fill="var(--text-dim)"/>' +
+    '<rect x="17" y="24" width="5" height="6" fill="var(--text-dim)"/>' +
+    '<rect x="14" y="8" width="4" height="2" fill="var(--gold)"/>';
+
+  // Rodent Biker: pixel rodent on motorbike
+  var SPRITE_BIKER = '<rect x="4" y="18" width="24" height="4" fill="var(--text-dim)"/>' +
+    '<rect x="6" y="14" width="6" height="6" fill="var(--text)"/>' +
+    '<rect x="5" y="12" width="2" height="4" fill="var(--text)"/>' +
+    '<rect x="9" y="12" width="2" height="4" fill="var(--text)"/>' +
+    '<rect x="7" y="16" width="2" height="2" fill="var(--base)"/>' +
+    '<rect x="24" y="10" width="4" height="8" fill="var(--ember)"/>' +
+    '<rect x="22" y="8" width="4" height="4" fill="var(--text)"/>' +
+    '<rect x="23" y="9" width="2" height="2" fill="var(--base)"/>' +
+    '<rect x="2" y="22" width="6" height="6" fill="var(--text-dim)"/>' +
+    '<rect x="24" y="22" width="6" height="6" fill="var(--text-dim)"/>' +
+    '<rect x="26" y="18" width="4" height="2" fill="var(--gold)"/>';
+
+  var RETRO_SPRITES = [SPRITE_BALLER, SPRITE_ENFORCER, SPRITE_BIKER];
+
+  function retroAddTimer(fn, ms) {
+    var id = setTimeout(fn, ms);
+    retroTimers.push(id);
+    return id;
+  }
+
+  function retroClearAll() {
+    for (var i = 0; i < retroTimers.length; i++) clearTimeout(retroTimers[i]);
+    retroTimers = [];
+    if (retroScoreTimer) { clearInterval(retroScoreTimer); retroScoreTimer = null; }
+  }
+
+  function retroDismiss() {
+    if (!retroOverlay) return;
+    retroClearAll();
+    retroOverlay.classList.remove('visible');
+    retroOverlay.setAttribute('aria-hidden', 'true');
+    retroStage.classList.remove('roaming');
+    if (retroSvg) retroSvg.innerHTML = '';
+    retroActive = false;
+  }
+
+  function retroSpawn() {
+    if (retroActive || !retroOverlay || !retroStage || !retroSvg) return;
+    if (reducedMotion) {
+      // Static sprite for 3s with caption
+      var spriteIdx = Math.floor(Math.random() * RETRO_SPRITES.length);
+      retroSvg.innerHTML = RETRO_SPRITES[spriteIdx];
+      retroOverlay.classList.add('visible');
+      retroOverlay.setAttribute('aria-hidden', 'false');
+      retroActive = true;
+      retroScoreEl.textContent = 'SCORE 0000';
+      retroAddTimer(function() { retroDismiss(); }, 3000);
+      return;
+    }
+    retroActive = true;
+    retroScoreVal = 0;
+    retroScoreEl.textContent = 'SCORE 0000';
+    var spriteIdx = Math.floor(Math.random() * RETRO_SPRITES.length);
+    retroSvg.innerHTML = RETRO_SPRITES[spriteIdx];
+    retroStage.classList.remove('roaming');
+    void retroStage.offsetWidth;
+    retroStage.classList.add('roaming');
+    retroOverlay.classList.add('visible');
+    retroOverlay.setAttribute('aria-hidden', 'false');
+    // Score ticks up while performing
+    retroScoreTimer = setInterval(function() {
+      retroScoreVal += Math.floor(Math.random() * 100) + 10;
+      retroScoreEl.textContent = 'SCORE ' + String(retroScoreVal).padStart(4, '0');
+    }, 800);
+    // Auto-retire after roam ends (~14s)
+    retroAddTimer(function() { retroDismiss(); }, 15000);
+  }
+
+  function initRetroSprite() {
+    if (!retroOverlay) return;
+    document.addEventListener('keydown', function(e) {
+      if (e.key && e.key.length === 1) {
+        retroKeyBuf += e.key.toLowerCase();
+        if (retroKeyBuf.length > 5) retroKeyBuf = retroKeyBuf.slice(-5);
+        if (retroKeyBuf === 'retro') {
+          retroKeyBuf = '';
+          retroSpawn();
+        }
+      }
+    });
+    retroOverlay.addEventListener('click', function() { retroDismiss(); });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && retroOverlay.classList.contains('visible')) {
+        retroDismiss();
       }
     });
   }
@@ -2752,6 +3171,7 @@ body.night #view-thesis > .section:first-of-type::before {
     try { initCursorFollower(); } catch(e) {}
     try { initKonami(); } catch(e) {}
     try { initSatoshiToast(); } catch(e) {}
+    try { initRetroSprite(); } catch(e) {}
 
     // Hide initial robot overlay after first paint + safety timeout
     setTimeout(hideRobotOverlay, 800);
@@ -3141,10 +3561,10 @@ function aiq_getBandClass(score){
 }
 
 function aiq_getScoreColor(score){
-  if(score<50)return '#c2410c';
-  if(score<65)return '#d4af37';
-  if(score<85)return '#22d3ee';
-  return '#d4af37';
+  if(score<50)return 'var(--danger)';
+  if(score<65)return 'var(--gold)';
+  if(score<85)return 'var(--teal)';
+  return 'var(--gold)';
 }
 
 function aiq_buildOpportunities(){
