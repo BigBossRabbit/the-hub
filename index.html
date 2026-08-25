@@ -207,6 +207,43 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   color: var(--text-dim);
 }
 
+/* --- Masthead BTC pill (mobile compact data source) --- */
+.masthead-btc-pill {
+  display: none; /* hidden on desktop; mempool-strip is the source */
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: var(--surface);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.masthead-btc-pill .pill-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.masthead-btc-pill .pill-dot.live {
+  background: var(--teal);
+  animation: dataPulse 2s ease-in-out infinite;
+}
+.masthead-btc-pill .pill-dot.offline {
+  background: rgba(var(--text-rgb),0.4);
+}
+.masthead-btc-pill .pill-btc {
+  color: var(--btc);
+  font-weight: 600;
+}
+.masthead-btc-pill .pill-val {
+  color: var(--text);
+}
+
 /* --- Mempool Strip — DARK instrument panel --- */
 .mempool-strip {
   position: fixed;
@@ -1332,33 +1369,157 @@ body.night #view-thesis > .section:first-of-type::before {
    RESPONSIVE
    ============================================ */
 @media (max-width: 768px) {
+  /* Collapse three fixed bars into ONE compact header */
+  .masthead {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: 48px;
+    padding: 0 12px;
+    gap: 8px;
+    border-bottom: 1px solid var(--hairline);
+    background: rgba(var(--base-rgb),0.95);
+    backdrop-filter: blur(8px);
+  }
+  .masthead-zone { flex: 0 0 auto; }
+  .masthead-left { gap: 6px; flex: 0 0 auto; }
+  .masthead-center { flex: 1 1 auto; min-width: 0; overflow: hidden; }
+  .masthead-right { gap: 6px; flex: 0 0 auto; }
+  .masthead-seal { width: 22px; height: 22px; }
+  .masthead-brand { font-size: 0.95rem; }
+  .masthead-hub-title { font-size: 0.85rem; letter-spacing: 0.1em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .masthead-tag { display: none; }
+  .atmosphere-toggle { padding: 0; }
+  .atmosphere-toggle span { padding: 4px 8px; font-size: 0.55rem; }
+
+  /* Show BTC pill, hide mempool-strip and top-nav */
+  .masthead-btc-pill { display: inline-flex; }
+  .mempool-strip { display: none; }
+  .top-nav { display: none; }
+
+  /* App container: single 48px header */
+  #app { padding-top: 58px; padding-bottom: 30px; }
+
+  /* Grid stacking */
   .grid { padding: 0 16px; gap: 12px; }
   .col-6, .col-4, .col-3, .col-8, .col-5, .col-7 { grid-column: 1 / -1; }
-  .door-grid { grid-template-columns: 1fr; }
+
+  /* Doors stack */
+  .door-grid { grid-template-columns: 1fr; min-height: auto; }
   .door-business { border-right: none; border-bottom: 1px solid var(--hairline); }
+  .door { padding: 32px 24px; }
+
+  /* Manifesto stacks */
   .manifesto-band { grid-template-columns: 1fr; }
-  .manifesto-item { border-right: none; border-bottom: 1px solid var(--hairline); }
+  .manifesto-item { border-right: none; border-bottom: 1px solid var(--hairline); text-align: center; padding: 28px 20px; }
   .manifesto-item:last-child { border-bottom: none; }
+  .manifesto-item .manifesto-num { margin-left: auto; margin-right: auto; }
+
+  /* Solution row stacks */
   .solution-row { grid-template-columns: 1fr; }
-  .solution-cell { border-right: 1px solid var(--hairline); border-bottom: none; }
+  .solution-cell { border-right: 1px solid var(--hairline); border-bottom: none; padding: 24px; }
+
+  /* Flow steps stack */
   .flow { flex-direction: column; }
   .flow-step { border-right: 1px solid var(--hairline); border-bottom: none; }
-  .flow-step:last-child { border-bottom: none; }
-  .top-nav { overflow-x: auto; gap: 0; }
-  .nav-link { padding: 8px 12px; font-size: 0.7rem; }
-  .mempool-strip { gap: 16px; padding: 0 16px; }
+
+  /* Section spacing */
   .section { padding: var(--sp5) 0; }
   .section-lg { padding: var(--sp6) 0; }
   .section-row { grid-template-columns: 1fr; gap: 8px; }
   .section-row .rail { padding-top: 0; }
+
+  /* Footer */
   .footer-watermark { width: 92px; height: 92px; }
+  .footer-links { flex-wrap: wrap; gap: 12px 16px; }
+
+  /* Display type scales */
   .display { font-size: clamp(2.5rem, 10vw, 4.5rem); }
-  .masthead-hub-title { font-size: 0.9rem; }
+
+  /* Ecosystem strip stacks */
   .ecosystem-strip { flex-direction: column; }
   .ecosystem-strip .ecosystem-label { border-right: none; border-bottom: 1px solid var(--hairline); width: 100%; }
   .ecosystem-strip .ecosystem-tiles { flex-direction: column; width: 100%; }
   .ecosystem-strip .ecosystem-tile { border-right: none; border-bottom: 1px solid var(--hairline); width: 100%; }
   .ecosystem-strip .ecosystem-tile:last-child { border-bottom: none; }
+
+  /* Hero motif smaller */
+  .hero-motif { inset: -20px; width: calc(100% + 40px); height: calc(100% + 40px); }
+
+  /* Spine label hidden */
+  .spine-label { display: none; }
+  .bg-numeral { font-size: 6rem; opacity: 0.04; }
+  .bg-word { font-size: 2.5rem; opacity: 0.03; }
+  .seal-editorial-mark { right: 0; width: 180px; height: 180px; }
+
+  /* Clip-paths soften */
+  #view-thesis > .section:first-of-type {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), 0 100%);
+    padding-bottom: 60px;
+  }
+  .manifesto-item:first-child { clip-path: none; }
+  #view-philosophy > .section:first-of-type::after { width: 40px; height: 40px; }
+  .manifesto-num { top: 0; margin-top: 0; margin-bottom: 12px; }
+
+  /* Sticky hed: lower offset for 48px header */
+  .section-sticky-hed { top: 58px; }
+
+  /* Assess view mobile */
+  #aiq-root .container { padding: var(--sp2) var(--sp2) var(--sp5); }
+  #aiq-root .step h1 { font-size: 1.5rem; }
+  #aiq-root .step h2 { font-size: 1.15rem; }
+  #aiq-root .landing-features { grid-template-columns: 1fr; }
+  #aiq-root .buttons { flex-direction: column; }
+  #aiq-root .btn { justify-content: center; }
+  #aiq-root .progress-bar { width: 80px; }
+  #aiq-root .progress-container span { display: none; }
+  #aiq-root .option-card { padding: var(--sp1) var(--sp2); }
+  #aiq-root .question-text { font-size: 1.05rem; }
+  #aiq-root .export-buttons { flex-direction: column; }
+  #aiq-root .internal-table { font-size: 0.65rem; }
+  #aiq-root .internal-table th, #aiq-root .internal-table td { padding: 4px 6px; }
+  #aiq-root .score-circle { flex-wrap: wrap; gap: var(--sp2); }
+  #aiq-root .score-circle .score-value { font-size: 2rem; }
+}
+
+@media (max-width: 480px) {
+  /* Small phones: tighten further */
+  .masthead { height: 44px; padding: 0 10px; gap: 6px; }
+  .masthead-seal { width: 20px; height: 20px; }
+  .masthead-brand { font-size: 0.85rem; }
+  .masthead-hub-title { font-size: 0.75rem; letter-spacing: 0.08em; }
+  .atmosphere-toggle span { padding: 3px 6px; font-size: 0.5rem; }
+  .masthead-btc-pill { padding: 3px 8px; font-size: 0.6rem; gap: 4px; }
+
+  #app { padding-top: 54px; }
+
+  .grid { padding: 0 12px; gap: 10px; }
+
+  .door { padding: 24px 16px; }
+  .door .door-title { font-size: 1.3rem; }
+
+  .card { padding: 20px; }
+  .pillar-card { padding: 24px; }
+  .solution-cell { padding: 20px; }
+  .flow-step { padding: 18px 14px; }
+
+  .display { font-size: clamp(2rem, 12vw, 3rem); }
+  .display-sm { font-size: clamp(1.5rem, 6vw, 2rem); }
+  .display-hed { font-size: clamp(1.2rem, 5vw, 1.5rem); }
+
+  .section { padding: var(--sp4) 0; }
+  .section-sm { padding: var(--sp4) 0; }
+  .section-lg { padding: var(--sp5) 0; }
+
+  .cta-block .cta-btn { padding: 12px 20px; font-size: 0.75rem; }
+
+  .footer-links { flex-direction: column; gap: 8px; }
+  .footer-verification { font-size: 0.65rem; }
+  .footer-legacy { font-size: 0.6rem; }
+
+  /* Assess: score circle full width */
+  #aiq-root .score-circle { flex-direction: column; align-items: flex-start; gap: var(--sp1); }
+  #aiq-root .score-circle .score-scale { width: 100%; }
 }
 }
 
@@ -2138,6 +2299,11 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
     <div class="masthead-hub-title">THE HUB</div>
   </div>
   <div class="masthead-zone masthead-right">
+    <div class="masthead-btc-pill" id="mastheadBtcPill" aria-label="Bitcoin price">
+      <span class="pill-dot offline" id="pillDot"></span>
+      <span class="pill-btc">BTC</span>
+      <span class="pill-val" id="pillVal">--</span>
+    </div>
     <button class="atmosphere-toggle" id="atmosphereToggle" aria-pressed="false" aria-label="Toggle atmosphere between Ember and Dark">
       <span class="toggle-ember">Ember</span>
       <span class="toggle-dark">Dark</span>
@@ -3014,8 +3180,30 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
       '<span class="strip-item"><span class="strip-label">BTC/NAD </span><span class="strip-val btc">N$' + fallbackData.btcNad.toLocaleString() + '</span></span>' +
       '<span class="strip-sep"></span>' +
       '<span class="strip-item"><span class="strip-label">As of </span><span class="strip-val">' + ts + '</span></span>';
+    // Update mobile BTC pill
+    updateMastheadPill(fallbackData.btcUsd, fallbackData.btcNad, false);
     // Show robot in offline state
     setTimeout(showRobotOffline, 300);
+  }
+
+  function updateMastheadPill(btcUsd, btcNad, isLive) {
+    var pillVal = document.getElementById('pillVal');
+    var pillDot = document.getElementById('pillDot');
+    if (!pillVal || !pillDot) return;
+    if (btcNad) {
+      pillVal.textContent = 'N$' + Math.round(btcNad).toLocaleString();
+    } else if (btcUsd) {
+      pillVal.textContent = '$' + Math.round(btcUsd).toLocaleString();
+    } else {
+      pillVal.textContent = '--';
+    }
+    if (isLive) {
+      pillDot.classList.remove('offline');
+      pillDot.classList.add('live');
+    } else {
+      pillDot.classList.remove('live');
+      pillDot.classList.add('offline');
+    }
   }
 
   function renderLive(data) {
@@ -3031,6 +3219,8 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
       '<span class="strip-item"><span class="strip-label">BTC/USD </span><span class="strip-val">$' + (data.btcUsd ? data.btcUsd.toLocaleString() : '—') + '</span></span>' +
       '<span class="strip-sep"></span>' +
       '<span class="strip-item"><span class="strip-label">BTC/NAD </span><span class="strip-val btc">N$' + (data.btcNad ? data.btcNad.toLocaleString() : '—') + '</span></span>';
+    // Update mobile BTC pill
+    updateMastheadPill(data.btcUsd, data.btcNad, true);
   }
 
   // ===== SCROLL REVEAL =====
