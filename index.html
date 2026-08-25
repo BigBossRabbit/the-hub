@@ -132,25 +132,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .masthead-brand .brand-accent {
   color: var(--ember);
-}
-
-/* ===== OKIN SEAL — single inline SVG symbol, tinted via currentColor ===== */
-.okin-seal {
-  display: block;
-  color: currentColor;
-  flex: none;
-}
-.okin-seal-k {
-  font-family: var(--serif);
-  font-weight: 700;
-  font-size: 62px;
-}
-.okin-seal-arc {
-  font-family: var(--serif);
-  font-size: 11.5px;
-  letter-spacing: 1.7px;
-}
-/* 1 — masthead */
+}/* 1 — masthead */
 .masthead-left { gap: 10px; }
 .masthead-seal {
   width: 28px;
@@ -188,9 +170,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   pointer-events: none;
 }
 /* The seal is a seal, not a loader: never animate it. */
-@media (prefers-reduced-motion: reduce) {
-  .okin-seal, .okin-seal * { animation: none !important; transition: none !important; }
-}
 .masthead-hub-title {
   font-family: var(--serif);
   font-size: 1.05rem;
@@ -304,6 +283,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   z-index: 80;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0;
   padding: 0 28px;
   height: 44px;
@@ -1060,10 +1040,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .ecosystem-strip {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0;
   border: 1px solid var(--hairline);
   background: var(--surface);
   overflow: hidden;
+  flex-wrap: wrap;
 }
 .ecosystem-strip .ecosystem-label {
   font-family: var(--mono);
@@ -1078,8 +1060,10 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .ecosystem-strip .ecosystem-tiles {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0;
   flex: 1;
+  flex-wrap: wrap;
 }
 .ecosystem-strip .ecosystem-tile {
   display: flex;
@@ -1454,13 +1438,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
    ============================================ */
 
 
-
-@media (hover: none), (pointer: coarse) {
-  
-}
-@media (prefers-reduced-motion: reduce) {
-  
-}
 
 /* ============================================
    KONAMI MANIFESTO OVERLAY
@@ -2145,27 +2122,7 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 
 <!-- ===== OKIN SEAL — defined ONCE, reused via <use>. The ring IS the letter "O". ===== -->
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
-  <defs>
-    <symbol id="okin-seal" viewBox="0 0 200 200">
-      <!-- bottom arc guide for the curved legend -->
-      <path id="okin-seal-arc-path" d="M35 100A65 65 0 0 0 165 100" fill="none"/>
-      <!-- double ring: thicker outer + thinner inner -->
-      <circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-width="7"/>
-      <circle cx="100" cy="100" r="81" fill="none" stroke="currentColor" stroke-width="2.4"/>
-      <g fill="currentColor">
-        <!-- serif capitals K and N, tightly kerned around the central I -->
-        <text class="okin-seal-k" x="67" y="122" text-anchor="middle">K</text>
-        <text class="okin-seal-k" x="133" y="122" text-anchor="middle">N</text>
-        <!-- the I: taller stem, normal thick serif foot, NO top serif -->
-        <path d="M95 62h10v52h9.5v8H85.5v-8H95z"/>
-        <!-- African continent silhouette replacing the I's top serif -->
-        <path transform="translate(82.5 21) scale(.35)" d="M14 4 74 0 86 26 100 44 76 52 74 72 62 96 48 118 34 96 24 74 26 60 8 54 0 40 2 26Z"/>
-        <!-- legend on the bottom arc -->
-        <text class="okin-seal-arc"><textPath href="#okin-seal-arc-path" startOffset="50%" text-anchor="middle">SPAWNED 1987</textPath></text>
-      </g>
-    </symbol>
-  </defs>
-</svg>
+  </svg>
 
 <!-- ===== GLOBAL NETWORK BACKGROUND ===== -->
 <svg class="global-network-bg" id="globalNetwork" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -2277,7 +2234,6 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 <!-- ===== MASTHEAD ===== -->
 <header class="masthead" role="banner">
   <div class="masthead-zone masthead-left">
-    <svg class="okin-seal masthead-seal" role="img" viewBox="0 0 200 200"><title>OKIN Ent</title><use href="#okin-seal"/></svg>
     <div class="masthead-brand"><span class="brand-accent">OKIN</span> Ent</div>
   </div>
   <div class="masthead-zone masthead-center">
@@ -2826,7 +2782,6 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 
     <!-- Closing thesis -->
     <div class="section seal-editorial scroll-reveal">
-      <svg class="okin-seal seal-editorial-mark" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><use href="#okin-seal"/></svg>
       <div class="grid">
         <div class="col-full">
           <div class="hairline-row">Closing statement</div>
@@ -2864,7 +2819,6 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 </div>
 
 <div class="step active" data-step="0" data-type="landing">
-<svg class="okin-seal assess-seal-mark" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><use href="#okin-seal"/></svg>
 <div class="assessment-eyebrow">ASSESSMENT / 8 DIMENSIONS</div>
 <h1>Is Your Business Ready for an AI Assistant?</h1>
 <p class="subtitle">Is your business ready for an AI assistant? Find out in 5 minutes.</p>
@@ -2919,8 +2873,7 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
       </div>
     </div>
   </div>
-  <svg class="okin-seal footer-watermark" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><use href="#okin-seal"/></svg>
-</footer>
+  </footer>
 
 <!-- ===== KONAMI MANIFESTO OVERLAY ===== -->
 <div class="konami-overlay" id="konamiOverlay" aria-hidden="true">
