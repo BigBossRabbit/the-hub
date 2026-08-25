@@ -1239,77 +1239,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 /* ============================================
-   ATMOSPHERE TOGGLE + NIGHT MODE
-   ============================================ */
-
-.atmosphere-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-  padding: 0;
-  border: 1px solid var(--hairline);
-  border-radius: 16px;
-  background: var(--surface);
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  overflow: hidden;
-  transition: border-color 0.15s ease;
-}
-.atmosphere-toggle:hover {
-  border-color: rgba(var(--text-rgb),0.18);
-}
-.atmosphere-toggle span {
-  padding: 5px 12px;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-.atmosphere-toggle .toggle-ember {
-  background: var(--ember);
-  color: var(--base);
-}
-.atmosphere-toggle .toggle-dark {
-  background: transparent;
-  color: var(--text-dim);
-}
-body.night .atmosphere-toggle .toggle-ember {
-  background: transparent;
-  color: var(--text-dim);
-}
-body.night .atmosphere-toggle .toggle-dark {
-  background: var(--hairline);
-  color: var(--text);
-}
-
-/* Night mode — deeper, cooler dark */
-body.night {
-  --base-rgb: 10,9,8;
-  --surface-rgb: 17,14,11;
-  --surface-lift-rgb: 20,17,14;
-  --hairline-rgb: 30,25,20;
-  --text-rgb: 229,223,210;
-  --text-dim-rgb: 138,127,110;
-  --gold-rgb: 201,164,47;
-  --ember-rgb: 214,122,42;
-}
-body.night .masthead {
-  background: rgba(var(--base-rgb),0.92);
-  border-bottom-color: var(--hairline);
-}
-body.night .top-nav {
-  background: rgba(var(--base-rgb),0.88);
-  border-bottom-color: var(--hairline);
-}
-body.night .mempool-strip {
-  background: var(--data-bg);
-  border-bottom-color: var(--data-bg);
-}
-body.night #view-thesis > .section:first-of-type::before {
-  background: radial-gradient(ellipse at center, rgba(var(--ember-rgb),0.04) 0%, transparent 70%);
-}
-
-/* ============================================
    LIVING SKY — breathing dark gradient
    ============================================ */
 .living-sky {
@@ -1389,8 +1318,6 @@ body.night #view-thesis > .section:first-of-type::before {
   .masthead-brand { font-size: 0.95rem; }
   .masthead-hub-title { font-size: 0.85rem; letter-spacing: 0.1em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .masthead-tag { display: none; }
-  .atmosphere-toggle { padding: 0; }
-  .atmosphere-toggle span { padding: 4px 8px; font-size: 0.55rem; }
 
   /* Show BTC pill, hide mempool-strip and top-nav */
   .masthead-btc-pill { display: inline-flex; }
@@ -1488,7 +1415,6 @@ body.night #view-thesis > .section:first-of-type::before {
   .masthead-seal { width: 20px; height: 20px; }
   .masthead-brand { font-size: 0.85rem; }
   .masthead-hub-title { font-size: 0.75rem; letter-spacing: 0.08em; }
-  .atmosphere-toggle span { padding: 3px 6px; font-size: 0.5rem; }
   .masthead-btc-pill { padding: 3px 8px; font-size: 0.6rem; gap: 4px; }
 
   #app { padding-top: 54px; }
@@ -1648,14 +1574,16 @@ body.night #view-thesis > .section:first-of-type::before {
 /* Score readout */
 .retro-score {
   position: absolute;
-  top: 20px;
-  right: 28px;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   font-family: var(--mono);
   font-size: 0.7rem;
   letter-spacing: 0.12em;
   color: var(--gold);
   text-transform: uppercase;
   pointer-events: none;
+  z-index: 601;
 }
 /* Roam animation: choppy pixel steps with a pause in the middle for the signature action */
 @keyframes retro-roam {
@@ -2304,11 +2232,7 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
       <span class="pill-btc">BTC</span>
       <span class="pill-val" id="pillVal">--</span>
     </div>
-    <button class="atmosphere-toggle" id="atmosphereToggle" aria-pressed="false" aria-label="Toggle atmosphere between Ember and Dark">
-      <span class="toggle-ember">Ember</span>
-      <span class="toggle-dark">Dark</span>
-    </button>
-    <div class="masthead-tag">v6.2 · assess</div>
+    
   </div>
 </header>
 
