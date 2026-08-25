@@ -412,6 +412,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   line-height: 1.02;
   font-weight: 500;
   letter-spacing: -0.04em;
+  color: var(--text);
 }
 .display-sm {
   font-family: var(--serif);
@@ -1528,10 +1529,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   z-index: 600;
   pointer-events: none;
   overflow: hidden;
+  display: none;
 }
 .retro-sprite-overlay.visible {
   pointer-events: auto;
   cursor: pointer;
+  display: block;
 }
 .retro-sprite-stage {
   position: absolute;
@@ -1967,6 +1970,7 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 /* Center the masthead zones */
 .masthead-zone {
   justify-content: center;
+  text-align: center;
 }
 .masthead-left { justify-content: center; }
 .masthead-center { justify-content: center; }
@@ -1975,6 +1979,40 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 /* Center the mempool strip content */
 .mempool-strip {
   justify-content: center;
+}
+
+/* ===== CENTER ALL CONTENT ===== */
+body {
+  text-align: center;
+}
+
+/* Keep form inputs and assessment left-aligned for readability */
+#aiq-root,
+#aiq-root .question-text,
+#aiq-root .opt-text,
+#aiq-root .form-group label,
+#aiq-root .dim-bar-label,
+#aiq-root .internal-table,
+#aiq-root .step h1,
+#aiq-root .step h2,
+#aiq-root .step .subtitle,
+#aiq-root .dimension-intro,
+#aiq-root .landing-features,
+#aiq-root .results-section,
+#aiq-root .score-circle {
+  text-align: left;
+}
+
+/* Center lists */
+ul, ol {
+  list-style-position: inside;
+  padding-left: 0;
+}
+
+/* Center masthead zones */
+.masthead-zone {
+  justify-content: center;
+  text-align: center;
 }
 </style>
 <style>
