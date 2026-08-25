@@ -1564,6 +1564,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   height: 120px;
   image-rendering: pixelated;
   will-change: transform;
+  pointer-events: auto;
 }
 .retro-sprite-stage .sprite-svg {
   width: 100%;
@@ -1582,7 +1583,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   letter-spacing: 0.12em;
   color: var(--gold);
   text-transform: uppercase;
-  pointer-events: none;
+  pointer-events: auto;
   z-index: 601;
 }
 /* Roam animation: choppy pixel steps with a pause in the middle for the signature action */
@@ -1942,6 +1943,81 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
   .hero-motif { inset: -20px; width: calc(100% + 40px); height: calc(100% + 40px); }
 }
 
+
+/* ===== CENTER ALL CONTENT ===== */
+#app p,
+#app h1,
+#app h2,
+#app h3,
+#app h4,
+#app li,
+#app .card-body,
+#app .card-title,
+#app .card-sub,
+#app .pillar-name,
+#app .pillar-desc,
+#app .door-desc,
+#app .door-title,
+#app .section-label,
+#app .manifesto-body,
+#app .tenet-body,
+#app .flow-content,
+#app .step-content,
+#app .step-title,
+#app .display,
+#app .subhead,
+#app .eyebrow,
+#app .cta-body,
+#app .cta-title,
+#app .section-title,
+#app .section-intro,
+#app .door-label,
+#app .hero-sub,
+#app .hero-title {
+  text-align: center;
+}
+
+/* Center card and section content containers */
+#app .card,
+#app .pillar-card,
+#app .door,
+#app .manifesto-item,
+#app .tenet-block,
+#app .flow-step,
+#app .step,
+#app .cta-block,
+#app .section,
+#app .hero-content {
+  text-align: center;
+}
+
+/* Center lists and their items */
+#app ul,
+#app ol {
+  text-align: center;
+  list-style-position: inside;
+  padding-left: 0;
+}
+
+/* Keep the top bar left-aligned (don't touch masthead/nav) */
+.masthead,
+.top-nav,
+.mempool-strip {
+  text-align: left;
+}
+
+/* Center ecosystem tiles and solution cells */
+#app .ecosystem-tile,
+#app .solution-cell,
+#app .solution-row {
+  text-align: center;
+}
+
+/* Center the TPOK and assess content */
+#app .tpok-content,
+#app .assess-content {
+  text-align: center;
+}
 </style>
 <style>
 /* AI Readiness Questionnaire — editorial spec-sheet reskin */
