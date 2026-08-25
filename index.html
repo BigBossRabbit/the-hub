@@ -648,12 +648,21 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* --- Pillars --- */
 .pillar-card {
+  display: block;
   border: 1px solid var(--hairline);
   padding: 32px;
   background: var(--surface);
   height: 100%;
   transition: border-color 0.15s ease, transform 0.2s ease, box-shadow 0.2s ease;
   position: relative;
+  color: inherit;
+  text-decoration: none;
+}
+.pillar-card:hover {
+  border-color: rgba(var(--text-rgb),0.18);
+  transform: translateY(-4px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  color: inherit;
 }
 .pillar-card::before {
   content: '';
@@ -664,12 +673,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   opacity: 0;
   transition: opacity 0.2s ease;
 }
-.pillar-card:hover {
-  border-color: rgba(var(--text-rgb),0.18);
-  transform: translateY(-4px);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
-}
 .pillar-card:hover::before { opacity: 1; }
+.pillar-card:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
 .pillar-card .pillar-icon {
   display: block;
   font-family: var(--mono);
@@ -682,6 +690,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-family: var(--serif);
   font-size: 1.25rem;
   margin-bottom: 4px;
+  display: flex;
+  align-items: center;
 }
 .pillar-card .pillar-audience {
   font-family: var(--mono);
@@ -702,6 +712,30 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-size: 0.68rem;
   color: var(--text-faint);
   letter-spacing: 0.04em;
+}
+
+/* --- Outbound link indicator --- */
+.outbound-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  opacity: 0.5;
+  vertical-align: middle;
+}
+.outbound-indicator svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.pillar-name .outbound-indicator {
+  margin-left: 6px;
+}
+.ecosystem-tile-name .outbound-indicator {
+  margin-left: 4px;
+}
+.card-title .outbound-indicator {
+  margin-left: 6px;
 }
 
 /* --- Flow steps --- */
@@ -1017,14 +1051,19 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   padding: 13px 21px;
   border-right: 1px solid var(--hairline);
   transition: background 0.15s ease;
+  color: inherit;
+  text-decoration: none;
 }
 .ecosystem-strip .ecosystem-tile:last-child { border-right: none; }
-.ecosystem-strip .ecosystem-tile:hover { background: rgba(var(--text-rgb),0.03); }
+.ecosystem-strip .ecosystem-tile:hover { background: rgba(var(--text-rgb),0.03); color: inherit; }
+.ecosystem-strip .ecosystem-tile:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .ecosystem-strip .ecosystem-tile-name {
   font-family: var(--serif);
   font-size: 0.85rem;
   color: var(--text);
   letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
 }
 .ecosystem-strip .ecosystem-tile-tag {
   font-family: var(--mono);
@@ -1544,6 +1583,276 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 .retro-robot-offline .robot-eye { fill: var(--base); }
 .retro-robot-offline .robot-led { fill: var(--ember); }
 .retro-robot-offline .robot-joint { fill: var(--text-faint); }
+
+
+/* ============================================
+   v7.0 — COMPOSITION & ART PASS
+   Alignment with intent, depth, overlap,
+   clip-path, sticky, blend, typographic art,
+   grain, scroll-driven reveals.
+   ============================================ */
+
+/* --- Warm shadow elevation system --- */
+:root {
+  --shadow-warm: 0 4px 24px rgba(var(--base-rgb),0.5), 0 1px 4px rgba(var(--ember-rgb),0.06);
+  --shadow-warm-md: 0 8px 32px rgba(var(--base-rgb),0.55), 0 2px 8px rgba(var(--ember-rgb),0.08);
+  --shadow-warm-lg: 0 16px 48px rgba(var(--base-rgb),0.6), 0 4px 12px rgba(var(--gold-rgb),0.07);
+  --shadow-warm-xl: 0 28px 64px rgba(var(--base-rgb),0.65), 0 6px 16px rgba(var(--gold-rgb),0.08);
+}
+
+/* --- Alignment with intent --- */
+.display,
+.display-sm,
+.display-hed,
+.eyebrow,
+.business-hero-sub,
+.manifesto-band,
+.manifesto-item,
+.cta-block,
+.konami-text,
+.seal-editorial .display-sm,
+.seal-editorial .body-lg {
+  text-align: center;
+}
+
+.col-full > .eyebrow,
+.col-full > .display,
+.col-full > .display-sm,
+.col-full > .display-hed,
+.col-full > .business-hero-sub {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.manifesto-item {
+  text-align: center;
+}
+.manifesto-item .manifesto-num {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.body-lg,
+.body-md,
+.card-body,
+.flow-desc,
+.sol-body,
+.pillar-desc,
+.tenet-body,
+.method-sub,
+.ledger-text,
+.manifesto-text {
+  text-align: left;
+}
+
+/* --- Depth / Elevation tiers --- */
+.card {
+  box-shadow: var(--shadow-warm);
+}
+.card:hover {
+  box-shadow: var(--shadow-warm-lg);
+  transform: translateY(-6px) scale(1.01);
+}
+
+.pillar-card {
+  box-shadow: var(--shadow-warm);
+}
+.pillar-card:hover {
+  box-shadow: var(--shadow-warm-lg);
+  transform: translateY(-6px) scale(1.01);
+}
+
+.ledger-note {
+  box-shadow: var(--shadow-warm-md);
+}
+
+.door {
+  box-shadow: var(--shadow-warm);
+}
+.door:hover {
+  box-shadow: var(--shadow-warm-md);
+  transform: translateY(-4px);
+}
+
+/* --- Overlap & Bleed --- */
+.hero-motif {
+  inset: -50px;
+  width: calc(100% + 100px);
+  height: calc(100% + 100px);
+}
+
+.seal-editorial-mark {
+  right: -50px;
+  width: 260px;
+  height: 260px;
+}
+
+.manifesto-item {
+  position: relative;
+  overflow: visible;
+}
+.manifesto-num {
+  position: relative;
+  top: -20px;
+  margin-top: -20px;
+  margin-bottom: -8px;
+}
+
+#view-philosophy > .section:first-of-type {
+  margin-bottom: -60px;
+  padding-bottom: 100px;
+  position: relative;
+  z-index: 2;
+}
+
+/* --- Shape / clip-path --- */
+#view-thesis > .section:first-of-type {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 50px), 0 100%);
+  padding-bottom: 90px;
+}
+
+.manifesto-item:first-child {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 24px));
+}
+
+#view-philosophy > .section:first-of-type::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  background: var(--base);
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* --- Scroll choreography: position:sticky --- */
+.section-sticky-hed {
+  position: sticky;
+  top: 132px;
+  z-index: 5;
+  background: linear-gradient(180deg, var(--base) 70%, transparent);
+  padding-bottom: 20px;
+  margin-bottom: 0;
+}
+
+/* --- Blending --- */
+.global-network-bg {
+  mix-blend-mode: screen;
+  opacity: 0.28;
+}
+
+.seal-editorial-mark {
+  mix-blend-mode: overlay;
+  opacity: 0.12;
+}
+
+/* --- Typographic art --- */
+.bg-numeral {
+  position: absolute;
+  font-family: var(--serif);
+  font-size: clamp(8rem, 22vw, 18rem);
+  line-height: 0.8;
+  color: var(--text-faint);
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+}
+
+.bg-word {
+  position: absolute;
+  font-family: var(--serif);
+  font-size: clamp(3rem, 9vw, 7rem);
+  line-height: 1;
+  color: var(--text-faint);
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+
+.spine-label {
+  position: fixed;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 50;
+  white-space: nowrap;
+}
+
+/* --- Texture: warm grain --- */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* --- Scroll-driven reveal (with @supports fallback) --- */
+@supports (animation-timeline: view()) {
+  .scroll-reveal {
+    animation: scrollReveal linear;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+  @keyframes scrollReveal {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@supports not (animation-timeline: view()) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- Reduced motion: disable all new motion --- */
+@media (prefers-reduced-motion: reduce) {
+  .card:hover,
+  .pillar-card:hover,
+  .door:hover {
+    transform: none;
+  }
+  .grain-overlay {
+    display: none;
+  }
+}
+
+/* --- Responsive: overlaps degrade gracefully --- */
+@media (max-width: 768px) {
+  .spine-label { display: none; }
+  .bg-numeral { font-size: 6rem; opacity: 0.04; }
+  .bg-word { font-size: 2.5rem; opacity: 0.03; }
+  .seal-editorial-mark { right: 0; width: 180px; height: 180px; }
+  #view-thesis > .section:first-of-type {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), 0 100%);
+    padding-bottom: 60px;
+  }
+  .manifesto-item:first-child { clip-path: none; }
+  #view-philosophy > .section:first-of-type::after { width: 40px; height: 40px; }
+  .manifesto-num { top: 0; margin-top: 0; margin-bottom: 12px; }
+  .hero-motif { inset: -20px; width: calc(100% + 40px); height: calc(100% + 40px); }
+}
+
 </style>
 <style>
 /* AI Readiness Questionnaire — editorial spec-sheet reskin */
@@ -1684,6 +1993,9 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
 </style>
 
 <body>
+
+<div class="grain-overlay" aria-hidden="true"></div>
+<div class="spine-label" aria-hidden="true">OKIN Ent — The Hub</div>
 
 <!-- ===== OKIN SEAL — defined ONCE, reused via <use>. The ring IS the letter "O". ===== -->
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
@@ -1906,7 +2218,8 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
     <!-- Three-tenet manifesto -->
     <div class="grid">
       <div class="col-full">
-        <div class="manifesto-band">
+        <div class="manifesto-band scroll-reveal" style="position:relative;">
+          <div class="bg-numeral" aria-hidden="true" style="top:-60px;left:50%;transform:translateX(-50%);">I.</div>
           <div class="manifesto-item">
             <div class="manifesto-num">I.</div>
             <div class="manifesto-title">Outcome over artifact.</div>
@@ -2110,35 +2423,36 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
       <div class="grid">
         <div class="col-full">
           <div class="section-label bordered">Three Pillars</div>
-          <h2 class="display-hed" style="margin-bottom: 32px;">Three ways to stack sats.</h2>
+          <h2 class="display-hed" style="margin-bottom: 10px;">Three ways to stack sats.</h2>
+          <p class="body-md" style="margin-bottom: 32px; color: var(--btc); font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.04em;">The earn side runs on EasySats.</p>
         </div>
         <div class="col-4">
 
-          <div class="pillar-card">
+          <a class="pillar-card" href="https://bitcoin.okinent.org/timeforce" target="_blank" rel="noopener noreferrer" aria-label="TimeForce on EasySats (opens in a new tab)">
             <span class="pillar-icon">01</span>
-            <div class="pillar-name">TimeForce</div>
+            <div class="pillar-name">TimeForce<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></div>
             <div class="pillar-audience">For anyone with time and willingness</div>
             <p class="pillar-desc">Exchange time and skills for sats. Short tasks, immediate settlement. Move, clean, verify, show up. Proof-of-work meets proof-of-attendance.</p>
             <div class="pillar-mechanic">Match → Do → Verify → Lightning settlement</div>
-          </div>
+          </a>
         </div>
         <div class="col-4">
-          <div class="pillar-card">
+          <a class="pillar-card" href="https://bitcoin.okinent.org/easyjobs" target="_blank" rel="noopener noreferrer" aria-label="EasyJobs on EasySats (opens in a new tab)">
             <span class="pillar-icon">02</span>
-            <div class="pillar-name">EasyJobs</div>
+            <div class="pillar-name">EasyJobs<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></div>
             <div class="pillar-audience">For skilled workers seeking Bitcoin-native careers</div>
             <p class="pillar-desc">Bitcoin-only career placements. Roles at companies that pay in sats. Operations to engineering. Salary runs on Lightning. No fiat detour.</p>
             <div class="pillar-mechanic">Profile → Match → Salary in sats → Stacked</div>
-          </div>
+          </a>
         </div>
         <div class="col-4">
-          <div class="pillar-card">
+          <a class="pillar-card" href="https://bitcoin.okinent.org/easydevs" target="_blank" rel="noopener noreferrer" aria-label="EasyDevs on EasySats (opens in a new tab)">
             <span class="pillar-icon">03</span>
-            <div class="pillar-name">EasyDevs</div>
+            <div class="pillar-name">EasyDevs<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></div>
             <div class="pillar-audience">For builders, designers, and technical freelancers</div>
             <p class="pillar-desc">Freelance bounties for wallet features, node dashboards, Lightning integrations. Paid in bitcoin on completion. No 20% platform cut.</p>
             <div class="pillar-mechanic">Bounty posted → Build → Review → Sats released</div>
-          </div>
+          </a>
         </div>
       </div>
     </div>
@@ -2199,7 +2513,7 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
       <div class="grid">
         <div class="col-full">
           <div class="cta-block">
-            <a class="cta-btn btc" href="#/solutions">Come l(earn) your first sats</a>
+            <a class="cta-btn btc" href="https://bitcoin.okinent.org/" target="_blank" rel="noopener noreferrer" aria-label="Come l(earn) your first sats on EasySats (opens in a new tab)">Come l(earn) your first sats<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></a>
           </div>
         </div>
       </div>
@@ -2274,14 +2588,14 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
           <div class="ecosystem-strip">
             <div class="ecosystem-label">Under The Hub</div>
             <div class="ecosystem-tiles">
-              <div class="ecosystem-tile">
-                <span class="ecosystem-tile-name">EasySats</span>
+              <a class="ecosystem-tile" href="https://bitcoin.okinent.org/" target="_blank" rel="noopener noreferrer" aria-label="EasySats (opens in a new tab)">
+                <span class="ecosystem-tile-name">EasySats<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></span>
                 <span class="ecosystem-tile-tag">Earn</span>
-              </div>
-              <div class="ecosystem-tile">
-                <span class="ecosystem-tile-name">TPOK</span>
+              </a>
+              <a class="ecosystem-tile" href="https://bitcoin.okinent.org/tpok" target="_blank" rel="noopener noreferrer" aria-label="TPOK on EasySats (opens in a new tab)">
+                <span class="ecosystem-tile-name">TPOK<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></span>
                 <span class="ecosystem-tile-tag">Ecosystem</span>
-              </div>
+              </a>
             </div>
           </div>
           <!-- TODO: user to supply real copy for each property -->
@@ -2305,7 +2619,8 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
        VIEW: #/philosophy
        ========================================== -->
   <section class="view" id="view-philosophy">
-    <div class="section" style="padding-top: 40px;">
+    <div class="section" style="padding-top: 40px; position:relative;">
+      <div class="bg-word" aria-hidden="true" style="top:0;right:0;">FREEDOM</div>
       <div class="grid">
         <div class="col-full">
           <div class="eyebrow" style="color: var(--ember);">Doctrine</div>
@@ -2319,7 +2634,7 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
       <div class="grid">
         <div class="col-8">
           <div class="section-label" style="color: var(--ember);">FreedomTech — full text</div>
-          <h2 class="display-hed">FreedomTech is the removal of unnecessary intermediaries — from your workflow and from your money — using tools that are open, verifiable, and controlled by the people who use them.</h2>
+          <h2 class="display-hed section-sticky-hed">FreedomTech is the removal of unnecessary intermediaries — from your workflow and from your money — using tools that are open, verifiable, and controlled by the people who use them.</h2>
           <p class="body-lg" style="margin-top: 24px;">That is the whole doctrine. Every system we build exists to make one or more intermediaries unnecessary. Not disrupted. Not "democratised." Unnecessary. The rent flows back to the person who earned it.</p>
         </div>
       </div>
@@ -2353,17 +2668,17 @@ a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:0
       <div class="grid">
         <div class="col-full">
           <div class="section-label" style="color: var(--ember); margin-bottom: 21px;">TPOK — The Pursuit of Knowledge</div>
-          <div class="card card-accent-gold" style="max-width: 600px;">
-            <div class="card-title">Edutainment events — learning frontier tech the fun way.</div>
+          <a class="card card-accent-gold" href="https://bitcoin.okinent.org/tpok" target="_blank" rel="noopener noreferrer" aria-label="TPOK on EasySats (opens in a new tab)" style="max-width: 600px; display: block;">
+            <div class="card-title">Edutainment events — learning frontier tech the fun way.<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></div>
             <div class="card-sub">Bitcoin · Lightning nodes · Nostr · and more</div>
             <p class="card-body">OKIN Ent's edutainment wing. A chill social session learning Bitcoin and frontier tech over good conversation. No slides. Walk away with a working Lightning wallet and a mental model that sticks because you used it. When built for real, TPOK gets its own page.</p>
-          </div>
+          </a>
         </div>
       </div>
     </div>
 
     <!-- Closing thesis -->
-    <div class="section seal-editorial">
+    <div class="section seal-editorial scroll-reveal">
       <svg class="okin-seal seal-editorial-mark" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><use href="#okin-seal"/></svg>
       <div class="grid">
         <div class="col-full">
