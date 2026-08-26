@@ -392,7 +392,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .agent-note { color: var(--text-dim); font-size: 0.68rem; text-align: center; margin-top: 8px; font-family: var(--mono); letter-spacing: 0.04em; }
 .agents-footer { border-top: 1px solid var(--hairline); margin-top: var(--sp6); padding: var(--sp5) 0; text-align: center; }
 .agents-footer p { color: var(--text-dim); font-size: 0.8rem; letter-spacing: 0.02em; }
-.nav-link.door-agents.active::after { background: var(--ember); }
 @media (prefers-reduced-motion: reduce) {
   .agent-card, .agent-chip { transition: none !important; }
   .agent-card:hover { transform: none; }
@@ -2394,7 +2393,6 @@ ul, ol {
   <a href="#/solutions" class="nav-link" data-route="/solutions">Solutions</a>
   <a href="#/philosophy" class="nav-link door-philosophy" data-route="/philosophy">Philosophy</a>
   <a href="#/assess" class="nav-link" data-route="/assess">Assess</a>
-  <a href="#/agents" class="nav-link door-agents" data-route="/agents">Agents</a>
 </nav>
 
 <!-- ===== APP ===== -->
@@ -3230,19 +3228,6 @@ ul, ol {
       <div class="agent-bar" id="agentBar"></div>
       <div class="agent-grid" id="agentGrid"></div>
 
-      <section class="agent-calc">
-        <h2>Do the math</h2>
-        <p class="sub">A small, boring client list adds up fast. Set your numbers and watch the monthly figure move.</p>
-        <div class="agent-row">
-          <div class="agent-field"><label>Active clients (retainer)</label><input id="aClients" type="number" value="4" min="0"></div>
-          <div class="agent-field"><label>Avg monthly retainer (N$)</label><input id="aRet" type="number" value="16000" min="0"></div>
-          <div class="agent-field"><label>New builds / month</label><input id="aBuilds" type="number" value="1" min="0"></div>
-          <div class="agent-field"><label>Avg build fee (N$)</label><input id="aSetup" type="number" value="96000" min="0"></div>
-        </div>
-        <div class="agent-out">Estimated monthly revenue<b id="aMrev">N$160,000</b></div>
-        <div class="agent-note" id="aAnn"></div>
-      </section>
-
       <footer class="agents-footer">
         <div style="color:var(--ember);font-family:var(--serif);font-size:1.1rem;margin-bottom:8px;">OKIN Ent</div>
         <p>Not an AI company. We build the agents, you own the relationship.</p>
@@ -3267,8 +3252,7 @@ ul, ol {
     '/philosophy': 'view-philosophy',
     '/assess': 'view-assess',
     '/terms': 'view-terms',
-    '/privacy': 'view-privacy',
-    '/agents': 'view-agents'
+    '/privacy': 'view-privacy'
   };
 
   var defaultRoute = '/';
@@ -4843,8 +4827,6 @@ window.aiq_toggleInternal=aiq_toggleInternal;
           + '<h4>The problem it kills</h4><p>' + a.prob + '</p>'
           + '<h4>What it does</h4><p>' + a.does + '</p>'
           + '<h4>Who buys it</h4><p>' + a.buy + '</p>'
-          + '<h4>How to spot the business</h4><p>' + a.spot + '</p>'
-          + '<h4>Why they say yes</h4><p>' + a.why + '</p>'
         + '</div>'
         + '<div class="agent-tags">' + a.cats.map(function (c) {
             var m = CATS.find(function (x) { return x[0] === c; });
