@@ -1152,6 +1152,14 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 100%;
   height: 100%;
 }
+.hero-motif canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-motif { animation: none !important; }
+}
 @keyframes motifDrift {
   0%, 100% { transform: translate(0, 0); }
   25% { transform: translate(10px, -8px); }
@@ -2326,21 +2334,7 @@ ul, ol {
     <div class="section" style="padding-top: 40px; position: relative; overflow: hidden;">
       <div class="living-sky" id="livingSky" aria-hidden="true"></div>
       <div class="hero-motif" aria-hidden="true">
-        <svg viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice">
-          <line class="hm-line-ember" x1="80" y1="180" x2="280" y2="100"  stroke-width="0.8" opacity="0.35"/>
-          <line class="hm-line-gold" x1="280" y1="100" x2="520" y2="220"  stroke-width="0.8" opacity="0.35"/>
-          <line class="hm-line-teal" x1="520" y1="220" x2="760" y2="140"  stroke-width="0.8" opacity="0.35"/>
-          <line class="hm-line-ember" x1="520" y1="220" x2="680" y2="320"  stroke-width="0.8" opacity="0.3"/>
-          <line class="hm-line-gold" x1="760" y1="140" x2="1020" y2="200"  stroke-width="0.8" opacity="0.35"/>
-          <line class="hm-line-teal" x1="280" y1="100" x2="380" y2="300"  stroke-width="0.8" opacity="0.25"/>
-          <circle class="hm-node-ember" cx="80" cy="180" r="4"  opacity="0.6"/>
-          <circle class="hm-node-gold" cx="280" cy="100" r="4"  opacity="0.6"/>
-          <circle class="hm-node-teal" cx="520" cy="220" r="4"  opacity="0.6"/>
-          <circle class="hm-node-ember" cx="760" cy="140" r="4"  opacity="0.6"/>
-          <circle class="hm-node-gold" cx="1020" cy="200" r="4"  opacity="0.6"/>
-          <circle class="hm-node-teal" cx="680" cy="320" r="3"  opacity="0.5"/>
-          <circle class="hm-node-ember" cx="380" cy="300" r="3"  opacity="0.5"/>
-        </svg>
+        <canvas id="okinHeroCanvas"></canvas>
       </div>
       <div class="grid">
         <div class="col-full">
@@ -3938,12 +3932,136 @@ ul, ol {
     }
   }
 
+  // ===== HERO CANVAS — de-intermediating node network =====
+  // Replaces the static hero-motif SVG with a live canvas: peripheral nodes
+  // spoke into a central intermediary early, then form a peer-to-peer BTC-orange
+  // mesh as the hub dissolves — the FreedomTech doctrine told in motion.
+  // Gated on #view-thesis visibility + prefers-reduced-motion (battery/a11y).
+  function initHeroCanvas() {
+    var canvas = document.getElementById('okinHeroCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    var reduced = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var DPR = Math.min(window.devicePixelRatio || 1, 2);
+    var W = 0, H = 0, raf = null, last = 0;
+
+    function resize() {
+      var host = canvas.parentElement;
+      W = host ? host.clientWidth : window.innerWidth;
+      H = host ? host.clientHeight : window.innerHeight;
+      if (W < 2) W = window.innerWidth;
+      if (H < 2) H = window.innerHeight;
+      canvas.width = Math.round(W * DPR);
+      canvas.height = Math.round(H * DPR);
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    }
+
+    // Seeded deterministic node field (stable across frames/direction)
+    var N = 24, nodes = [], seed = 7331;
+    function rnd() { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+    for (var i = 0; i < N; i++) {
+      nodes.push({ x: rnd(), y: rnd(), r: 1.4 + rnd() * 2.2, ph: rnd() * 6.283, sp: 0.2 + rnd() * 0.5 });
+    }
+    function lerp(a, b, t) { return a + (b - a) * t; }
+    function clamp01(v) { return v < 0 ? 0 : (v > 1 ? 1 : v); }
+
+    // scroll-driven de-intermediation: 0 = hub present, 1 = mesh
+    function progress() {
+      var view = document.getElementById('view-thesis');
+      if (!view) return 0.6;
+      var rect = view.getBoundingClientRect();
+      var top = rect.top;
+      var h = window.innerHeight || 1;
+      // 0 when thesis fully in view at top, ->1 as you scroll it away
+      return clamp01(((-top) / h) * 1.4);
+    }
+
+    function frame(ts) {
+      raf = null;
+      var t = (ts || 0) / 1000;
+      var p = progress();
+      ctx.clearRect(0, 0, W, H);
+      var cxp = W / 2, cyp = H / 2;
+      var px = (p - 0.5) * 30, py = (p - 0.5) * 20;
+      var pos = nodes.map(function (n) {
+        return {
+          x: (n.x * W) + Math.sin(t * n.sp + n.ph) * 12 - px,
+          y: (n.y * H) + Math.cos(t * n.sp + n.ph) * 12 - py,
+          r: n.r
+        };
+      });
+      var hubStr = clamp01(1 - p / 0.5);
+      var hubX = cxp + Math.sin(t * 0.3) * 5, hubY = cyp + Math.cos(t * 0.3) * 5;
+      if (hubStr > 0.02) {
+        ctx.lineWidth = 0.6;
+        for (var a = 0; a < pos.length; a++) {
+          ctx.strokeStyle = 'rgba(212,175,55,' + (0.10 * hubStr) + ')';
+          ctx.beginPath(); ctx.moveTo(pos[a].x, pos[a].y); ctx.lineTo(hubX, hubY); ctx.stroke();
+        }
+        var hg = ctx.createRadialGradient(hubX, hubY, 2, hubX, hubY, 60 * hubStr + 8);
+        hg.addColorStop(0, 'rgba(212,175,55,' + (0.20 * hubStr) + ')');
+        hg.addColorStop(1, 'rgba(212,175,55,0)');
+        ctx.fillStyle = hg; ctx.fillRect(hubX - 70, hubY - 70, 140, 140);
+        ctx.beginPath(); ctx.arc(hubX, hubY, 8 * hubStr + 1, 0, 6.283);
+        ctx.fillStyle = 'rgba(212,175,55,' + (0.5 * hubStr) + ')'; ctx.fill();
+      }
+      var meshStr = clamp01((p - 0.45) / 0.4);
+      if (meshStr > 0.02) {
+        ctx.lineWidth = 0.5;
+        var thr = (W * 0.22);
+        for (var b = 0; b < pos.length; b++) {
+          for (var c = b + 1; c < pos.length; c++) {
+            var dx = pos[b].x - pos[c].x, dy = pos[b].y - pos[c].y;
+            var d2 = dx * dx + dy * dy;
+            if (d2 < thr * thr) {
+              var al = (1 - Math.sqrt(d2) / thr) * 0.16 * meshStr;
+              ctx.strokeStyle = 'rgba(247,147,26,' + al + ')';
+              ctx.beginPath(); ctx.moveTo(pos[b].x, pos[b].y); ctx.lineTo(pos[c].x, pos[c].y); ctx.stroke();
+            }
+          }
+        }
+      }
+      for (var d = 0; d < pos.length; d++) {
+        var tw = 0.5 + 0.5 * Math.sin(t * 2 + nodes[d].ph);
+        ctx.beginPath(); ctx.arc(pos[d].x, pos[d].y, pos[d].r, 0, 6.283);
+        ctx.fillStyle = 'rgba(237,231,218,' + (0.35 + 0.4 * tw) + ')'; ctx.fill();
+      }
+      schedule();
+    }
+
+    function schedule() {
+      if (reduced) return;            // static frame only
+      if (raf) return;
+      raf = requestAnimationFrame(frame);
+    }
+    function visible() {
+      var v = document.getElementById('view-thesis');
+      return v && v.classList.contains('active');
+    }
+    function kick() {
+      if (reduced) { if (!last) { last = 1; frame(0); } return; }
+      if (visible()) schedule();
+    }
+
+    window.addEventListener('resize', function () { resize(); kick(); });
+    window.addEventListener('hashchange', kick);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) kick();
+    });
+    resize();
+    // draw one static frame immediately; animate only when thesis visible
+    if (reduced) { frame(0); } else { kick(); }
+  }
+
   // ===== INITIALIZATION =====
   function init() {
     try { handleHash(); } catch(e) {}
     try { fetchMempool(); } catch(e) { try { renderFallback(); } catch(e2) {} }
     setInterval(function() { try { fetchMempool(); } catch(e) {} }, 60000);
     try { startPulseAnimations(); } catch(e) {}
+    try { initHeroCanvas(); } catch(e) {}
     try { initReveal(); } catch(e) {}
     try { initCursorFollower(); } catch(e) {}
     try { initKonami(); } catch(e) {}
