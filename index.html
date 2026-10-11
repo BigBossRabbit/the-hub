@@ -6,6 +6,12 @@
 <title>OKIN Ent — The Hub</title>
 <style>
 /* ============================================
+   THE HUB v7 — v6 + the leaves, joined.
+   v7: GTO Labs and EasySats reachable from the hub (nav, both doors,
+       network node, footer). Hub = front door; leaves stand alone.
+       Surgical edits only, v6 architecture intact.
+   ============================================ */
+/* ============================================
    THE HUB v6 — "Network of Hubs"
    OKIN Ent · single-file offline demo
    v6: global network bg, retro loader,
@@ -2246,6 +2252,28 @@ ul, ol {
 @media (prefers-reduced-motion:reduce){#aiq-root, #aiq-root *, #aiq-root *::before, #aiq-root *::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
 </style>
 
+
+<style id="leaf-links">
+/* v7 — the two leaves, reachable from the hub. Hub = front door, never a dependency:
+   each leaf stands alone (GTO rule), the hub only points at them. */
+.door .door-leaf {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 18px;
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--text-dim); text-decoration: none;
+  border-bottom: 1px solid var(--hairline); padding-bottom: 3px;
+  transition: color .25s ease, border-color .25s ease;
+}
+.door-business .door-leaf:hover { color: var(--ember); border-color: var(--ember); }
+.door-earn .door-leaf:hover { color: var(--btc); border-color: var(--btc); }
+.door .door-leaf span { transition: transform .25s ease; }
+.door .door-leaf:hover span { transform: translateX(3px); }
+.global-network-bg .gn-node[data-ext] { cursor: pointer; }
+.global-network-bg .gn-node[data-ext]:hover,
+.global-network-bg .gn-node-label[data-ext]:hover { opacity: 1; }
+.nav-link.nav-leaf { color: var(--text-dim); }
+.nav-link.nav-leaf::after { content: ""; }
+@media (max-width: 760px) { .top-nav .nav-leaf { display: none; } }
+</style>
 <body>
 
 <div class="grain-overlay" aria-hidden="true"></div>
@@ -2300,6 +2328,8 @@ ul, ol {
   <text class="gn-node-label" x="1120" y="720" text-anchor="middle" id="gnLabelPeer2">PEER</text>
   <circle class="gn-node" id="gnNodeAssess" cx="600" cy="680" r="5" data-route="/assess"/>
   <text class="gn-node-label" x="600" y="700" text-anchor="middle" id="gnLabelAssess">ASSESS</text>
+  <circle class="gn-node" id="gnNodeGto" cx="1020" cy="380" r="5.5" data-ext="https://gto.okinent.org"/>
+  <text class="gn-node-label" x="1020" y="360" text-anchor="middle" id="gnLabelGto" data-ext="https://gto.okinent.org">GTO LABS</text>
 </svg>
 
 <!-- ===== RETRO ROBOT OVERLAY (page load) ===== -->
@@ -2393,6 +2423,7 @@ ul, ol {
   <a href="#/solutions" class="nav-link" data-route="/solutions">Solutions</a>
   <a href="#/philosophy" class="nav-link door-philosophy" data-route="/philosophy">Philosophy</a>
   <a href="#/assess" class="nav-link" data-route="/assess">Assess</a>
+  <a href="https://gto.okinent.org" class="nav-link nav-leaf" rel="noopener">GTO Labs</a>
 </nav>
 
 <!-- ===== APP ===== -->
@@ -2424,12 +2455,14 @@ ul, ol {
             <h2 class="door-title">Businesses buy back their hours.</h2>
             <p class="door-desc">We automate the repetitive work drowning your people. Outcome-priced, never tech-flavoured. Data stays on your machines.</p>
             <span class="door-cta">Enter the Business view</span>
+            <a class="door-leaf" href="https://gto.okinent.org" rel="noopener" onclick="event.stopPropagation()">GTO Labs <span>&#8594;</span></a>
           </div>
           <div class="door door-earn" onclick="window.location.hash='#/earn'">
             <div class="door-label">Door II — Earn</div>
             <h2 class="door-title">Individuals earn their sovereignty.</h2>
             <p class="door-desc">Namibia's Bitcoin earning layer. Time, skill, and work convert directly to sats on Lightning. No gatekeepers. No permission needed.</p>
             <span class="door-cta">Enter the Earn view</span>
+            <a class="door-leaf" href="https://bitcoin.okinent.org" rel="noopener" onclick="event.stopPropagation()">EasySats <span>&#8594;</span></a>
           </div>
         </div>
       </div>
@@ -3182,9 +3215,11 @@ ul, ol {
         <a href="#/business">Business</a>
         <a href="#/earn">Earn</a>
         <a href="#/solutions">Solutions</a>
+        <a href="https://gto.okinent.org" rel="noopener">GTO Labs</a>
+        <a href="https://bitcoin.okinent.org" rel="noopener">EasySats</a>
       </div>
       <div class="footer-legacy">
-        Legacy OKIN properties redirect to The Hub.<br>Operated independently.<br>Prior routing consolidated here.
+        The Hub is the front door. Each arm has its own site and stands alone &mdash; GTO Labs for businesses, EasySats for individuals.<br>Entry point here, delivery out there.
       </div>
     </div>
   </div>
@@ -3301,7 +3336,15 @@ ul, ol {
     };
 
     // Reset all nodes and labels
-    var allNodes = document.querySelectorAll('.gn-node');
+    // GTO leaf node — decorative graph, but it has to actually go somewhere
+  (function () {
+    var gto = document.getElementById('gnNodeGto'), gtoLabel = document.getElementById('gnLabelGto');
+    if (gto) gto.addEventListener('click', function () { window.location.href = 'https://gto.okinent.org'; });
+    if (gtoLabel) gtoLabel.addEventListener('click', function () { window.location.href = 'https://gto.okinent.org'; });
+    if (gto) gto.style.opacity = '0.55';
+    if (gtoLabel) gtoLabel.style.opacity = '0.4';
+  })();
+  var allNodes = document.querySelectorAll('.gn-node');
     var allLabels = document.querySelectorAll('.gn-node-label');
     for (var i = 0; i < allNodes.length; i++) allNodes[i].classList.remove('active');
     for (var j = 0; j < allLabels.length; j++) allLabels[j].classList.remove('active');
