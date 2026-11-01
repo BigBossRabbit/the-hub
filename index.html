@@ -4898,6 +4898,7 @@ window.aiq_toggleInternal=aiq_toggleInternal;
   }).join('');
 
   function calc() {
+    if (!document.getElementById('aClients')) return; // calculator block not present (agents view parked) — no-op
     var c = +document.getElementById('aClients').value;
     var b = +document.getElementById('aRet').value;
     var k = +document.getElementById('aBuilds').value;
@@ -4908,7 +4909,8 @@ window.aiq_toggleInternal=aiq_toggleInternal;
   }
 
   ['aClients', 'aRet', 'aBuilds', 'aSetup'].forEach(function (id) {
-    document.getElementById(id).addEventListener('input', calc);
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', calc);
   });
 
   render();
