@@ -2611,8 +2611,8 @@ ul, ol {
         <div class="col-4">
           <div class="card card-accent-ember">
             <div class="card-title">"Where Do Your Hours Go?"</div>
-            <div class="card-sub">Assessment · N$22,500 fixed · credited back in full</div>
-            <p class="card-body" style="text-align:center;">Maps where every person-hour goes. Output: ranked automation candidates, hours reclaimed, cost of inaction. Take a package and the full N$22,500 comes off the bill.</p>
+            <div class="card-sub">Assessment · from N$22,500 · indicative</div>
+            <p class="card-body" style="text-align:center;">Maps where every person-hour goes. Output: ranked automation candidates, hours reclaimed, cost of inaction. Go ahead with the buildout and the assessment fee is credited against it. Your exact figure comes out of the hours audit form.</p>
           </div>
         </div>
         <div class="col-4">
@@ -2975,7 +2975,7 @@ ul, ol {
           <a class="card card-accent-gold" href="https://bitcoin.okinent.org/tpok" target="_blank" rel="noopener noreferrer" aria-label="TPOK on EasySats (opens in a new tab)" style="max-width: 600px; display: block;">
             <div class="card-title">Edutainment events — learning frontier tech the fun way.<span class="outbound-indicator" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 9L9 1M9 1H3M9 1V7"/></svg></span></div>
             <div class="card-sub">Bitcoin · Lightning nodes · Nostr · and more</div>
-            <p class="card-body" style="text-align:center;">OKIN Ent's edutainment wing. A chill social session learning Bitcoin and frontier tech over good conversation. No slides. Walk away with a working Lightning wallet and a mental model that sticks because you used it. When built for real, TPOK gets its own page.</p>
+            <p class="card-body" style="text-align:center;">OKIN Ent's edutainment wing. A chill social session learning Bitcoin and frontier tech over good conversation. No slides. Walk away with a working Lightning wallet and a mental model that sticks because you used it. Its own page is live at bitcoin.okinent.org/tpok.</p>
           </a>
         </div>
       </div>
@@ -3052,8 +3052,6 @@ ul, ol {
 </div>
 </div>
 </section>
-
-</main>
 
 
   <!-- ==========================================
@@ -3321,6 +3319,8 @@ ul, ol {
 
     </div>
   </section>
+
+</main>
 
 <!-- ============================================
      SCRIPTS
@@ -4635,7 +4635,7 @@ function aiq_renderResults(){
 
   h+='<div class="results-section"><h3>What We Would Build for You</h3><div class="opp-item">'+tier.whatWeBuild+'</div></div>';
 
-  h+='<div class="results-section"><h3>What It Costs</h3><div class="opp-item">'+tier.price+'</div></div>';
+  h+='<div class="results-section"><h3>What It Costs</h3><div class="opp-item">Priced per business, not per seat or hour. Your realistic figure comes out of the hours audit — fill in the short form and we\'ll come back with a quote for your operation.</div></div>';
 
   h+='<div class="results-section"><h3>Your Strengths</h3><div class="opportunities">';
   opportunities.forEach(o=>{h+='<div class="opp-item">'+o+'</div>'});
@@ -4744,7 +4744,7 @@ function aiq_buildInternalView(){
     });
   }
   h+='</div>';
-  h+='<div style="margin-bottom:20px"><strong style="font-size:13px;color:var(--text-muted)">INDICATIVE PRICE BAND:</strong><br><span style="color:var(--accent-gold);font-size:15px;font-weight:600">'+aiq_TIERS[aiq_finalTier].price+'</span></div>';
+  h+='<div style="margin-bottom:20px"><strong style="font-size:13px;color:var(--text-muted)">INDICATIVE PRICE BAND:</strong><br><span style="color:var(--accent-gold);font-size:15px;font-weight:600">Set per engagement — indicative only; confirmed in your quote after the hours audit.</span></div>';
   h+='<table class="internal-table"><thead><tr><th>Dimension</th><th>Earned</th><th>Max</th><th>Score</th><th>Weight</th><th>Weighted</th></tr></thead><tbody>';
   aiq_RUBRIC.dimensions.forEach(dim=>{
     const earned=aiq_rawPoints[dim.id]||0;
@@ -4758,7 +4758,7 @@ function aiq_buildInternalView(){
     h+='<tr style="font-weight:700"><td>ADJUSTED COMPOSITE</td><td colspan="4"></td><td>'+aiq_compositeScore.toFixed(2)+'</td></tr>';
   }
   h+='</tbody></table>';
-  h+='<div style="font-size:13px;color:var(--text-muted);margin-top:12px"><strong>TIER LOGIC:</strong> Composite '+aiq_compositeScore.toFixed(2)+' → Tier '+aiq_finalTier+' ('+aiq_TIERS[aiq_finalTier].range+')';
+  h+='<div style="font-size:13px;color:var(--text-muted);margin-top:12px"><strong>TIER LOGIC:</strong> Composite '+aiq_compositeScore.toFixed(2)+' → Tier '+aiq_finalTier+' (indicative band confirmed in the hours audit)';
   if(aiq_triggeredDQs.length>0)h+='<br><strong>OVERRIDE:</strong> Disqualifier(s) triggered → forced to '+aiq_finalTier;
   h+='</div>';
   return h;
