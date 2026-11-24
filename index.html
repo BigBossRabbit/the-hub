@@ -520,6 +520,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .col-8 { grid-column: span 8; }
 .col-5 { grid-column: span 5; }
 .col-7 { grid-column: span 7; }
+.col-right { grid-column: 9 / span 4; }
 
 /* Section spacing — golden ratio scale */
 .section {
@@ -566,6 +567,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   line-height: 1.8;
   color: var(--text-dim);
   max-width: 60ch;
+  margin-inline: auto;
 }
 .body-md {
   font-size: 0.95rem;
@@ -695,6 +697,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   color: var(--text-dim);
   line-height: 1.6;
   max-width: 55ch;
+  margin-inline: auto;
 }
 
 /* --- Doors --- */
@@ -741,6 +744,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   color: var(--text-dim);
   line-height: 1.65;
   max-width: 44ch;
+  margin-inline: auto;
 }
 .door .door-cta {
   font-family: var(--mono);
@@ -988,6 +992,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   color: var(--text-dim);
   line-height: 1.75;
   max-width: 65ch;
+  margin-inline: auto;
 }
 
 /* --- Ledger note --- */
@@ -1448,7 +1453,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
   /* Grid stacking */
   .grid { padding: 0 16px; gap: 12px; }
-  .col-6, .col-4, .col-3, .col-8, .col-5, .col-7 { grid-column: 1 / -1; }
+  .col-6, .col-4, .col-3, .col-8, .col-5, .col-7, .col-right { grid-column: 1 / -1; }
 
   /* Doors stack */
   .door-grid { grid-template-columns: 1fr; min-height: auto; }
@@ -2543,7 +2548,7 @@ ul, ol {
     <!-- Thesis statement -->
     <div class="section">
       <div class="grid">
-        <div class="col-8">
+        <div class="col-full">
           <div class="eyebrow">The removal of rent-takers</div>
           <p class="body-lg drop-cap">An intermediary inserts itself between the worker and the value. Takes rent. Leaves the worker tired and the business fragile. We interrupt that pattern — on the workflow side and on the money side — with tools that remove the intermediary by design.</p>
         </div>
@@ -2573,7 +2578,7 @@ ul, ol {
           <h2 class="display-hed">The pitch is the outcome, never the technology.</h2>
           <p class="body-md">We never call ourselves an AI company. Automation, orchestration, inference — means, not ends. The end: fewer hours, better results, data never leaving your machines.</p>
         </div>
-        <div class="col-4" style="margin-left: 100px;">
+        <div class="col-4 col-right">
           <div class="card card-accent-ember">
             <div class="card-title">Data sovereignty</div>
             <p class="card-body" style="text-align:center;">Inference runs on your hardware. No model provider sees your data. No extraction. No surprise terms changes.</p>
@@ -2712,7 +2717,7 @@ ul, ol {
     <!-- Hero equity -->
     <div class="section">
       <div class="grid">
-        <div class="col-8">
+        <div class="col-full">
           <div class="eyebrow" style="color: var(--btc);text-align:center;">Namibia's Bitcoin earning layer</div>
           <h2 class="display-hed" style="text-align:center;">Earn sats with the time, skills, and work you already have.</h2>
           <p class="body-lg" style="text-align:center;">The earning rail of The Hub. Every pillar converts what you can do today into bitcoin on Lightning. No bank account. No permission. Proof of work and a wallet.</p>
@@ -2801,7 +2806,7 @@ ul, ol {
           <h2 class="display-hed">The network is alive right now.</h2>
           <p class="body-md">The strip pulls live Bitcoin data. If it is updating, the network is processing. If the network is processing, your route to earning is open. When data is unavailable, an <em>OFFLINE SNAPSHOT</em> shows last known values. Either way, the strip stays honest.</p>
         </div>
-        <div class="col-4" style="margin-left: 40px;">
+        <div class="col-4 col-right">
           <div class="card card-accent-btc">
             <div class="card-title">Why this matters</div>
             <p class="card-body" style="text-align:center;">Settles on a chain that has never been offline. Does not require your bank's permission to confirm.</p>
@@ -2873,7 +2878,7 @@ ul, ol {
           <h2 class="display-hed">The cost gap is real. We do not pretend to eliminate it.</h2>
           <p class="body-lg">2–4% versus the 8.78% regional average. Corridor realities, not marketing. The exact rate depends on corridor, volume, and timing. No fine print.</p>
         </div>
-        <div class="col-4" style="margin-left: 100px;">
+        <div class="col-4 col-right">
           <div class="card card-accent-teal">
             <div class="card-title">What we do not claim</div>
             <p class="card-body" style="text-align:center;">We do not claim zero cost, zero friction, or coverage we do not have. Tool comparison, not a guarantee.</p>
@@ -2934,7 +2939,7 @@ ul, ol {
     <!-- FreedomTech doctrine -->
     <div class="section">
       <div class="grid">
-        <div class="col-8">
+        <div class="col-full">
           <div class="section-label" style="color: var(--ember);">FreedomTech — full text</div>
           <h2 class="display-hed section-sticky-hed">FreedomTech is the removal of unnecessary intermediaries — from your workflow and from your money — using tools that are open, verifiable, and controlled by the people who use them.</h2>
           <p class="body-lg" style="margin-top: 24px;text-align:center;">That is the whole doctrine. Every system we build exists to make one or more intermediaries unnecessary. Not disrupted. Not "democratised." Unnecessary. The rent flows back to the person who earned it.</p>
@@ -2987,7 +2992,7 @@ ul, ol {
         </div>
       </div>
       <div class="grid">
-        <div class="col-8">
+        <div class="col-full">
           <h2 class="display-sm" style="text-align:center;">The removal-of-rent-takers thesis.</h2>
           <p class="body-lg" style="margin-top: 24px;text-align:center;">Every system asks: <em>who is taking rent, and can we make them unnecessary?</em> The tools exist. The technology is open. The rails are live. The only missing piece is the decision.</p>
         </div>
