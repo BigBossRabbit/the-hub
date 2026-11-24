@@ -503,6 +503,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
    LAYOUT
    ============================================ */
 
+/* USD equivalents — computed from the live NAD/USD cross rate */
+[data-usd-eq]::after{content:' (' attr(data-usd-eq) ')';color:var(--text-faint);font-weight:inherit;font-size:.9em;white-space:nowrap}
+
 /* Grid */
 .grid {
   display: grid;
@@ -3309,7 +3312,7 @@ ul, ol {
         <div class="eyebrow" style="color:var(--ember);">Client Agent Catalog</div>
         <h1>Seven agents businesses<br>already pay for.</h1>
         <p class="lede">Real setup fees, real retainers — in Namibian Dollars. Pick the agent that fits the businesses you already know. Build it once, own the relationship.</p>
-        <span class="agents-rate">1 USD ≈ N$16.0, indicative</span>
+        <span class="agents-rate" id="agentsRate">Indicative rate loading…</span>
       </div>
 
       <div class="agent-bar" id="agentBar"></div>
@@ -3328,6 +3331,82 @@ ul, ol {
 <!-- ============================================
      SCRIPTS
      ============================================ -->
+<script>
+/* USD equivalents, computed live. NAD figures stay the quoted number; the USD copy
+   follows the NAD/USD cross rate derived from the same feeds as the bitcoin strip. */
+window.OKIN_RATE = { nadPerUsd: 17.5, live: false };
+
+function okFmtUsd(num){
+  var rate = window.OKIN_RATE.nadPerUsd;
+  if (!(rate > 1)) return '';
+  var usd = num / rate;
+  if (usd >= 1000) usd = Math.round(usd / 10) * 10;
+  else usd = Math.round(usd / 5) * 5;
+  return usd.toLocaleString();
+}
+
+function okParse(text){
+  var re = /(?:N\$|NAD\s?)([\d,]+)(k|m)?(\+)?(?:\s?[–-]\s?(?:N\$|NAD\s?)?([\d,]+)(k|m)?(\+)?)?/g;
+  var out = [], m;
+  while ((m = re.exec(text)) !== null) {
+    var lo = parseFloat(m[1].replace(/,/g, '')) * (m[2] === 'k' ? 1e3 : m[2] === 'm' ? 1e6 : 1);
+    var one = okFmtUsd(lo) + (m[3] || '');
+    if (m[4]) {
+      var hi = parseFloat(m[4].replace(/,/g, '')) * (m[5] === 'k' ? 1e3 : m[5] === 'm' ? 1e6 : 1);
+      one += '–' + okFmtUsd(hi) + (m[6] || '');
+    }
+    out.push('USD ' + one);
+  }
+  return out.join(', ');
+}
+
+function okParseUsd(text){
+  var re = /\$(\d[\d,]*)(?:\s?[–-]\s?\$?(\d[\d,]*))?/g;
+  var rate = window.OKIN_RATE.nadPerUsd, out = [], m;
+  function nad(n){ n = n * rate; return (n >= 1000 ? Math.round(n / 10) * 10 : Math.round(n / 5) * 5).toLocaleString(); }
+  while ((m = re.exec(text)) !== null) {
+    out.push('N$' + nad(parseFloat(m[1].replace(/,/g, ''))) + (m[2] ? '–' + nad(parseFloat(m[2].replace(/,/g, ''))) : ''));
+  }
+  return out.join(', ');
+}
+
+function okHydrate(root){
+  var scope = root || document;
+  scope.querySelectorAll('[data-usd-eq]').forEach(function(el){ el.removeAttribute('data-usd-eq'); });
+  scope.querySelectorAll('[data-cand]').forEach(function(el){ el.removeAttribute('data-cand'); });
+  var cands = [];
+  scope.querySelectorAll('p, div, span, li, td, h3, strong, em, label').forEach(function(el){
+    if (el.id === 'agentsRate' || el.closest('.strip-item') || el.closest('.mempool-strip') || el.closest('.masthead-zone')) return;
+    var t0 = el.textContent || '';
+    if (!/N\$\d|NAD\s?\d|\$\d/.test(t0)) return;
+    if (/1 USD ≈/.test(t0)) return;
+    el.setAttribute('data-cand', '');
+    cands.push(el);
+  });
+  // keep only the deepest nodes: a container would otherwise repeat every figure inside it
+  var leaves = cands.filter(function(el){ return !el.querySelector('[data-cand]'); });
+  leaves.forEach(function(el){
+    var txt = el.textContent || '';
+    var eq = /N\$\d|NAD\s?\d/.test(txt) ? okParse(txt) : okParseUsd(txt);
+    if (eq) el.setAttribute('data-usd-eq', eq);
+  });
+  cands.forEach(function(el){ el.removeAttribute('data-cand'); });
+}
+
+function okSetRate(nadPerUsd, live){
+  if (!(nadPerUsd > 1) || !isFinite(nadPerUsd)) return;
+  window.OKIN_RATE.nadPerUsd = nadPerUsd;
+  window.OKIN_RATE.live = !!live;
+  var lbl = document.getElementById('agentsRate');
+  if (lbl) lbl.textContent = '1 USD ≈ N$' + nadPerUsd.toFixed(1) + (live ? ' (live)' : ' (indicative)') + ', converted throughout';
+  okHydrate(document);
+}
+window.okHydrate = okHydrate;
+window.okSetRate = okSetRate;
+document.addEventListener('DOMContentLoaded', function(){
+  okSetRate(window.OKIN_RATE.nadPerUsd, false);
+});
+</script>
 <script>
 (function() {
   'use strict';
@@ -3563,7 +3642,9 @@ ul, ol {
     var pillVal = document.getElementById('pillVal');
     var pillDot = document.getElementById('pillDot');
     if (!pillVal || !pillDot) return;
-    if (btcNad) {
+    if (btcNad && btcUsd) {
+      pillVal.textContent = 'N$' + Math.round(btcNad).toLocaleString() + ' · $' + Math.round(btcUsd).toLocaleString();
+    } else if (btcNad) {
       pillVal.textContent = 'N$' + Math.round(btcNad).toLocaleString();
     } else if (btcUsd) {
       pillVal.textContent = '$' + Math.round(btcUsd).toLocaleString();
@@ -4029,11 +4110,13 @@ ul, ol {
         pending--;
         if (pending <= 0) {
           done = true;
+          if (data.btcUsd && nadRatePerBtc) okSetRate(nadRatePerBtc / data.btcUsd, true);
           if (data.height || data.fee || data.btcUsd) {
             renderLive(data);
           } else {
             renderFallback();
           }
+          okHydrate(document);
         }
       }
 
@@ -4303,7 +4386,7 @@ ul, ol {
 (function(){
 "use strict";
 
-const aiq_RUBRIC={"dimensions":[{"id":"d1","name":"Your Information","weight":0.25,"intro":"The real blocker. If we can't get to your business records, we can't build anything. We need to understand what software you run the business on and whether we can connect to it.","maxPoints":52,"questions":[{"id":"q1","type":"single","text":"How many core business software systems do you currently use?","options":[{"label":"0 — paper-based only","points":0,"dq":"dq6"},{"label":"1 system","points":3},{"label":"2 systems","points":6},{"label":"3 systems","points":8},{"label":"4 or more systems","points":10}]},{"id":"q2","type":"multi","text":"What are the main software systems you run the business on? (Select all that apply)","options":[{"label":"Accounting or invoicing software (e.g., Pastel, SAP, Xero, IQ Retail)","points":3},{"label":"Vehicle tracking or fleet monitoring (e.g., Cartrack, Ituran)","points":3},{"label":"Customer or sales tracking","points":2},{"label":"Staff or payroll system","points":1},{"label":"Stock or inventory management","points":2},{"label":"A system built just for your business","points":1},{"label":"None of the above","points":0,"dq":"dq6"}]},{"id":"q3","type":"single","text":"Which statement best describes how you can get your information out of your business software?","options":[{"label":"We can already export or download our data whenever we want","points":10},{"label":"Our software company can switch that on for us if we ask","points":7},{"label":"Our software company is slow or unhelpful about it","points":3,"dq":"dq7"},{"label":"Our data is locked in and we cannot get it out","points":0,"dq":"dq1"},{"label":"Our software company has refused","points":0,"dq":"dq1"}]},{"id":"q6","type":"single","text":"In your experience, how complete and accurate are the records in your primary system?","options":[{"label":"Highly reliable — we use it for daily decisions","points":10},{"label":"Mostly reliable — occasional gaps or errors","points":7},{"label":"Somewhat reliable — frequent manual corrections needed","points":3},{"label":"Unreliable — we don't trust it","points":1},{"label":"No records exist on a computer","points":0}]},{"id":"q8","type":"single","text":"Do you have a second system that sees the same work from another angle? For example, your invoicing software says what you delivered, and a vehicle tracker says where the van actually went.","options":[{"label":"Yes, and the information complements each other","points":10},{"label":"Yes, but the information overlaps significantly","points":5},{"label":"There is a second system but it's not comparable","points":3},{"label":"No second system exists","points":0}]}]},{"id":"d2","name":"The Problem Worth Fixing","weight":0.20,"intro":"A clear problem with a measurable cost is what makes a smart assistant worth building. We need to know what it costs you and whether it spans systems.","maxPoints":20,"questions":[{"id":"q10","type":"single","text":"What does your most expensive recurring problem cost you each month?","options":[{"label":"Over NAD 100,000 / USD 5,500+","points":10},{"label":"NAD 50,000-100,000 / USD 2,800-5,500","points":8},{"label":"NAD 20,000-50,000 / USD 1,100-2,800","points":5},{"label":"NAD 5,000-20,000 / USD 280-1,100","points":2},{"label":"Under NAD 5,000 / USD 280","points":0},{"label":"We can't name a specific problem yet","points":0}]},{"id":"q11","type":"single","text":"Does the problem involve comparing or matching up information from two different systems?","options":[{"label":"Yes — this is exactly the problem","points":10},{"label":"Somewhat — there's a manual comparison element","points":5},{"label":"No — it's a single-system issue","points":2}]},{"id":"q14","type":"text","text":"Which recurring task eats the most staff time each week?"}]},{"id":"d3","name":"Where Things Run","weight":0.15,"intro":"Where your business information lives and how reliable your internet is affects how we set things up.","maxPoints":18,"questions":[{"id":"q15","type":"single","text":"Where do you prefer to keep your business information?","options":[{"label":"On a computer in our own building","points":10},{"label":"Online, but in a private space dedicated to us","points":7},{"label":"Online, in a standard cloud service (Microsoft 365, Google Workspace)","points":5},{"label":"No preference — we need guidance","points":3}]},{"id":"q17","type":"single","text":"How reliable is your internet connection at your main place of business?","options":[{"label":"Fibre or dedicated line — very reliable","points":8},{"label":"ADSL or stable mobile data — mostly reliable","points":5},{"label":"Unstable — frequent outages","points":1},{"label":"No reliable internet available","points":0}]}]},{"id":"d4","name":"Your Systems","weight":0.12,"intro":"Whether you have computer support determines how quickly we can get going.","maxPoints":10,"questions":[{"id":"q23","type":"single","text":"Do you have an in-house computer person or a contracted IT support company?","options":[{"label":"Yes, a dedicated in-house person","points":10},{"label":"Yes, a contracted support company","points":7},{"label":"No computer support at all","points":0}]}]},{"id":"d5","name":"Your Team","weight":0.10,"intro":"Bringing in a smart assistant requires change in the business. We need to know who's driving this and whether the team is prepared.","maxPoints":28,"questions":[{"id":"q25","type":"single","text":"Who in your company has the authority to approve and fund this project?","options":[{"label":"Both a senior sponsor and a budget owner have been named","points":10},{"label":"A senior sponsor has been named","points":7,"dq":"dq3"},{"label":"A budget owner has been named","points":7,"dq":"dq2"},{"label":"No specific person has been named yet","points":0,"dq":["dq2","dq3"]}]},{"id":"q27","type":"single","text":"Is there someone in your organisation who will champion this project day-to-day?","options":[{"label":"Yes, a clear champion is ready","points":10},{"label":"Possibly — someone is interested but not confirmed","points":5},{"label":"No champion identified","points":0}]},{"id":"q28","type":"single","text":"How comfortable is your staff with learning new software tools?","options":[{"label":"Very comfortable — we use multiple tools daily","points":8},{"label":"Somewhat comfortable — open to learning with support","points":5},{"label":"Not comfortable — staff resist new technology","points":1}]}]},{"id":"d6","name":"Scope","weight":0.08,"intro":"How many different jobs in your team would need their own assistant directly affects the size and cost of the build.","maxPoints":10,"questions":[{"id":"q32","type":"single","text":"How many different jobs in your team would need their own assistant? For example: the person who plans deliveries, the person who handles orders, the person doing paperwork.","options":[{"label":"1-2 roles","points":3},{"label":"3-5 roles","points":6},{"label":"6-10 roles","points":8},{"label":"11+ roles","points":10}]}]},{"id":"d7","name":"Budget","weight":0.05,"intro":"Your budget range determines which setup is the right fit for your business.","maxPoints":10,"questions":[{"id":"q34","type":"single","text":"What is your approximate budget for this project (setup plus the first three months)?","options":[{"label":"NAD 450,000+ / USD 25,000+","points":10},{"label":"NAD 250,000-450,000 / USD 14,000-25,000","points":8},{"label":"NAD 120,000-250,000 / USD 6,700-14,000","points":6},{"label":"NAD 70,000-120,000 / USD 3,900-6,700","points":3},{"label":"Under NAD 70,000 / USD 3,900","points":1},{"label":"We are expecting this to be done for free","points":0,"dq":"dq4"}]}]},{"id":"d8","name":"Privacy","weight":0.05,"intro":"Privacy and compliance requirements affect how we handle your information and what safeguards we build in.","maxPoints":10,"questions":[{"id":"q38","type":"single","text":"Are you required to keep customer information inside the country, or handle it under privacy rules?","options":[{"label":"Yes, we handle regulated personal data (customer IDs, financial records) with strict privacy requirements","points":10},{"label":"We handle some regulated data but have no strict location requirements","points":6},{"label":"We don't handle regulated personal data","points":3}]}]}]};
+const aiq_RUBRIC={"dimensions":[{"id":"d1","name":"Your Information","weight":0.25,"intro":"The real blocker. If we can't get to your business records, we can't build anything. We need to understand what software you run the business on and whether we can connect to it.","maxPoints":52,"questions":[{"id":"q1","type":"single","text":"How many core business software systems do you currently use?","options":[{"label":"0 — paper-based only","points":0,"dq":"dq6"},{"label":"1 system","points":3},{"label":"2 systems","points":6},{"label":"3 systems","points":8},{"label":"4 or more systems","points":10}]},{"id":"q2","type":"multi","text":"What are the main software systems you run the business on? (Select all that apply)","options":[{"label":"Accounting or invoicing software (e.g., Pastel, SAP, Xero, IQ Retail)","points":3},{"label":"Vehicle tracking or fleet monitoring (e.g., Cartrack, Ituran)","points":3},{"label":"Customer or sales tracking","points":2},{"label":"Staff or payroll system","points":1},{"label":"Stock or inventory management","points":2},{"label":"A system built just for your business","points":1},{"label":"None of the above","points":0,"dq":"dq6"}]},{"id":"q3","type":"single","text":"Which statement best describes how you can get your information out of your business software?","options":[{"label":"We can already export or download our data whenever we want","points":10},{"label":"Our software company can switch that on for us if we ask","points":7},{"label":"Our software company is slow or unhelpful about it","points":3,"dq":"dq7"},{"label":"Our data is locked in and we cannot get it out","points":0,"dq":"dq1"},{"label":"Our software company has refused","points":0,"dq":"dq1"}]},{"id":"q6","type":"single","text":"In your experience, how complete and accurate are the records in your primary system?","options":[{"label":"Highly reliable — we use it for daily decisions","points":10},{"label":"Mostly reliable — occasional gaps or errors","points":7},{"label":"Somewhat reliable — frequent manual corrections needed","points":3},{"label":"Unreliable — we don't trust it","points":1},{"label":"No records exist on a computer","points":0}]},{"id":"q8","type":"single","text":"Do you have a second system that sees the same work from another angle? For example, your invoicing software says what you delivered, and a vehicle tracker says where the van actually went.","options":[{"label":"Yes, and the information complements each other","points":10},{"label":"Yes, but the information overlaps significantly","points":5},{"label":"There is a second system but it's not comparable","points":3},{"label":"No second system exists","points":0}]}]},{"id":"d2","name":"The Problem Worth Fixing","weight":0.20,"intro":"A clear problem with a measurable cost is what makes a smart assistant worth building. We need to know what it costs you and whether it spans systems.","maxPoints":20,"questions":[{"id":"q10","type":"single","text":"What does your most expensive recurring problem cost you each month?","options":[{"label":"Over NAD 100,000+","points":10},{"label":"NAD 50,000-100,000","points":8},{"label":"NAD 20,000-50,000","points":5},{"label":"NAD 5,000-20,000","points":2},{"label":"Under NAD 5,000","points":0},{"label":"We can't name a specific problem yet","points":0}]},{"id":"q11","type":"single","text":"Does the problem involve comparing or matching up information from two different systems?","options":[{"label":"Yes — this is exactly the problem","points":10},{"label":"Somewhat — there's a manual comparison element","points":5},{"label":"No — it's a single-system issue","points":2}]},{"id":"q14","type":"text","text":"Which recurring task eats the most staff time each week?"}]},{"id":"d3","name":"Where Things Run","weight":0.15,"intro":"Where your business information lives and how reliable your internet is affects how we set things up.","maxPoints":18,"questions":[{"id":"q15","type":"single","text":"Where do you prefer to keep your business information?","options":[{"label":"On a computer in our own building","points":10},{"label":"Online, but in a private space dedicated to us","points":7},{"label":"Online, in a standard cloud service (Microsoft 365, Google Workspace)","points":5},{"label":"No preference — we need guidance","points":3}]},{"id":"q17","type":"single","text":"How reliable is your internet connection at your main place of business?","options":[{"label":"Fibre or dedicated line — very reliable","points":8},{"label":"ADSL or stable mobile data — mostly reliable","points":5},{"label":"Unstable — frequent outages","points":1},{"label":"No reliable internet available","points":0}]}]},{"id":"d4","name":"Your Systems","weight":0.12,"intro":"Whether you have computer support determines how quickly we can get going.","maxPoints":10,"questions":[{"id":"q23","type":"single","text":"Do you have an in-house computer person or a contracted IT support company?","options":[{"label":"Yes, a dedicated in-house person","points":10},{"label":"Yes, a contracted support company","points":7},{"label":"No computer support at all","points":0}]}]},{"id":"d5","name":"Your Team","weight":0.10,"intro":"Bringing in a smart assistant requires change in the business. We need to know who's driving this and whether the team is prepared.","maxPoints":28,"questions":[{"id":"q25","type":"single","text":"Who in your company has the authority to approve and fund this project?","options":[{"label":"Both a senior sponsor and a budget owner have been named","points":10},{"label":"A senior sponsor has been named","points":7,"dq":"dq3"},{"label":"A budget owner has been named","points":7,"dq":"dq2"},{"label":"No specific person has been named yet","points":0,"dq":["dq2","dq3"]}]},{"id":"q27","type":"single","text":"Is there someone in your organisation who will champion this project day-to-day?","options":[{"label":"Yes, a clear champion is ready","points":10},{"label":"Possibly — someone is interested but not confirmed","points":5},{"label":"No champion identified","points":0}]},{"id":"q28","type":"single","text":"How comfortable is your staff with learning new software tools?","options":[{"label":"Very comfortable — we use multiple tools daily","points":8},{"label":"Somewhat comfortable — open to learning with support","points":5},{"label":"Not comfortable — staff resist new technology","points":1}]}]},{"id":"d6","name":"Scope","weight":0.08,"intro":"How many different jobs in your team would need their own assistant directly affects the size and cost of the build.","maxPoints":10,"questions":[{"id":"q32","type":"single","text":"How many different jobs in your team would need their own assistant? For example: the person who plans deliveries, the person who handles orders, the person doing paperwork.","options":[{"label":"1-2 roles","points":3},{"label":"3-5 roles","points":6},{"label":"6-10 roles","points":8},{"label":"11+ roles","points":10}]}]},{"id":"d7","name":"Budget","weight":0.05,"intro":"Your budget range determines which setup is the right fit for your business.","maxPoints":10,"questions":[{"id":"q34","type":"single","text":"What is your approximate budget for this project (setup plus the first three months)?","options":[{"label":"NAD 450,000+","points":10},{"label":"NAD 250,000-450,000","points":8},{"label":"NAD 120,000-250,000","points":6},{"label":"NAD 70,000-120,000","points":3},{"label":"Under NAD 70,000","points":1},{"label":"We are expecting this to be done for free","points":0,"dq":"dq4"}]}]},{"id":"d8","name":"Privacy","weight":0.05,"intro":"Privacy and compliance requirements affect how we handle your information and what safeguards we build in.","maxPoints":10,"questions":[{"id":"q38","type":"single","text":"Are you required to keep customer information inside the country, or handle it under privacy rules?","options":[{"label":"Yes, we handle regulated personal data (customer IDs, financial records) with strict privacy requirements","points":10},{"label":"We handle some regulated data but have no strict location requirements","points":6},{"label":"We don't handle regulated personal data","points":3}]}]}]};
 const aiq_DISQUALIFIERS={"dq1":{"code":"DQ1","name":"Software company refuses access","description":"The software company won't let us connect to your records. This needs to be resolved before we can proceed."},"dq2":{"code":"DQ2","name":"No senior sponsor","description":"No one with the authority to approve this project has been named. Without that person, the project cannot move forward."},"dq3":{"code":"DQ3","name":"No budget owner","description":"No one to approve the budget has been named. We need both a sponsor and a budget owner to proceed."},"dq4":{"code":"DQ4","name":"Expecting free work","description":"We understand the desire to try before you commit, but our work requires real setup, real data, and real integration. We do not offer free pilots — but we do offer a detailed, no-obligation scoping session so you know exactly what you're buying."},"dq6":{"code":"DQ6","name":"Records on paper","description":"Your records are currently on paper. Getting them onto a computer is a separate project that needs to happen first. We can advise on the right path."},"dq7":{"code":"DQ7","name":"Software company unhelpful","description":"Your software company is slow or unhelpful about giving you access to your own records. This will cause delays, but it can be overcome."},"dq8":{"code":"DQ8","name":"No computer support","description":"For larger builds, you need at least some computer support — even just a local IT person or company."}};
 const aiq_TIERS={
   "T0": {
@@ -4441,6 +4524,7 @@ function aiq_renderStep(){
   document.getElementById('progressFill').style.width=pct+'%';
   document.getElementById('stepCounter').textContent='Step '+(aiq_currentStep+1)+' of '+totalSteps;
   if(aiq_currentStep===5) aiq_renderResults();
+  okHydrate(document.getElementById('aiq-root'));
 }
 
 function aiq_next(){
@@ -4670,6 +4754,7 @@ function aiq_renderResults(){
   }
 
   resultsDiv.innerHTML=h;
+  okHydrate(resultsDiv);
 
   setTimeout(()=>{
     aiq_rootEl.querySelectorAll('.dim-bar-fill').forEach(bar=>{
@@ -4981,6 +5066,7 @@ window.aiq_toggleInternal=aiq_toggleInternal;
           }).join('') + '</div>'
       + '</div>';
     }).join('');
+    okHydrate(grid);
   }
 
   function filt(cat) {
@@ -5008,8 +5094,8 @@ window.aiq_toggleInternal=aiq_toggleInternal;
     var k = +document.getElementById('aBuilds').value;
     var s = +document.getElementById('aSetup').value;
     var m = c * b + k * s, y = m * 12;
-    document.getElementById('aMrev').textContent = 'N$' + m.toLocaleString();
-    document.getElementById('aAnn').textContent = '≈ N$' + y.toLocaleString() + ' per year · ' + c + ' client' + (c !== 1 ? 's' : '') + ' × N$' + b + '/mo + ' + k + ' build' + (k !== 1 ? 's' : '') + ' × N$' + s;
+    document.getElementById('aMrev').textContent = 'N$' + m.toLocaleString() + ' (' + okParse('N$' + m) + ')';
+    document.getElementById('aAnn').textContent = '≈ N$' + y.toLocaleString() + ' (' + okParse('N$' + y) + ') per year · ' + c + ' client' + (c !== 1 ? 's' : '') + ' × N$' + b + '/mo (' + okParse('N$' + b) + '/mo) + ' + k + ' build' + (k !== 1 ? 's' : '') + ' × N$' + s + ' (' + okParse('N$' + s) + ')';
   }
 
   ['aClients', 'aRet', 'aBuilds', 'aSetup'].forEach(function (id) {
